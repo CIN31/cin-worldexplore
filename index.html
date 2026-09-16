@@ -145,6 +145,11 @@ body.lock{overflow:hidden}
 td.pos{color:var(--grass);font-weight:600}
 td.neg{color:var(--danxia);font-weight:600}
 table.people{min-width:420px}
+.nav-row{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.nav-amap{border:0;background:var(--lake);color:#fff;border-radius:8px;padding:7px 14px;font-size:14px;font-weight:600}
+.nav-amap:hover{filter:brightness(1.08)}
+.nav-hint{font-size:12px;color:var(--soft)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--salt);padding:10px 16px;border-radius:10px;font-size:13px;z-index:99;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .show-map{margin-top:10px;border:0;background:none;color:var(--lake);padding:0;font-size:13px;text-decoration:underline;text-underline-offset:3px}
 
 /* sections */
@@ -205,7 +210,7 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
   .bars{height:110px}
 }
 @media print{
-  .daynav,.map-tools,.show-map,.copy,.strip-box{display:none}
+  .daynav,.map-tools,.nav-row,.copy,.strip-box{display:none}
   .main{grid-template-columns:1fr}.mapbox{position:relative}
   .day,.tip{break-inside:avoid}
   body{background:#fff}
@@ -395,7 +400,7 @@ const GEO = {"type":"FeatureCollection","features":[{"type":"Feature","propertie
 // [名称, 经度, 纬度, 高德搜索词]
 const P = [
  ["西宁",101.78,36.62,"西宁市"],["塔尔寺",101.57,36.49,"塔尔寺"],["日月山",101.1,36.44,"日月山景区"],
- ["青海湖",100.49,36.58,"青海湖二郎剑景区"],["茶卡",99.08,36.79,"茶卡盐湖"],["翡翠湖",95.09,37.91,"大柴旦翡翠湖"],
+ ["青海湖",100.49,36.58,"青海湖二郎剑景区"],["茶卡",99.08,36.79,"茶卡盐湖"],["翡翠湖",95.27,37.83,"大柴旦翡翠湖"],
  ["U 型公路",94.15,37.42,"U型公路 海西"],["水上雅丹",93.68,37.57,"水上雅丹"],["黑独山",93.44962,38.8676,"黑独山"],
  ["当金山",94.34,39.39,"当金山"],["敦煌",94.66,40.14,"敦煌市"],["莫高窟数字展示中心",94.8,40.12,"莫高窟数字展示中心"],
  ["莫高窟",94.81,40.04,"莫高窟"],["鸣沙山月牙泉",94.67,40.09,"鸣沙山月牙泉"],["瓜州雕塑长廊",95.8,40.43,"瓜州 大地之子雕塑"],
@@ -535,6 +540,31 @@ const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile|HarmonyOS|MicroMessenger/i.te
   || (matchMedia("(pointer: coarse)").matches && Math.min(screen.width, screen.height) <= 820);
 const srcFor = g => (IS_MOBILE && g.m) ? g.m : g.src;
 
+/* 高德地图路线：手机唤起 App（含途经点），电脑打开网页版多点标注 */
+function routeStops(d){ return d.stops.filter((s,k) => k===0 || s!==d.stops[k-1]); }
+function toast(msg){
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg;
+  document.body.append(t); setTimeout(() => t.remove(), 4000);
+}
+function openAmapRoute(i){
+  const st = routeStops(DAYS[i]);
+  const pt = k => P[st[k]];
+  const start = pt(0), end = pt(st.length-1), vias = st.slice(1,-1).map(k => P[k]);
+  const q = new URLSearchParams({sourceApplication:"qg-trip", slat:start[2], slon:start[1], sname:start[3],
+    dlat:end[2], dlon:end[1], dname:end[3], dev:"1", t:"0"});
+  if (vias.length) { q.set("vian", vias.length); q.set("vialons", vias.map(v=>v[1]).join("|")); q.set("vialats", vias.map(v=>v[2]).join("|")); q.set("vianames", vias.map(v=>v[3]).join("|")); }
+  const web = "https://uri.amap.com/marker?" + new URLSearchParams({markers: st.slice(0,10).map(k => `${P[k][1]},${P[k][2]},${P[k][0]}`).join("|"), coordinate:"wgs84", src:"qg-trip", callnative:"0"});
+  const ua = navigator.userAgent;
+  if (/MicroMessenger/i.test(ua)) { toast("微信里无法直接打开高德，请点右上角 ··· 选择在浏览器打开"); return; }
+  if (!IS_MOBILE) { window.open(web, "_blank", "noopener"); return; }
+  const scheme = (/iPhone|iPad|iPod/i.test(ua) ? "iosamap://path?" : "amapuri://route/plan/?") + q.toString();
+  let left = false;
+  const onHide = () => { left = true; };
+  document.addEventListener("visibilitychange", onHide, {once:true});
+  window.location.href = scheme;
+  setTimeout(() => { if (!left && !document.hidden) { toast("没有检测到高德地图 App，已改为打开网页版"); window.open(web, "_blank"); } }, 2000);
+}
+
 /* days */
 function legsBlock(i){
   const L = LEGS[i];
@@ -573,7 +603,7 @@ $("#days").innerHTML = DAYS.map((d,i)=>`
   ${d.flag?`<div class="flag"><b>待核实：</b>${esc(d.flag)}</div>`:""}
   ${guideBlock(d)}
   ${stayBlock(d)}
-  <button class="show-map" data-i="${i}">在地图上看这一天</button>
+  <div class="nav-row"><button class="nav-amap" data-i="${i}">用高德地图打开这天路线</button><span class="nav-hint">含 ${routeStops(d).length} 个点，途经点坐标为区域示意，出发前在 App 里核对</span></div>
 </article>`).join("");
 
 /* stay table */
@@ -694,9 +724,7 @@ $("#btn-minus").onclick = () => svg.transition().call(zoom.scaleBy, 1/1.5);
 $("#btn-full").onclick = function(){ const box = document.querySelector(".mapbox"); const on = box.classList.toggle("full"); document.body.classList.toggle("lock", on); this.setAttribute("aria-pressed", on); this.textContent = on ? "退出全屏" : "全屏"; };
 document.addEventListener("keydown", e => { if (e.key === "Escape" && document.querySelector(".mapbox.full")) $("#btn-full").click(); });
 $("#btn-follow").onclick = function(){ follow = !follow; this.setAttribute("aria-pressed", follow); };
-document.querySelectorAll(".show-map").forEach(b => b.onclick = () => {
-  highlight(+b.dataset.i);
-});
+document.querySelectorAll(".nav-amap").forEach(b => b.onclick = () => openAmapRoute(+b.dataset.i));
 
 /* 点击跳转：直接更新地图，并在滚动动画期间暂停滚动监听，避免被中途经过的日期覆盖 */
 let lockUntil = 0, spyTimer;
