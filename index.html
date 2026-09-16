@@ -6,14 +6,14 @@
 <title>青甘环线 9/26–10/4 行车手册</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --salt:#EEF2F1; --paper:#FFFFFF; --ink:#1D2B30; --soft:#5B6B70; --line:#D5DEDD;
   --lake:#17707C; --lake-soft:#DCEBEC; --sand:#B9823A; --sand-soft:#F3E6D2;
   --danxia:#B24A3B; --danxia-soft:#F4DEDA; --grass:#4F7D4A;
   --map-land:#E7E1D0; --map-qh:#DDE7DE; --map-edge:#B8C3BD;
-  --display:"ZCOOL XiaoWei","Songti SC","Noto Serif SC","SimSun",serif;
+  --display:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
   --body:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -39,18 +39,18 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* hero */
 .hero{padding:40px 0 8px}
-.hero h1{font:400 clamp(34px,6vw,58px)/1.1 var(--display);margin:0;letter-spacing:.02em}
+.hero h1{font:700 clamp(34px,6vw,58px)/1.1 var(--display);margin:0;letter-spacing:.02em}
 .hero .route-line{margin:10px 0 0;color:var(--soft);font-size:15px}
 .facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin:22px 0 0;padding:0;list-style:none}
 .facts li{display:flex;flex-direction:column}
-.facts b{font:400 26px/1.2 var(--display);font-variant-numeric:tabular-nums}
+.facts b{font:500 26px/1.2 var(--display);font-variant-numeric:tabular-nums}
 .facts span{font-size:13px;color:var(--soft)}
 .countdown b{color:var(--lake)}
 
 /* drive strip */
 .strip-box{min-width:0;margin:28px 0 0;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px}
 .strip-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-.strip-head h2{margin:0;font:400 20px/1.3 var(--display)}
+.strip-head h2{margin:0;font:500 20px/1.3 var(--display)}
 .strip-key{font-size:12px;color:var(--soft);display:flex;gap:14px;flex-wrap:wrap}
 .key{display:inline-flex;align-items:center;gap:5px}
 .key i{width:12px;height:12px;border-radius:3px;display:inline-block}
@@ -95,8 +95,8 @@ body.lock{overflow:hidden}
 .day .dot{position:absolute;left:0;top:6px;width:18px;height:18px;border-radius:50%;background:var(--paper);border:3px solid var(--c)}
 .day.active .dot{background:var(--c)}
 .day-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.day-date{font:400 15px/1 var(--body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--c)}
-.day h3{margin:0;font:400 24px/1.3 var(--display)}
+.day-date{font:500 15px/1 var(--body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--c)}
+.day h3{margin:0;font:500 24px/1.3 var(--display)}
 .today{font-size:12px;background:var(--lake);color:#fff;border-radius:999px;padding:1px 8px}
 .stops{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:10px 0 0;padding:0;list-style:none}
 .stops li{display:flex;align-items:center;gap:4px}
@@ -115,7 +115,7 @@ body.lock{overflow:hidden}
 .stay .tag{grid-row:span 2;width:34px;height:34px;border-radius:8px;background:var(--sand);color:#fff;display:grid;place-items:center;font-weight:700}
 .stay .n{font-weight:600}
 .stay .m{font-size:12px;color:var(--soft);grid-column:2}
-.stay .p{grid-row:span 2;font:400 20px/1 var(--display);font-variant-numeric:tabular-nums}
+.stay .p{grid-row:span 2;font:500 20px/1 var(--display);font-variant-numeric:tabular-nums}
 .stay.none{background:transparent;border:1px dashed var(--line)}
 .stay.none .tag{background:var(--soft)}
 .legs{margin:10px 0 0;font-size:13px}
@@ -141,7 +141,7 @@ body.lock{overflow:hidden}
 .weather td:nth-child(n+2):nth-child(-n+4){white-space:nowrap;font-variant-numeric:tabular-nums}
 .note-list{margin:10px 0 0;padding-left:1.1em;color:var(--soft);font-size:13px;max-width:70ch}
 .muted-row td{color:var(--soft)}
-.sub-h{font:400 19px/1.3 var(--display);margin:22px 0 8px}
+.sub-h{font:500 19px/1.3 var(--display);margin:22px 0 8px}
 td.pos{color:var(--grass);font-weight:600}
 td.neg{color:var(--danxia);font-weight:600}
 table.people{min-width:420px}
@@ -154,7 +154,7 @@ table.people{min-width:420px}
 
 /* sections */
 section.block{margin:44px 0 0}
-section.block>h2{font:400 28px/1.3 var(--display);margin:0 0 6px}
+section.block>h2{font:500 28px/1.3 var(--display);margin:0 0 6px}
 section.block>p.lead{margin:0 0 16px;color:var(--soft);max-width:70ch}
 .two>*{min-width:0}
 .two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:start}
@@ -170,7 +170,7 @@ tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
 .deadline{white-space:nowrap}
 .deadline.soon{color:var(--danxia);font-weight:600}
 .split{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px}
-.split .big{font:400 44px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.split .big{font:500 44px/1.1 var(--display);font-variant-numeric:tabular-nums}
 .split ul{margin:10px 0 0;padding-left:1.1em;color:var(--soft);font-size:13px}
 
 .checklist{list-style:none;margin:0;padding:0;background:var(--paper);border:1px solid var(--line);border-radius:14px}
@@ -190,7 +190,7 @@ tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
 
 .tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border-top:2px solid var(--ink)}
 .tip{padding:14px 16px 16px 0;border-bottom:1px solid var(--line)}
-.tip h3{margin:0 0 4px;font:400 19px/1.3 var(--display)}
+.tip h3{margin:0 0 4px;font:500 19px/1.3 var(--display)}
 .tip p{margin:0;font-size:14px;color:var(--soft)}
 
 footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font-size:12px;color:var(--soft)}
