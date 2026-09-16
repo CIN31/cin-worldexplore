@@ -301,7 +301,6 @@ else try {
     .polygonCapColor(capColor)
     .polygonSideColor(d => d.trip ? "rgba(242,194,122,0.16)" : "rgba(15,26,46,0.2)")
     .polygonStrokeColor(d => d.trip ? "rgba(255,236,196,0.75)" : "rgba(80,104,140,0.35)")
-    .showGraticules(true)
     .ringsData([{ lat: 37.15, lng: 99.05 }])
     .ringColor(() => t => `rgba(242,194,122,${(1 - t) * 0.8})`)
     .ringMaxRadius(7)
