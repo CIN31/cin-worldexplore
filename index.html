@@ -47,6 +47,57 @@ body.leaving #veil{opacity:1;pointer-events:auto}
   .hud{padding:18px 16px 16px}
   .card{max-width:100%;width:100%}
 }
+
+/* ===== 视觉升级 ===== */
+:root{ --gold:#F2C27A; --ember:#E27D5A; }
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%, transparent 55%, rgba(8,13,24,.72) 100%),
+             linear-gradient(180deg, rgba(8,13,24,.75) 0%, transparent 22%, transparent 70%, rgba(8,13,24,.85) 100%)}
+.hud{z-index:2}
+.brand .kicker{display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 10px;border-radius:999px;
+  background:rgba(242,194,122,.08);border:1px solid rgba(242,194,122,.28);letter-spacing:.12em}
+.brand .kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(242,194,122,.6);animation:beacon 2.4s ease-out infinite}
+@keyframes beacon{0%{box-shadow:0 0 0 0 rgba(242,194,122,.55)}70%{box-shadow:0 0 0 9px rgba(242,194,122,0)}100%{box-shadow:0 0 0 0 rgba(242,194,122,0)}}
+.brand h1{margin-top:12px;font-size:clamp(38px,7vw,76px);letter-spacing:.08em;
+  background:linear-gradient(95deg,#FFF6DD 0%,var(--gold) 45%,var(--ember) 80%,#9FC7D3 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 4px 24px rgba(242,194,122,.18))}
+.brand .rule{display:block;width:72px;height:2px;margin-top:14px;background:linear-gradient(90deg,var(--gold),transparent)}
+.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.card{position:relative;overflow:hidden;max-width:360px;padding:18px 20px 16px;border-radius:18px;
+  background:linear-gradient(160deg,rgba(24,36,60,.78),rgba(12,20,36,.82));border:1px solid rgba(159,176,200,.18)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,#2F8FA3,var(--gold),var(--ember),#4F78A8)}
+.card.hot{border-color:rgba(242,194,122,.45);box-shadow:0 18px 50px -20px rgba(242,194,122,.35)}
+.card .tag{display:flex;align-items:center;gap:8px}
+.card .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.card h2{font-weight:700;font-size:26px;margin-top:6px}
+.card .route{margin:6px 0 0;font-size:13px;color:#C5CFDD;letter-spacing:.02em}
+.card .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:14px 0 0;padding:10px 0 0;border-top:1px solid rgba(159,176,200,.16)}
+.card .stats div{display:flex;flex-direction:column}
+.card .stats b{font:700 20px/1.1 var(--display);color:#fff;font-variant-numeric:tabular-nums}
+.card .stats b small{font-size:11px;color:var(--soft);font-weight:400;margin-left:2px}
+.card .stats span{font-size:11px;color:var(--soft);margin-top:2px}
+.card .cd{margin:12px 0 0;font-size:13px;color:var(--soft)}
+.card .cd b{color:var(--gold);font-variant-numeric:tabular-nums;font-weight:600;margin-left:4px}
+.enter{margin-top:14px;padding:10px 18px;background:linear-gradient(135deg,var(--gold),var(--ember));color:#1A1206;box-shadow:0 8px 24px -10px rgba(226,125,90,.7)}
+.enter::after{content:"→";transition:transform .2s ease}
+.enter:hover::after{transform:translateX(3px)}
+.coord{pointer-events:none;text-align:right;font-size:11px;letter-spacing:.14em;color:rgba(159,176,200,.7);font-variant-numeric:tabular-nums;line-height:1.7}
+.coord b{display:block;color:rgba(243,227,181,.85);font-weight:500}
+.pin{color:#FFF1D2}
+.pin i{width:10px;height:10px;background:var(--gold);box-shadow:0 0 0 3px rgba(242,194,122,.25),0 0 18px 4px rgba(242,194,122,.55)}
+.pin b{font-weight:700;letter-spacing:.2em;text-shadow:0 0 12px rgba(242,194,122,.6),0 1px 6px #0F1A2E}
+@media (max-width:640px){
+  .bottom{flex-direction:column;align-items:stretch}
+  .coord{display:none}
+  .card{max-width:100%}
+  .brand h1{font-size:40px}
+  .card{padding:14px 16px 12px}
+  .card h2{font-size:22px}
+  .card .route{display:none}
+  .card .stats{margin-top:10px;padding-top:8px}
+  .card .cd{margin-top:8px}
+  .enter{margin-top:10px;padding:8px 16px}
+}
 </style>
 </head>
 <body>
@@ -55,13 +106,24 @@ body.leaving #veil{opacity:1;pointer-events:auto}
   <header class="brand">
     <p class="kicker">已点亮 1 站</p>
     <h1>世界探索计划</h1>
+    <span class="rule" aria-hidden="true"></span>
   </header>
+  <div class="bottom">
   <article class="card" id="card">
     <div class="tag" id="card-tag">青海 × 甘肃</div>
     <h2 id="card-title">青甘大环线</h2>
     <p class="meta" id="card-meta">2026/9/26–10/4 · 西宁出发，环线回到西宁</p>
+    <p class="route">西宁 → 柴达木 → 敦煌 → 河西走廊 → 祁连</p>
+    <div class="stats">
+      <div><b>9<small>天</small></b><span>行程</span></div>
+      <div><b>2,750<small>km</small></b><span>参考里程</span></div>
+      <div><b>4<small>人</small></b><span>同行</span></div>
+    </div>
+    <p class="cd" id="cd">距出发<b id="cd-v">--</b></p>
     <a class="enter" id="enter" href="./qinggan/index.html">进入行程</a>
   </article>
+  <div class="coord" id="coord" aria-hidden="true"><b id="coord-v">N 36.60°　E 99.20°</b>ALT 1.85</div>
+  </div>
 </div>
 <div class="fallback" id="fallback">
   <div>
@@ -74,6 +136,21 @@ body.leaving #veil{opacity:1;pointer-events:auto}
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
 <script>
+
+const ROUTE = [[36.62,101.78],[36.49,101.57],[36.44,101.10],[36.58,100.49],[36.79,99.08],[37.83,95.27],[37.42,94.15],[37.57,93.68],[38.87,93.45],[39.39,94.34],[40.14,94.66],[40.43,95.80],[39.81,98.22],[38.97,100.04],[38.93,100.45],[38.24,100.94],[38.08,100.72],[38.18,100.25],[37.47,101.62],[37.36,101.42],[36.62,101.78]];
+(function(){
+  const start = new Date("2026-09-26T07:30:00+08:00"), end = new Date("2026-10-04T23:59:59+08:00");
+  const pad = n => String(n).padStart(2,"0");
+  function tick(){
+    const now = new Date(), el = document.getElementById("cd"), v = document.getElementById("cd-v");
+    if (!el) return;
+    if (now < start) { let t = Math.floor((start-now)/1000); const d = Math.floor(t/86400); t%=86400;
+      v.textContent = `${d} 天 ${pad(Math.floor(t/3600))}:${pad(Math.floor(t%3600/60))}:${pad(t%60)}`; }
+    else if (now <= end) { el.firstChild.textContent = "旅途中"; v.textContent = `第 ${Math.floor((now-start)/864e5)+1} 天`; }
+    else { el.firstChild.textContent = "已完成"; v.textContent = "青甘大环线"; }
+  }
+  tick(); setInterval(tick, 1000);
+})();
 const TRIPS = [
   {
     id: "qinggan",
@@ -119,7 +196,7 @@ if (typeof Globe !== "function") fail();
 else try {
   let hover = null;
   const capColor = d => d.trip
-    ? (d === hover ? "rgba(92,182,193,0.55)" : "rgba(92,182,193,0.38)")
+    ? (d === hover ? "rgba(242,194,122,0.50)" : "rgba(242,194,122,0.30)")
     : "rgba(36,52,78,0.28)";
   const altitude = d => d.trip ? (d === hover ? 0.045 : 0.018) : 0.004;
   const el = document.getElementById("globe");
@@ -128,12 +205,30 @@ else try {
     .backgroundImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png")
     .globeImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-dark.jpg")
     .showAtmosphere(true)
-    .atmosphereColor("#5CB6C1")
+    .atmosphereColor("#7FB3D9")
     .atmosphereAltitude(0.18)
     .polygonAltitude(altitude)
     .polygonCapColor(capColor)
-    .polygonSideColor(d => d.trip ? "rgba(92,182,193,0.18)" : "rgba(15,26,46,0.2)")
-    .polygonStrokeColor(d => d.trip ? "rgba(92,182,193,0.45)" : "rgba(42,60,90,0.35)")
+    .polygonSideColor(d => d.trip ? "rgba(242,194,122,0.16)" : "rgba(15,26,46,0.2)")
+    .polygonStrokeColor(d => d.trip ? "rgba(255,236,196,0.75)" : "rgba(80,104,140,0.35)")
+    .showGraticules(true)
+    .ringsData([{ lat: 37.15, lng: 99.05 }])
+    .ringColor(() => t => `rgba(242,194,122,${(1 - t) * 0.8})`)
+    .ringMaxRadius(7)
+    .ringPropagationSpeed(2.2)
+    .ringRepeatPeriod(1600)
+    .ringAltitude(0.021)
+    .pathsData([ROUTE])
+    .pathPoints(d => d)
+    .pathPointLat(p => p[0])
+    .pathPointLng(p => p[1])
+    .pathPointAlt(0.024)
+    .pathColor(() => ["rgba(255,241,210,0.95)", "rgba(226,125,90,0.95)"])
+    .pathStroke(1.6)
+    .pathDashLength(0.06)
+    .pathDashGap(0.012)
+    .pathDashAnimateTime(reduceMotion ? 0 : 14000)
+    .pathTransitionDuration(0)
     .polygonCapCurvatureResolution(6)
     .polygonsTransitionDuration(220)
     .polygonLabel(d => d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker}` : "")
@@ -158,7 +253,7 @@ else try {
       return node;
     })
     .htmlAltitude(0.03)
-    .pointOfView({ lat: 36.6, lng: 99.2, altitude: 1.85 }, 0);
+    .pointOfView(innerWidth < 640 ? { lat: 16, lng: 99.2, altitude: 2.4 } : { lat: 36.6, lng: 99.2, altitude: 1.85 }, 0);
 
   const ctrl = world.controls();
   ctrl.enableDamping = true;
@@ -167,6 +262,13 @@ else try {
   ctrl.minDistance = 140;
   ctrl.maxDistance = 520;
   ctrl.addEventListener("start", () => { ctrl.autoRotate = false; });
+  const coordV = document.getElementById("coord-v"), coordBox = document.getElementById("coord");
+  ctrl.addEventListener("change", () => {
+    const pov = world.pointOfView();
+    const lat = pov.lat, lng = ((pov.lng + 540) % 360) - 180;
+    coordV.textContent = `${lat >= 0 ? "N" : "S"} ${Math.abs(lat).toFixed(2)}°　${lng >= 0 ? "E" : "W"} ${Math.abs(lng).toFixed(2)}°`;
+    coordBox.lastChild.textContent = `ALT ${pov.altitude.toFixed(2)}`;
+  });
 
   go = function(href){
     if (!href || document.body.classList.contains("leaving")) return;
