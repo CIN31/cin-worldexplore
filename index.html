@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>世界探索计划</title>
-<meta name="description" content="世界探索计划。第一站：青海 × 甘肃。">
+<meta name="description" content="世界探索计划。青海 × 甘肃。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@ a{color:inherit}
 .hud a,.hud button{pointer-events:auto}
 .brand .kicker{margin:0;font-size:13px;letter-spacing:.14em;color:var(--star);text-transform:none}
 .brand h1{margin:6px 0 0;font:700 clamp(32px,6vw,56px)/1.1 var(--display);letter-spacing:.06em}
-.brand p{margin:10px 0 0;max-width:36ch;color:var(--soft);font-size:14px}
 .card{pointer-events:auto;align-self:flex-start;background:color-mix(in srgb,var(--night) 72%,transparent);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;min-width:min(100%,280px);max-width:340px;box-shadow:0 18px 40px -24px #000}
 .card.hot{border-color:color-mix(in srgb,var(--lake) 55%,var(--line))}
 .card .tag{font-size:12px;letter-spacing:.08em;color:var(--star)}
@@ -31,20 +30,15 @@ a{color:inherit}
 .card .meta{margin:4px 0 0;color:var(--soft);font-size:13px}
 .enter{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:8px 14px;border-radius:999px;border:0;background:var(--lake);color:#0F1A2E;font-weight:600;text-decoration:none;cursor:pointer}
 .enter:hover{filter:brightness(1.08)}
-.hint{margin-top:10px;font-size:12px;color:var(--soft)}
 .pin{appearance:none;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%);cursor:pointer;color:var(--star);text-shadow:0 1px 8px #0F1A2E;font:inherit}
-.pin i{width:10px;height:10px;border-radius:50%;background:var(--lake);box-shadow:0 0 0 6px color-mix(in srgb,var(--lake) 35%,transparent),0 0 16px var(--lake)}
+.pin i{width:8px;height:8px;border-radius:50%;background:color-mix(in srgb,var(--lake) 70%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--lake) 18%,transparent)}
 .pin b{margin-top:6px;font:500 14px/1 var(--display);letter-spacing:.12em}
 .fallback{position:fixed;inset:0;z-index:2;display:none;place-items:center;padding:24px;background:var(--night);text-align:center}
 .fallback.show{display:grid}
 .fallback a{color:var(--lake)}
 @media (max-width:640px){
   .hud{padding:18px 16px 16px}
-  .brand p{display:none}
   .card{max-width:100%;width:100%}
-}
-@media (prefers-reduced-motion:reduce){
-  .pin i{box-shadow:0 0 0 4px color-mix(in srgb,var(--lake) 35%,transparent)}
 }
 </style>
 </head>
@@ -54,20 +48,18 @@ a{color:inherit}
   <header class="brand">
     <p class="kicker">已点亮 1 站</p>
     <h1>世界探索计划</h1>
-    <p>在地球上点亮走过的地方。现在亮着的是第一站：青海与甘肃。</p>
   </header>
   <article class="card" id="card">
-    <div class="tag" id="card-tag">第一站 · 青海 × 甘肃</div>
+    <div class="tag" id="card-tag">青海 × 甘肃</div>
     <h2 id="card-title">青甘大环线</h2>
     <p class="meta" id="card-meta">2026/9/26–10/4 · 西宁出发，环线回到西宁</p>
     <a class="enter" id="enter" href="./qinggan/index.html">进入行程</a>
-    <p class="hint">拖动地球查看；点发亮的省份也能进去。</p>
   </article>
 </div>
 <div class="fallback" id="fallback">
   <div>
     <h1>世界探索计划</h1>
-    <p>地球加载失败时，可以直接进入第一站。</p>
+    <p>地球加载失败时，可以直接进入行程。</p>
     <p><a href="./qinggan/index.html">青甘大环线 →</a></p>
   </div>
 </div>
@@ -80,7 +72,7 @@ const TRIPS = [
     name: "青甘大环线",
     href: "./qinggan/index.html",
     regions: ["青海省", "甘肃省"],
-    kicker: "第一站 · 青海 × 甘肃",
+    kicker: "青海 × 甘肃",
     date: "2026/9/26–10/4",
     summary: "西宁出发，环线回到西宁"
   }
@@ -106,7 +98,7 @@ if (typeof Globe !== "function") fail();
 else try {
   let hover = null;
   const capColor = d => d.trip
-    ? (d === hover ? "rgba(226,168,87,0.92)" : "rgba(92,182,193,0.88)")
+    ? (d === hover ? "rgba(92,182,193,0.55)" : "rgba(92,182,193,0.38)")
     : "rgba(36,52,78,0.28)";
   const altitude = d => d.trip ? (d === hover ? 0.045 : 0.018) : 0.004;
   const el = document.getElementById("globe");
@@ -119,8 +111,8 @@ else try {
     .atmosphereAltitude(0.18)
     .polygonAltitude(altitude)
     .polygonCapColor(capColor)
-    .polygonSideColor(d => d.trip ? "rgba(92,182,193,0.35)" : "rgba(15,26,46,0.2)")
-    .polygonStrokeColor(d => d.trip ? "#F3E3B5" : "rgba(42,60,90,0.35)")
+    .polygonSideColor(d => d.trip ? "rgba(92,182,193,0.18)" : "rgba(15,26,46,0.2)")
+    .polygonStrokeColor(d => d.trip ? "rgba(92,182,193,0.45)" : "rgba(42,60,90,0.35)")
     .polygonCapCurvatureResolution(6)
     .polygonsTransitionDuration(220)
     .polygonLabel(d => d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker}` : "")
