@@ -118,6 +118,24 @@ body.lock{overflow:hidden}
 .stay .p{grid-row:span 2;font:400 20px/1 var(--display);font-variant-numeric:tabular-nums}
 .stay.none{background:transparent;border:1px dashed var(--line)}
 .stay.none .tag{background:var(--soft)}
+.guide{margin:12px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.guide summary{cursor:pointer;padding:8px 12px;font-size:14px;font-weight:600;list-style-position:inside}
+.guide[open] summary{border-bottom:1px solid var(--line)}
+.guide ul{list-style:none;margin:0;padding:0}
+.guide li{padding:10px 12px}
+.guide li+li{border-top:1px dashed var(--line)}
+.g-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.g-stay{font-size:12px;color:var(--soft);white-space:nowrap}
+.g-t{font-size:13px;color:var(--lake)}
+.guide p{margin:2px 0 0;font-size:13px;color:var(--soft);max-width:62ch}
+.g-links{display:flex;gap:14px;font-size:12px;margin-top:4px}
+.weather td:nth-child(n+2):nth-child(-n+4){white-space:nowrap;font-variant-numeric:tabular-nums}
+.note-list{margin:10px 0 0;padding-left:1.1em;color:var(--soft);font-size:13px;max-width:70ch}
+.muted-row td{color:var(--soft)}
+.sub-h{font:400 19px/1.3 var(--display);margin:22px 0 8px}
+td.pos{color:var(--grass);font-weight:600}
+td.neg{color:var(--danxia);font-weight:600}
+table.people{min-width:420px}
 .show-map{margin-top:10px;border:0;background:none;color:var(--lake);padding:0;font-size:13px;text-decoration:underline;text-underline-offset:3px}
 
 /* sections */
@@ -131,7 +149,7 @@ table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:12px;color:var(--soft);font-weight:500}
 tbody tr:last-child td{border-bottom:0}
-td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
 .ord{font-size:12px;color:var(--soft);font-variant-numeric:tabular-nums}
 .copy{border:1px solid var(--line);background:none;border-radius:6px;font-size:11px;padding:0 6px;margin-left:4px;color:var(--soft)}
@@ -159,8 +177,13 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
 
 @media (max-width:960px){
   .main{grid-template-columns:minmax(0,1fr)}
-  .mapbox{position:relative;top:0;order:-1}
-  #map{height:62vh;min-height:420px}
+  .mapbox{position:sticky;top:49px;z-index:4;order:-1;box-shadow:0 6px 12px -8px rgba(0,0,0,.25)}
+  #map{height:40vh;min-height:260px}
+  .map-foot{display:none}
+  .map-caption,#btn-plus,#btn-minus{display:none}
+  .map-tools{flex-wrap:nowrap;overflow-x:auto;padding:6px}
+  .tool{flex:none}
+  html{scroll-padding-top:calc(49px + 40vh + 50px)}
   .two{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:560px){
@@ -185,12 +208,12 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
 <div class="wrap">
   <header class="hero">
     <h1>青甘大环线</h1>
-    <p class="route-line">西宁出发，经青海湖、柴达木、敦煌、河西走廊、祁连，回到西宁。4 人自驾，2026 年 9 月 26 日至 10 月 4 日。</p>
+    <p class="route-line">西宁出发，经青海湖、柴达木、敦煌、河西走廊、祁连，回到西宁。4 人自驾，全景点保留。9/25 陆续到西宁集合，9/26 07:30 全员出发，10/4 暂定回西宁。</p>
     <ul class="facts">
       <li class="countdown"><b id="countdown">–</b><span id="countdown-label">距出发</span></li>
-      <li><b>9 天</b><span>其中 8 晚已订</span></li>
-      <li><b>¥1,640.10</b><span>住宿总额，7 笔订单</span></li>
-      <li><b>¥410</b><span>每人住宿均摊</span></li>
+      <li><b>9 天</b><span>环线 8 晚住宿已订</span></li>
+      <li><b>¥7,046.98</b><span>已记账支出</span></li>
+      <li><b>¥1,460.53</b><span>四人共摊部分，每人</span></li>
     </ul>
   </header>
 
@@ -204,7 +227,7 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
       </div>
     </div>
     <div class="strip" id="strip"></div>
-    <p class="strip-note">前三天是整趟最累的一段，9/27 加上预留可能要 11–12 小时在路上。点任意一天跳到详情。</p>
+    <p class="strip-note">9/27、9/28 是整趟最累的两天，全天估算分别可能到 14–17 小时和 12–16 小时。点任意一天跳到详情。</p>
   </div>
 </div>
 
@@ -221,6 +244,7 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
         <button class="tool" id="btn-full" aria-pressed="false">全屏</button>
         <button class="tool" id="btn-follow" aria-pressed="true" title="滚动到哪天，地图就跟到哪天">跟随滚动</button>
         <span class="map-caption" id="map-caption">全程路线</span>
+        <button class="tool" id="btn-goto" hidden>看这天行程</button>
       </div>
       <svg id="map" role="img" aria-label="青甘环线路线示意地图"></svg>
       <div class="map-foot">点位为区域示意，连线只表示游览顺序，不是实际道路。出发前请用导航核对每段路线。</div>
@@ -235,17 +259,17 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
         <table>
           <thead><tr><th>入住</th><th>住宿</th><th>免费取消截止</th><th class="num">金额</th></tr></thead>
           <tbody id="stay-rows"></tbody>
-          <tfoot><tr><td></td><td>合计 7 笔</td><td></td><td class="num">¥1,640.10</td></tr></tfoot>
+          <tfoot><tr><td></td><td>合计（含 9/25 西宁）</td><td></td><td class="num">¥1,780.98</td></tr></tfoot>
         </table>
       </div>
       <div class="split">
         <div class="big">¥410.03</div>
-        <div>每人住宿费用（¥1,640.10 ÷ 4）</div>
+        <div>环线住宿每人（¥1,640.10 ÷ 4）</div>
         <ul>
-          <li>覆盖 9/26 至 10/3 共 8 晚。</li>
-          <li>不含 9/25 西宁集合当晚，也不含 10/4 返程当晚。</li>
+          <li>环线 7 笔订单覆盖 9/26 至 10/3 共 8 晚，合计 ¥1,640.10，4 人均摊。</li>
+          <li>9/25 西宁酒店 ¥140.88 已订，由 3 人分摊（每人 ¥46.96）。10/4 当晚未订。</li>
           <li>敦煌 ¥220 订单按 Notion 记录覆盖 9/28 和 9/29 两晚，Excel 未列退房日期。</li>
-          <li>只有雅丹营地订单标注了"在线付"，其他订单的付款方式待确认。</li>
+          <li>住宿费用目前都由胡先生垫付，记账表里已登记。</li>
         </ul>
       </div>
     </div>
@@ -253,18 +277,93 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
 
   <section class="block" id="todo">
     <h2>出发前要确认的事</h2>
-    <p class="lead">勾选状态保存在这台设备的浏览器里，同行的人各自打开是分开的。</p>
+    <p class="lead">勾选状态保存在这台设备的浏览器里，同行的人各自打开是分开的。团队共用的待办和必带物品清单在 Notion 里。</p>
     <p class="progress" id="progress"></p>
     <ul class="checklist" id="checklist"></ul>
+  </section>
+
+  <section class="block" id="budget">
+    <h2>费用</h2>
+    <p class="lead">已记账部分来自 Notion「记账」表，截至 2026/9/16。每人差额是按分摊人数平均算出来的，最终转账以 Notion 结算为准。</p>
+
+    <h3 class="sub-h">每人现状</h3>
+    <div class="table-wrap">
+      <table class="people">
+        <thead><tr><th>成员</th><th class="num">已垫付</th><th class="num">应承担</th><th class="num">差额</th></tr></thead>
+        <tbody>
+          <tr><td>日天</td><td class="num">¥3,250.00</td><td class="num">¥1,507.49</td><td class="num pos">应收 ¥1,742.51</td></tr>
+          <tr><td>胡先生</td><td class="num">¥1,640.10</td><td class="num">¥1,507.49</td><td class="num pos">应收 ¥132.61</td></tr>
+          <tr><td>成经龙</td><td class="num">¥2,016.00</td><td class="num">¥2,524.53</td><td class="num neg">应付 ¥508.53</td></tr>
+          <tr><td>向磊</td><td class="num">¥140.88</td><td class="num">¥1,507.49</td><td class="num neg">应付 ¥1,366.61</td></tr>
+        </tbody>
+        <tfoot><tr><td>合计</td><td class="num">¥7,046.98</td><td class="num">¥7,046.98</td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <p class="note-list" style="list-style:none;padding:0">成经龙的应承担里包含他自己的深圳到西宁火车票 ¥1,064，只算在他一人名下。</p>
+
+    <h3 class="sub-h">已记账明细</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>支出</th><th>付款人</th><th>分摊</th><th class="num">金额</th></tr></thead>
+        <tbody>
+          <tr><td>租车</td><td>日天</td><td>4 人</td><td class="num">¥3,250.00</td></tr>
+          <tr><td>环线住宿 8 晚（7 笔订单）<div class="ord">明细见上方住宿表</div></td><td>胡先生</td><td>4 人</td><td class="num">¥1,640.10</td></tr>
+          <tr><td>深圳去西宁火车票<div class="ord">深圳→西宁 882.5，广元→西宁 182</div></td><td>成经龙</td><td>成经龙本人</td><td class="num">¥1,064.00</td></tr>
+          <tr><td>莫高窟门票<div class="ord">4 张</div></td><td>成经龙</td><td>4 人</td><td class="num">¥952.00</td></tr>
+          <tr><td>西宁酒店 9/25–9/26</td><td>向磊</td><td>日天、胡先生、向磊</td><td class="num">¥140.88</td></tr>
+        </tbody>
+        <tfoot><tr><td>合计</td><td></td><td></td><td class="num">¥7,046.98</td></tr></tfoot>
+      </table>
+    </div>
+
+    <h3 class="sub-h">还没发生的费用（估算）</h3>
+    <p class="lead">沿用 Notion 原版预算的单价，已经扣掉租车、住宿、莫高窟这些已付的部分。油费的里程估计已失效，出发前按导航重算。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>项目</th><th class="num">每人估算</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>油费、过路、停车</td><td class="num">¥625–900</td><td>4 人合计约 2,500–3,600</td></tr>
+          <tr><td>其他门票</td><td class="num">¥563–762</td><td>鸣沙山 110、嘉峪关 110、丹霞 93、塔尔寺 70、茶卡 60、雅丹 60、卓尔山 60。上限按原预留 1,000 减去莫高窟</td></tr>
+          <tr><td>餐饮 9 天</td><td class="num">¥900–1,350</td><td>每天 100–150</td></tr>
+          <tr><td>保险、路餐、杂费</td><td class="num">¥200–300</td><td></td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>待发生小计</td><td class="num">¥2,288–3,312</td><td></td></tr>
+          <tr><td>加上已共摊的 ¥1,460.53</td><td class="num">约 ¥3,750–4,770</td><td>每人全程预计，不含各自往返西宁的交通、9/25 和 10/4 住宿</td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="weather">
+    <h2>天气与穿衣</h2>
+    <p class="lead">9 月底历史同期参考，不是实时预报。临行前请查覆盖整个行程的逐日预报。</p>
+    <div class="table-wrap">
+      <table class="weather">
+        <thead><tr><th>地点</th><th>海拔</th><th>白天</th><th>夜间</th><th>提示</th></tr></thead>
+        <tbody>
+          <tr><td>西宁</td><td>2275 m</td><td>16–20°C</td><td>6–9°C</td><td>首晚适应海拔</td></tr>
+          <tr><td>青海湖、茶卡</td><td>约 3100 m</td><td>10–18°C</td><td>2–8°C</td><td>风大，体感冷</td></tr>
+          <tr><td>大柴旦</td><td>约 3174 m</td><td>9–17°C</td><td>2–7°C</td><td>干燥，紫外线强</td></tr>
+          <tr><td>敦煌</td><td>1139 m</td><td>22–27°C</td><td>8–13°C</td><td>全程最暖，白天可穿单层</td></tr>
+          <tr><td>嘉峪关、张掖</td><td>约 1480 m</td><td>18–25°C</td><td>7–11°C</td><td>丹霞需要晴天</td></tr>
+          <tr><td>祁连、门源</td><td>约 2800 m</td><td>8–16°C</td><td>0–6°C</td><td>达坂山可能有初雪</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="note-list">
+      <li>青海段昼夜温差可达 15°C 以上，夜间接近冰点。甘肃段相对暖和，但非常干燥。</li>
+      <li>分层穿：速干层、抓绒或薄羽绒、外套。另带防晒、保温杯、车充。</li>
+    </ul>
   </section>
 
   <section class="block" id="tips">
     <h2>路上提醒</h2>
     <p class="lead">通用经验，具体以当地实际情况为准。</p>
     <div class="tips">
-      <div class="tip"><h3>10/1 起是国庆假期</h3><p>后半程嘉峪关、七彩丹霞、卓尔山正好赶上假期，排队和停车会明显变慢。门票能提前在官方渠道预约的尽量提前，预留时间别省。</p></div>
+      <div class="tip"><h3>前后都撞上假期</h3><p>9/25–27 是中秋假期，10/1–7 是国庆假期。青海湖、茶卡、七彩丹霞重点预留停车和接驳排队时间。门票能提前在官方渠道预约的尽量提前。</p></div>
       <div class="tip"><h3>柴达木段早加油</h3><p>大柴旦到水上雅丹、黑独山、当金山这一段加油站和补给点少，油量过半就加，车上备好水和吃的。</p></div>
-      <div class="tip"><h3>海拔与温差</h3><p>茶卡一带海拔约 3000 米，当金山垭口更高。第一天别剧烈运动。9 月底柴达木早晚很冷，带抓绒或薄羽绒。</p></div>
+      <div class="tip"><h3>尊重地表和牧场</h3><p>黑独山、雅丹按景区路线走，不越野碾压地表。草原上用正规停车区，不开车进牧场。</p></div>
       <div class="tip"><h3>避免天黑赶路</h3><p>无人区路段夜里光线差，路上可能有牛羊。长途日尽量早出发，4 人轮换开车，每 2 小时左右换一次。</p></div>
       <div class="tip"><h3>莫高窟带证件</h3><p>带上预约时用的身份证件原件。9/29 从敦煌市区出发，先到数字展示中心，不是直接去窟区。</p></div>
       <div class="tip"><h3>离线地图</h3><p>柴达木和当金山一带信号可能不稳，出发前在导航 App 里下载青海、甘肃的离线地图。</p></div>
@@ -272,7 +371,7 @@ footer{margin:48px 0 0;padding:18px 0 40px;border-top:1px solid var(--line);font
   </section>
 
   <footer>
-    资料来源：用户 2026/9/16 上传的已订住宿 Excel、原 <a href="https://app.notion.com/p/3bcfd4256f87801a82cde1bae5375018" target="_blank" rel="noopener">Notion 行程</a>。行车时间是规划估算，不是实时导航结果。
+    资料来源：<a href="https://app.notion.com/p/3bcfd4256f87801a82cde1bae5375018" target="_blank" rel="noopener">Notion「世界探索计划——青甘大环线」</a>（2026/9/16 同步）及已订住宿 Excel。行车时间是规划估算，不是实时导航结果。
     底图来自 <a href="https://github.com/longwosion/geojson-map-china" target="_blank" rel="noopener">longwosion/geojson-map-china</a> 省界数据；黑独山位置参考<a href="https://www.ctgii.com/scenic/overseas/1315" target="_blank" rel="noopener">景区介绍</a>。点地名会在高德地图中搜索。
   </footer>
 </div>
@@ -286,58 +385,91 @@ const GEO = {"type":"FeatureCollection","features":[{"type":"Feature","propertie
 // [名称, 经度, 纬度, 高德搜索词]
 const P = [
  ["西宁",101.78,36.62,"西宁市"],["塔尔寺",101.57,36.49,"塔尔寺"],["日月山",101.1,36.44,"日月山景区"],
- ["青海湖二郎剑",100.49,36.58,"青海湖二郎剑景区"],["茶卡",99.08,36.79,"茶卡盐湖"],["翡翠湖",95.09,37.91,"大柴旦翡翠湖"],
+ ["青海湖",100.49,36.58,"青海湖二郎剑景区"],["茶卡",99.08,36.79,"茶卡盐湖"],["翡翠湖",95.09,37.91,"大柴旦翡翠湖"],
  ["U 型公路",94.15,37.42,"U型公路 海西"],["水上雅丹",93.68,37.57,"水上雅丹"],["黑独山",93.44962,38.8676,"黑独山"],
  ["当金山",94.34,39.39,"当金山"],["敦煌",94.66,40.14,"敦煌市"],["莫高窟数字展示中心",94.8,40.12,"莫高窟数字展示中心"],
- ["莫高窟",94.81,40.04,"莫高窟"],["鸣沙山月牙泉",94.67,40.09,"鸣沙山月牙泉"],["瓜州雕塑",95.8,40.43,"瓜州 大地之子雕塑"],
+ ["莫高窟",94.81,40.04,"莫高窟"],["鸣沙山月牙泉",94.67,40.09,"鸣沙山月牙泉"],["瓜州雕塑长廊",95.8,40.43,"瓜州 大地之子雕塑"],
  ["嘉峪关关城",98.22,39.81,"嘉峪关关城"],["七彩丹霞",100.04,38.97,"张掖七彩丹霞"],["张掖",100.45,38.93,"张掖国家湿地公园"],
- ["扁都口",100.94,38.24,"扁都口"],["祁连草原",100.72,38.08,"祁连草原"],["卓尔山",100.25,38.18,"卓尔山"],
- ["门源岗什卡",101.62,37.47,"门源 岗什卡雪峰"],["达坂山",101.42,37.36,"达坂山"]
+ ["扁都口",100.94,38.24,"扁都口"],["祁连大草原",100.72,38.08,"祁连草原"],["卓尔山",100.25,38.18,"卓尔山"],
+ ["门源岗什卡",101.62,37.47,"门源 岗什卡雪峰"],["达坂山观景段",101.42,37.36,"达坂山"]
 ];
 
 const STAYS = [
+ {date:"9/25",nights:"9/25",name:"西宁酒店",room:"",area:"西宁，集合当晚",amount:140.88,order:"",cancel:null,note:"3 人分摊，不在 7 笔订单内"},
  {date:"9/26",nights:"9/26",name:"茶卡锦庐民宿",room:"两室",area:"茶卡镇",amount:220,order:"1128150458461157",cancel:"2026-09-25T18:00",note:""},
  {date:"9/27",nights:"9/27",name:"星舰雅丹未来城野奢营地酒店",room:"星舰全景双床房",area:"水上雅丹附近（地址待核）",amount:479.10,order:"1128150986995987",cancel:"2026-09-27T18:00",note:"在线付"},
  {date:"9/28",nights:"9/28–9/29",name:"归宿家 清欢",room:"2 居室 / 田园小院",area:"敦煌",amount:220,order:"1128150458476890",cancel:"2026-09-28T18:00",note:"两晚，每晚约 ¥110"},
  {date:"9/30",nights:"9/30",name:"归宿家 清欢（续住）",room:"",area:"敦煌",amount:181,order:"1128150458477482",cancel:"2026-09-29T18:00",note:""},
  {date:"10/1",nights:"10/1",name:"东湖／迎宾湖附近舒适二居",room:"可住 7 人，有电梯",area:"嘉峪关",amount:142,order:"1128150458479234",cancel:"2026-10-01T18:00",note:"房源名和地址待确认"},
- {date:"10/2",nights:"10/2",name:"中式风两室两厅观景套房",room:"",area:"张掖国家湿地公园附近",amount:167,order:"1128150458479976",cancel:"2026-10-02T18:00",note:""},
- {date:"10/3",nights:"10/3",name:"观岚居民宿",room:"",area:"祁连县（地址待核）",amount:231,order:"1128150458482449",cancel:"2026-10-03T18:00",note:""}
+ {date:"10/2",nights:"10/2",name:"中式风两室两厅观景套房",room:"",area:"张掖国家湿地公园附近",amount:167,order:"1128150458479976",cancel:"2026-10-02T18:00",note:"",conflict:"记账表写的是 10/2 0 点前"},
+ {date:"10/3",nights:"10/3",name:"观岚居民宿",room:"",area:"祁连县（地址待核）",amount:231,order:"1128150458482449",cancel:"2026-10-03T18:00",note:"",conflict:"记账表写的是 10/3 0 点前"}
 ];
 
 const DAYS = [
- {date:"9/26",iso:"2026-09-26",wd:"周六",title:"西宁到茶卡",stops:[0,1,2,3,4],drive:[5.5,7],buf:[2,3],full:"13–16 小时",c:"#B9823A",stay:0,
-  note:"07:30 从西宁出发，车辆已安排。沿途塔尔寺、日月山、青海湖，傍晚到茶卡。",flag:""},
- {date:"9/27",iso:"2026-09-27",wd:"周日",title:"茶卡到水上雅丹",stops:[4,5,6,7],drive:[7.5,9],buf:[2,3],full:"14–17 小时以上",c:"#B24A3B",stay:1,hard:true,
-  note:"全程最长的一天，经翡翠湖、U 型公路到水上雅丹。",flag:"这一天的安排仍是草案，车程加景点可能超过 14 小时。建议出发前重新导航评估，必要时砍掉一个景点。"},
- {date:"9/28",iso:"2026-09-28",wd:"周一",title:"水上雅丹到敦煌",stops:[7,8,9,10],drive:[7,9],buf:[1,2],full:"12–16 小时",c:"#B24A3B",stay:2,hard:true,
-  note:"经黑独山，翻当金山，目标晚上到敦煌。",flag:"晚上到敦煌是目标，不保证。第二天中午有莫高窟预约，今晚尽量别拖太晚。"},
- {date:"9/29",iso:"2026-09-29",wd:"周二",title:"莫高窟",stops:[10,11,12,10],drive:[1,1.5],buf:[1,1],full:"莫高窟约 3–4 小时",c:"#17707C",stay:2,
-  note:"12:45 已预约。争取 11:45 到莫高窟数字展示中心，具体以订单要求为准。下午自由，可去沙洲夜市或看《又见敦煌》。",flag:""},
- {date:"9/30",iso:"2026-09-30",wd:"周三",title:"鸣沙山月牙泉",stops:[10,13,10],drive:[0.5,1],buf:[1,2],full:"景点约 3–4 小时",c:"#17707C",stay:3,
-  note:"前几天连续长途，上午可以睡晚一点。下午到傍晚去鸣沙山，晚上沙洲夜市。《又见敦煌》如果 9/29 没看，今晚可选。",flag:""},
- {date:"10/1",iso:"2026-10-01",wd:"周四",title:"敦煌到嘉峪关",stops:[10,14,15],drive:[4,5],buf:[1.5,2.5],full:"9–12 小时",c:"#4F7D4A",stay:4,
-  note:"途经瓜州雕塑。关城如果当天来不及，可以挪到第二天上午再去。",flag:""},
- {date:"10/2",iso:"2026-10-02",wd:"周五",title:"嘉峪关到七彩丹霞，住张掖",stops:[15,16,17],drive:[3,4],buf:[2,3],full:"9–12 小时，另加丹霞到住处",c:"#4F7D4A",stay:5,
-  note:"下午到七彩丹霞，看完日落再去张掖住宿。",flag:"丹霞到张掖住处这段车程还没按酒店地址重新导航，时间表里没算进去。"},
- {date:"10/3",iso:"2026-10-03",wd:"周六",title:"张掖到祁连",stops:[17,18,19,20],drive:[4,5],buf:[1,2],full:"8–11 小时",c:"#5E6FA3",stay:6,
-  note:"经扁都口、祁连草原，傍晚上卓尔山。",flag:""},
- {date:"10/4",iso:"2026-10-04",wd:"周日",title:"祁连回西宁",stops:[20,21,22,0],drive:[5,6],buf:[1.5,2.5],full:"8–11 小时",c:"#5E6FA3",stay:null,
-  note:"经门源远眺岗什卡雪峰，翻达坂山回西宁。有空可去莫家街、新千夜市。",flag:"返程日期还可以调整，当晚住宿未订。"}
+ {date:"9/26",iso:"2026-09-26",wd:"周六",title:"西宁到茶卡",stops:[0,1,2,3,4],drive:[5.5,7],buf:[2,3],full:"13–16 小时",c:"#B9823A",stay:1,
+  note:"07:30 全员从西宁出发，取车不占当天出发时间。行程较满，不固定到达时间，午饭按前进方向就近解决。",flag:"中秋假期期间，青海湖和茶卡要多留停车与接驳排队时间。"},
+ {date:"9/27",iso:"2026-09-27",wd:"周日",title:"茶卡到水上雅丹",stops:[4,5,6,7],drive:[7.5,9],buf:[2,3],full:"14–17 小时以上",c:"#B24A3B",stay:2,hard:true,
+  note:"全程最长的一天。上午茶卡盐湖，经翡翠湖、U 型公路方向到水上雅丹附近。U 型公路只在合法停车点短停。",flag:"高负荷且尚未通过完整导航核验。先核对全部途经点导航和酒店地址，不靠压缩睡眠硬赶。"},
+ {date:"9/28",iso:"2026-09-28",wd:"周一",title:"水上雅丹到敦煌",stops:[7,8,9,10],drive:[7,9],buf:[1,2],full:"12–16 小时",c:"#B24A3B",stay:3,hard:true,
+  note:"经冷湖附近的黑独山，走当金山方向到敦煌。当金山走隧道还是山口以实际导航为准。当晚不安排定时演出。",flag:"晚上到敦煌是已确定的目标，但前半程能否支撑这个目标还需验证。第二天中午有莫高窟预约。"},
+ {date:"9/29",iso:"2026-09-29",wd:"周二",title:"莫高窟",stops:[10,11,12,10],drive:[1,1.5],buf:[1,1],full:"参观约 3–4 小时，其余自由",c:"#17707C",stay:3,
+  note:"12:45 已预约。争取 11:45 左右到莫高窟数字展示中心，以订单集合要求为准。晚上可去沙洲夜市，或看《又见敦煌》（场次另核，票未订）。",flag:"",extras:["沙洲夜市","又见敦煌"]},
+ {date:"9/30",iso:"2026-09-30",wd:"周三",title:"鸣沙山月牙泉",stops:[10,13,10],drive:[0.5,1],buf:[1,2],full:"弹性安排",c:"#17707C",stay:4,
+  note:"上午休息或自由活动。下午提前出门去鸣沙山，留出登沙丘、看日落和回程排队的时间，晚上沙洲夜市。",flag:"",extras:["沙洲夜市","又见敦煌"]},
+ {date:"10/1",iso:"2026-10-01",wd:"周四",title:"敦煌到嘉峪关",stops:[10,14,15],drive:[4,5],buf:[1.5,2.5],full:"约 9–12 小时",c:"#4F7D4A",stay:5,
+  note:"早出发。途经瓜州戈壁雕塑长廊（大地之子、无界、非垂直坐标等），再到嘉峪关关城。关城赶不上入园的话，挪到 10/2 上午。",flag:"国庆假期第一天，景区排队和停车会明显变慢。"},
+ {date:"10/2",iso:"2026-10-02",wd:"周五",title:"嘉峪关到七彩丹霞，住张掖",stops:[15,16,17],drive:[3,4],buf:[2,3],full:"约 9–12 小时（含等日落）",c:"#4F7D4A",stay:6,
+  note:"下午到七彩丹霞，乘观光车看到傍晚。不要临近日落才入园，并确认末班观光车时间。如果上午要补关城，就提前出发。",flag:"丹霞到张掖住处这段车程还没按酒店地址重新导航，时间估算里没算进去。"},
+ {date:"10/3",iso:"2026-10-03",wd:"周六",title:"张掖到祁连",stops:[17,18,19,20],drive:[4,5],buf:[1,2],full:"约 8–11 小时",c:"#5E6FA3",stay:7,
+  note:"经扁都口、祁连大草原，沿途短停，留出卓尔山入园和接驳时间。草原上停车用正规区域，不开车进牧场。",flag:""},
+ {date:"10/4",iso:"2026-10-04",wd:"周日",title:"祁连回西宁",stops:[20,21,22,0],drive:[5,6],buf:[1.5,2.5],full:"约 8–11 小时",c:"#5E6FA3",stay:null,
+  note:"途经门源远眺岗什卡雪峰（不进山），翻达坂山回西宁。达坂山遇低能见度、冰雪或拥堵，以通行为先。",flag:"返程日期可调整，当晚住宿未定。还车、去机场和值机要另外计时，航班早的话回西宁时间要提前。",extras:["莫家街","新千夜市"]}
 ];
 
+// 景点看点，来自 Notion「景点图文指南」。键为 P 的下标或名称
+const GUIDE = {
+ 1:{t:"藏传佛教寺院建筑与艺术",d:"重点看寺院院落、壁画、堆绣和酥油花，建议结合讲解。殿内能否拍照以现场规定为准。",stay:"1.5–2 小时",src:"https://you.ctrip.com/sight/xining237/9794.html",m:"https://gs.ctrip.com/html5/you/sight/xining237/9794.html"},
+ 2:{t:"山口、亭阁与高原远景",d:"西宁到青海湖之间的短停点，看山口地形、亭阁和开阔景色。",stay:"30–45 分钟",src:"https://dp.pconline.com.cn/dphoto/list_3395251.html"},
+ 3:{t:"大湖、天际线与高原光影",d:"选一个景区入口游览，以湖岸散步和湖面全景为主。9 月底不以油菜花为目标。",stay:"1.5–2 小时",src:"https://kpwhbjb.cgl.org.cn/article/2024/2096-9791/2096-9791-40-3-28.shtml"},
+ 4:{t:"盐滩、小火车与天空倒影",d:"镜面效果取决于风、水面和光线，不是每天都一样。小火车和接驳时间另算。",stay:"2–3 小时",src:"https://www.chakasl.com/dynamics/detail/1728.html"},
+ 5:{t:"不同色彩的盐池与白色盐岸",d:"看蓝绿盐池的色彩对比。航拍视角和地面观看不同，按开放步道和观光车路线游览。",stay:"2–3 小时",src:"https://www.sundaytour.com.tw/zh-tw/attractions/detail.php?cid=0&fid2=50&fid=0&pid=12776"},
+ 6:{t:"戈壁公路的起伏与透视",d:"沿途观景项目。不要站在行车道上拍照，只在合法停车点短停。",stay:"途经短停",src:"https://you.ctrip.com/sight/haixiprefecture120012/133968233.html",m:"https://gs.ctrip.com/html5/you/sight/haixiprefecture120012/133968233.html"},
+ 7:{t:"湖水环绕风蚀土丘",d:"本次必去。看水面与雅丹群的组合、远近层次和侧光。实际水位和颜色会变化。",stay:"2.5–3 小时",src:"https://www.mipai.com.cn/article/MjM5NDE5"},
+ 8:{t:"黑灰山体与浅色戈壁的水墨感",d:"位于冷湖附近，看山体纹理和黑白对比。按景区开放路线游览，不要自行越野碾压地表。",stay:"1.5–2 小时",src:"https://beatricewong.com/2025/08/21/qinghai-heidu-yanzhi-mountain-july-2025/"},
+ 9:{t:"青海与甘肃之间的山地公路",d:"转场途中的观景段，不单独安排登山。走隧道还是山口以实际导航和路况为准。",stay:"沿途观看",src:"https://travel.sina.com.cn/domestic/pages/2017-05-15/detail-ifycwyxr9093346.shtml",m:"https://travel.sina.cn/domestic/pages/2017-05-15/detail-ifycwyxr9093346.d.html"},
+ 12:{t:"丝绸之路上的壁画与彩塑",d:"按订单先到数字展示中心，参观哪些洞窟以实际票型和讲解安排为准。",stay:"约 3–4 小时",src:"https://www.mgk.org.cn/",srcLabel:"官方预约入口"},
+ 13:{t:"沙丘、绿洲与月牙形泉水",d:"下午进入，留时间登沙丘、看月牙泉和日落。骑骆驼、滑沙按兴趣自选，一般不含在门票里。",stay:"3–4 小时",src:"https://www.tripadeal.com.au/deals/5633-treasures-of-chinas-silk-road"},
+ 14:{t:"大尺度雕塑与戈壁空间",d:"包括大地之子、无界、非垂直坐标等。各作品不在同一个停车点，出发前核对位置和开放情况。",stay:"合计 1–1.5 小时，点间驾驶另计",src:"https://news.cri.cn/2023-09-09/83c238f6-e753-fe48-e5f5-8cabcda2ee81.html"},
+ 15:{t:"城楼、城墙与边塞历史",d:"以关城主体和城墙视角为主，了解河西走廊的交通与防御。不额外加其他长城景点。",stay:"2–2.5 小时",src:"https://www.chinevoyage.com/turfan/tuyoq.htm"},
+ 16:{t:"彩色丘陵与层状纹理",d:"乘观光车结合观景台游览，下午到傍晚看光线变化。实际颜色受天气和光线影响。",stay:"3–4 小时，等日落另留余量",src:"https://www.artfido.com/the-magical-rainbow-mountains-of-china/"},
+ 18:{t:"祁连山通道与山谷风景",d:"张掖到祁连的沿途停靠点，看山谷与草地。10 月不以油菜花为看点。",stay:"30–45 分钟",src:"https://you.ctrip.com/sight/shandan120488/1480659.html",m:"https://gs.ctrip.com/html5/you/sight/shandan120488/1480659.html"},
+ 19:{t:"起伏草甸与远山",d:"看沿途草原、牧群和山脉层次。秋季草色偏黄褐。",stay:"沿途累计 30–60 分钟",src:"https://eng.tibet.cn/eng/travel/destination/201809/t20180920_6274569.html"},
+ 20:{t:"红色山体、草坡与祁连山景",d:"适合步行观景，看山谷全景。10 月植被颜色以现场为准。",stay:"2–3 小时",src:"https://www.sohu.com/a/545290288_121106869",m:"https://m.sohu.com/a/545290288_121106869"},
+ 21:{t:"盆地田野与远处雪峰",d:"只途经门源并远眺岗什卡，不进山、不徒步。能不能看清雪峰取决于天气。",stay:"30–60 分钟",src:"https://you.ctrip.com/sight/menyuan1446317/1713881.html",m:"https://gs.ctrip.com/html5/you/sight/menyuan1446317/1713881.html"},
+ 22:{t:"高处俯瞰门源盆地",d:"回西宁途中，天气和停车条件允许时短停。",stay:"15–30 分钟",src:"https://you.ctrip.com/sight/menyuan1446317/3389711.html",m:"https://gs.ctrip.com/html5/you/sight/menyuan1446317/3389711.html"},
+ "沙洲夜市":{t:"敦煌夜间街景与小吃",d:"敦煌连住期间吃晚饭、散步、买纪念品。可以试试驴肉黄面、杏皮水和烤串。",stay:"1–2 小时",src:"https://www.travelchinaguide.com/package/dunhuang-day-tour.htm",kw:"沙洲夜市"},
+ "又见敦煌":{t:"敦煌文化主题的沉浸式演出",d:"可选项目，未订票。看 9/29 或 9/30 的场次，注意和莫高窟结束时间的衔接。",stay:"按所订场次",src:"https://www.ly.com/scenery/BookSceneryTicket_229637.html",kw:"又见敦煌剧场"},
+ "莫家街":{t:"西宁街巷与青海小吃",d:"集合期间或回西宁后自由安排。可以尝酿皮、甜醅和酸奶。",stay:"自由安排",src:"https://chinawondersguide.com/yak-yogurt-mojia-food-street/",kw:"西宁 莫家街"},
+ "新千夜市":{t:"西宁夜间餐饮与逛街",d:"和莫家街一样作为西宁停留时的自由活动，按当晚营业情况安排。",stay:"自由安排",src:"https://www.sohu.com/a/699273424_121117077",m:"https://m.sohu.com/a/699273424_121117077",kw:"西宁 新千夜市"}
+};
+
 const TODO = [
- {id:"t1",text:"重新导航评估 9/27 茶卡到水上雅丹是否可行，决定要不要删景点",when:"出发前"},
- {id:"t2",text:"确认雅丹营地酒店的具体地址和进营地的入口",when:"出发前"},
+ {id:"t1",text:"用导航核验 9/27、9/28 全部途经点，决定是否删景点",when:"出发前"},
+ {id:"t2",text:"确认雅丹营地酒店的实际地址和到景区入口的驾车路线",when:"出发前"},
  {id:"t3",text:"用张掖酒店地址导航，补算 10/2 七彩丹霞到住处的车程",when:"出发前"},
  {id:"t4",text:"确认嘉峪关房源的名称和地址",when:"出发前"},
  {id:"t5",text:"确认祁连观岚居民宿的地址",when:"出发前"},
  {id:"t6",text:"确认敦煌 ¥220 订单确实包含 9/28、9/29 两晚及退房日期",when:"出发前"},
- {id:"t7",text:"查看莫高窟订单，确认到达数字展示中心的时间和需要带的证件",when:"9/28 前"},
- {id:"t8",text:"查《又见敦煌》9/29、9/30 的场次，决定看不看",when:"9/28 前"},
- {id:"t9",text:"核对每笔订单的入住人数和房间数是否够 4 人",when:"出发前"},
- {id:"t10",text:"定下 10/4 是否当天返程，以及 9/25、10/4 晚上住哪",when:"出发前"},
- {id:"t11",text:"下载青海、甘肃离线地图",when:"出发前"}
+ {id:"t7",text:"核对每笔订单的入住人数上限、房间数和床型是否够 4 人",when:"出发前"},
+ {id:"t8",text:"查看莫高窟订单，确认集合时间和需要带的证件",when:"9/28 前"},
+ {id:"t9",text:"查《又见敦煌》9/29、9/30 的场次，决定看不看",when:"9/28 前"},
+ {id:"t10",text:"核对瓜州各雕塑的位置和开放情况",when:"9/30 前"},
+ {id:"t11",text:"查七彩丹霞末班观光车时间",when:"10/1 前"},
+ {id:"t12",text:"定下返程日期、航班和 10/4 晚上住哪；确认延长还车是否要补差价",when:"出发前"},
+ {id:"t15",text:"张掖、祁连两笔订单的免费取消时间，行程页写 18:00，记账表写 0 点，看订单页确认",when:"10/1 前"},
+ {id:"t16",text:"成经龙确认西宁 9/25 住宿怎么安排（西宁酒店目前由另外 3 人分摊）",when:"9/25 前"},
+ {id:"t13",text:"临行查一次覆盖 9/25–10/4 的逐日天气预报",when:"9/24 前后"},
+ {id:"t14",text:"下载青海、甘肃离线地图",when:"出发前"}
 ];
 
 const $ = s => document.querySelector(s);
@@ -373,9 +505,25 @@ $("#strip").innerHTML = DAYS.map((d,i)=>{
 $("#strip").querySelectorAll(".col").forEach(b => b.onclick = () => jumpTo(+b.dataset.i));
 
 /* day nav */
-$("#daynav").innerHTML = DAYS.map((d,i)=>`<a href="#day-${i}" data-i="${i}">${d.date} ${d.title.split("到")[1]?.split("，")[0] || d.title}</a>`).join("") + `<a href="#stays">住宿</a><a href="#todo">待办</a><a href="#tips">提醒</a>`;
+$("#daynav").innerHTML = DAYS.map((d,i)=>`<a href="#day-${i}" data-i="${i}">${d.date} ${d.title.split("到")[1]?.split("，")[0] || d.title}</a>`).join("") + `<a href="#stays">住宿</a><a href="#todo">待办</a><a href="#budget">费用</a><a href="#weather">天气</a><a href="#tips">提醒</a>`;
+
+/* 手机打开移动版链接，电脑打开网页版链接 */
+const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile|HarmonyOS|MicroMessenger/i.test(navigator.userAgent)
+  || (matchMedia("(pointer: coarse)").matches && Math.min(screen.width, screen.height) <= 820);
+const srcFor = g => (IS_MOBILE && g.m) ? g.m : g.src;
 
 /* days */
+function guideBlock(d){
+  const seen = new Set();
+  const items = [];
+  d.stops.forEach(s => { if (GUIDE[s] && !seen.has(s)) { seen.add(s); items.push([P[s][0], GUIDE[s], amap(s)]); } });
+  (d.extras||[]).forEach(k => items.push([k==="又见敦煌"?"《又见敦煌》":k, GUIDE[k], `https://uri.amap.com/search?keyword=${encodeURIComponent(GUIDE[k].kw)}&src=trip&callnative=1`]));
+  if (!items.length) return "";
+  return `<details class="guide"><summary>景点看点与建议停留（${items.length}）</summary><ul>${items.map(([n,g,nav]) => `
+    <li><div class="g-head"><b>${esc(n)}</b><span class="g-stay">${esc(g.stay)}</span></div>
+    <div class="g-t">${esc(g.t)}</div><p>${esc(g.d)}</p>
+    <div class="g-links"><a href="${nav}" target="_blank" rel="noopener">高德搜索</a><a href="${srcFor(g)}" target="_blank" rel="noopener">${g.srcLabel||"参考图文"}</a></div></li>`).join("")}</ul></details>`;
+}
 function stayBlock(d){
   if (d.stay === null) return `<div class="stay none"><div class="tag">?</div><div class="n">当晚未订</div><div class="p"></div><div class="m">返程日期确定后再安排</div></div>`;
   const s = STAYS[d.stay];
@@ -394,6 +542,7 @@ $("#days").innerHTML = DAYS.map((d,i)=>`
   </dl>
   <p class="note">${esc(d.note)}</p>
   ${d.flag?`<div class="flag"><b>待核实：</b>${esc(d.flag)}</div>`:""}
+  ${guideBlock(d)}
   ${stayBlock(d)}
   <button class="show-map" data-i="${i}">在地图上看这一天</button>
 </article>`).join("");
@@ -401,14 +550,17 @@ $("#days").innerHTML = DAYS.map((d,i)=>`
 /* stay table */
 const now = new Date();
 $("#stay-rows").innerHTML = STAYS.map((s,i)=>{
-  const dl = new Date(s.cancel + ":00+08:00");
-  const days = (dl - now) / 864e5;
-  const cls = days >= 0 && days < 3 ? "deadline soon" : "deadline";
-  const [, mo, da] = s.cancel.slice(0,10).split("-"); const dtxt = `${+mo}/${+da} 18:00`;
+  let cls = "deadline", dtxt = "未记录";
+  if (s.cancel) {
+    const dl = new Date(s.cancel + ":00+08:00"), days = (dl - now) / 864e5;
+    if (days >= 0 && days < 3) cls += " soon";
+    const [, mo, da] = s.cancel.slice(0,10).split("-"); dtxt = `${+mo}/${+da} 18:00`;
+  }
+  if (s.conflict) dtxt += `<div class="ord" style="color:var(--danxia)">${esc(s.conflict)}，待核对</div>`;
   return `<tr>
     <td style="white-space:nowrap">${s.nights}</td>
     <td>${esc(s.name)}<div class="ord">${esc(s.area)}${s.note?"，"+esc(s.note):""}</div>
-      <div class="ord">订单号 <span class="ordno">${s.order}</span><button class="copy" data-v="${s.order}">复制</button></div></td>
+      ${s.order?`<div class="ord">订单号 <span class="ordno">${s.order}</span><button class="copy" data-v="${s.order}">复制</button></div>`:""}</td>
     <td class="${cls}">${dtxt}</td>
     <td class="num">${money(s.amount)}</td>
   </tr>`;
@@ -502,10 +654,12 @@ function highlight(i, move=true){
   $("#map-caption").textContent = i<0 ? "全程路线" : `${DAYS[i].date} ${DAYS[i].title}`;
   if (move) { if (i<0) svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity); else focusStops(DAYS[i].stops); }
   const nav = document.querySelector(`#daynav a[data-i="${i}"]`);
-  if (nav) nav.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+  if (nav) { const bar = $("#daynav"); bar.scrollTo({left: nav.offsetLeft - bar.clientWidth/2 + nav.offsetWidth/2, behavior:"smooth"}); }
+  $("#btn-goto").hidden = i < 0;
 }
 
 $("#btn-all").onclick = () => highlight(-1);
+$("#btn-goto").onclick = () => { if (active < 0) return; if (document.querySelector(".mapbox.full")) $("#btn-full").click(); jumpTo(active, true); };
 $("#btn-plus").onclick = () => svg.transition().call(zoom.scaleBy, 1.5);
 $("#btn-minus").onclick = () => svg.transition().call(zoom.scaleBy, 1/1.5);
 $("#btn-full").onclick = function(){ const box = document.querySelector(".mapbox"); const on = box.classList.toggle("full"); document.body.classList.toggle("lock", on); this.setAttribute("aria-pressed", on); this.textContent = on ? "退出全屏" : "全屏"; };
@@ -513,12 +667,11 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && document.q
 $("#btn-follow").onclick = function(){ follow = !follow; this.setAttribute("aria-pressed", follow); };
 document.querySelectorAll(".show-map").forEach(b => b.onclick = () => {
   highlight(+b.dataset.i);
-  if (matchMedia("(max-width:960px)").matches) document.querySelector(".mapbox").scrollIntoView({block:"start"});
 });
 
 /* 点击跳转：直接更新地图，并在滚动动画期间暂停滚动监听，避免被中途经过的日期覆盖 */
 let lockUntil = 0, spyTimer;
-function jumpTo(i, scroll = true){
+function jumpTo(i, scroll = false){
   lockUntil = Date.now() + 1200;
   highlight(i, true);
   if (scroll) document.getElementById("day-" + i).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
