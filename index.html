@@ -114,6 +114,9 @@ body.lock{overflow:hidden}
 .stay{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:var(--sand-soft);display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center}
 .stay .tag{grid-row:span 2;width:34px;height:34px;border-radius:8px;background:var(--sand);color:#fff;display:grid;place-items:center;font-weight:700}
 .stay .n{font-weight:600}
+.stay .addr{grid-column:1/-1;margin-top:6px;color:var(--ink)}
+.stay .addr a{margin-left:6px;white-space:nowrap}
+.addr-warn{display:block;color:var(--danxia);font-size:12px;margin-top:2px}
 .stay .m{font-size:12px;color:var(--soft);grid-column:2}
 .stay .p{grid-row:span 2;font:500 20px/1 var(--display);font-variant-numeric:tabular-nums}
 .stay.none{background:transparent;border:1px dashed var(--line)}
@@ -415,13 +418,13 @@ const P = [
 
 const STAYS = [
  {date:"9/25",nights:"9/25",name:"西宁酒店",room:"",area:"西宁，集合当晚",amount:140.88,order:"",cancel:null,note:"3 人分摊，不在 7 笔订单内"},
- {date:"9/26",nights:"9/26",name:"茶卡锦庐民宿",room:"两室",area:"茶卡镇",amount:220,order:"1128150458461157",cancel:"2026-09-25T18:00",note:""},
- {date:"9/27",nights:"9/27",name:"星舰雅丹未来城野奢营地酒店",room:"星舰全景双床房",area:"青海格尔木西莎线中国石油加油站向东 800 米处",amount:479.10,order:"1128150986995987",cancel:"2026-09-27T18:00",note:"在线付"},
- {date:"9/28",nights:"9/28–9/29",name:"归宿家 清欢",room:"2 居室 / 田园小院",area:"敦煌",amount:220,order:"1128150458476890",cancel:"2026-09-28T18:00",note:"两晚，每晚约 ¥110"},
- {date:"9/30",nights:"9/30",name:"归宿家 清欢（续住）",room:"",area:"敦煌",amount:181,order:"1128150458477482",cancel:"2026-09-29T18:00",note:""},
- {date:"10/1",nights:"10/1",name:"东湖／迎宾湖附近舒适二居",room:"可住 7 人，有电梯",area:"嘉峪关",amount:142,order:"1128150458479234",cancel:"2026-10-01T18:00",note:"房源名和地址待确认"},
- {date:"10/2",nights:"10/2",name:"中式风两室两厅观景套房",room:"",area:"张掖国家湿地公园附近",amount:167,order:"1128150458479976",cancel:"2026-10-02T18:00",note:"",conflict:"记账表写的是 10/2 0 点前"},
- {date:"10/3",nights:"10/3",name:"观岚居民宿",room:"",area:"祁连县（地址待核）",amount:231,order:"1128150458482449",cancel:"2026-10-03T18:00",note:"",conflict:"记账表写的是 10/3 0 点前"}
+ {date:"9/26",nights:"9/26",name:"茶卡锦庐民宿",room:"两室",area:"茶卡镇",addr:"海西乌兰县满都海小区 9 号楼",nav:"乌兰县满都海小区",lon:99.08,lat:36.79,addrNote:"订单地址写的是乌兰县满都海小区，需确认是在茶卡镇还是乌兰县城（县城距茶卡约 70 公里）",amount:220,order:"1128150458461157",cancel:"2026-09-25T18:00",note:""},
+ {date:"9/27",nights:"9/27",name:"星舰雅丹未来城野奢营地酒店",room:"星舰全景双床房",area:"水上雅丹附近",addr:"青海格尔木西莎线中国石油加油站向东 800 米处",nav:"星舰雅丹未来城野奢营地酒店",lon:93.70,lat:37.55,amount:479.10,order:"1128150986995987",cancel:"2026-09-27T18:00",note:"在线付"},
+ {date:"9/28",nights:"9/28–9/29",name:"归宿家 清欢",room:"2 居室 / 田园小院",area:"敦煌",addr:"酒泉敦煌市小康村",nav:"敦煌市小康村",lon:94.66,lat:40.13,amount:220,order:"1128150458476890",cancel:"2026-09-28T18:00",note:"两晚，每晚约 ¥110"},
+ {date:"9/30",nights:"9/30",name:"归宿家 清欢（续住）",room:"",area:"敦煌",addr:"酒泉敦煌市小康村",nav:"敦煌市小康村",lon:94.66,lat:40.13,amount:181,order:"1128150458477482",cancel:"2026-09-29T18:00",note:""},
+ {date:"10/1",nights:"10/1",name:"东湖／迎宾湖附近舒适二居",room:"可住 7 人，有电梯",area:"嘉峪关",addr:"嘉峪关雄关区兰新东路 759-3",nav:"嘉峪关市兰新东路759",lon:98.29,lat:39.81,amount:142,order:"1128150458479234",cancel:"2026-10-01T18:00",note:""},
+ {date:"10/2",nights:"10/2",name:"中式风两室两厅观景套房",room:"",area:"张掖国家湿地公园附近",addr:"张掖甘州区公园道 1 号 34 号楼",nav:"张掖市甘州区公园道1号",lon:100.44,lat:38.96,amount:167,order:"1128150458479976",cancel:"2026-10-02T18:00",note:"",conflict:"记账表写的是 10/2 0 点前"},
+ {date:"10/3",nights:"10/3",name:"观岚居民宿（草帽哥山水农庄）",room:"",area:"祁连县",addr:"海北祁连县祁连草帽哥山水农庄",nav:"祁连草帽哥山水农庄",lon:100.25,lat:38.18,amount:231,order:"1128150458482449",cancel:"2026-10-03T18:00",note:"",conflict:"记账表写的是 10/3 0 点前"}
 ];
 
 const DAYS = [
@@ -488,9 +491,10 @@ const GUIDE = {
 const TODO = [
  {id:"t1",text:"用导航核验 9/27、9/28 全部途经点，决定是否删景点",when:"出发前",note:"按粗算，9/27 到水上雅丹时已接近天黑，详见 9/27 的说明"},
  {id:"t2",text:"确认雅丹营地酒店的实际地址和进营地入口",when:"出发前",status:"done",note:"青海格尔木西莎线中国石油加油站向东 800 米处"},
- {id:"t3",text:"用张掖酒店地址导航，补算 10/2 七彩丹霞到住处的车程",when:"出发前",owner:"淡然"},
- {id:"t4",text:"确认嘉峪关房源的名称和地址",when:"出发前",owner:"淡然"},
- {id:"t5",text:"确认祁连观岚居民宿的地址",when:"出发前",owner:"淡然"},
+ {id:"t3",text:"用张掖酒店地址导航，补算 10/2 七彩丹霞到住处的车程",when:"出发前",status:"partial",note:"地址已收到：张掖甘州区公园道 1 号 34 号楼，车程待导航补算"},
+ {id:"t4",text:"确认嘉峪关房源的名称和地址",when:"出发前",status:"done",note:"嘉峪关雄关区兰新东路 759-3"},
+ {id:"t5",text:"确认祁连观岚居民宿的地址",when:"出发前",status:"done",note:"海北祁连县祁连草帽哥山水农庄"},
+ {id:"t17",text:"确认茶卡锦庐民宿在茶卡镇还是乌兰县城（订单地址写乌兰县满都海小区）",when:"9/25 前"},
  {id:"t6",text:"确认敦煌 ¥220 订单确实包含 9/28、9/29 两晚及退房日期",when:"出发前",owner:"淡然"},
  {id:"t7",text:"核对每笔订单的入住人数上限、房间数和床型是否够 4 人",when:"出发前",status:"done",note:"已确认够住"},
  {id:"t8",text:"查看莫高窟订单，确认集合时间和需要带的证件",when:"9/28 前",status:"partial",note:"证件：带身份证。到数字展示中心的时间还需看订单确认"},
@@ -550,7 +554,42 @@ function toast(msg){
   const t = document.createElement("div"); t.className = "toast"; t.textContent = msg;
   document.body.append(t); setTimeout(() => t.remove(), 4000);
 }
+// 每天导航：起点是前一晚住处（名称搜索），终点是当晚住处；途经点为当天景点
+const NAV = [
+ {start:{p:0}, vias:[1,2,3], end:{stay:1}},
+ {start:{stay:1}, vias:[4,5,6,7], end:{stay:2}},
+ {start:{stay:2}, vias:[8,9], end:{stay:3}},
+ {start:{stay:3}, vias:[11], end:{stay:3}},
+ {start:{stay:4}, vias:[13], end:{stay:4}},
+ {start:{stay:4}, vias:[14,15], end:{stay:5}},
+ {start:{stay:5}, vias:[16], end:{stay:6}},
+ {start:{stay:6}, vias:[18,19,20], end:{stay:7}},
+ {start:{stay:7}, vias:[21,22], end:{p:0}}
+];
+const amapSearch = kw => `https://uri.amap.com/search?keyword=${encodeURIComponent(kw)}&src=qg-trip&callnative=1`;
+function navPoint(x){
+  if (x.p !== undefined) { const v = P[x.p]; return {name:v[3], label:v[0], lon:v[1], lat:v[2]}; }
+  const st = STAYS[x.stay]; return {name:st.nav, label:st.name, lon:st.lon, lat:st.lat, byName:true};
+}
 function openAmapRoute(i){
+  const cfg = NAV[i], S = navPoint(cfg.start), E = navPoint(cfg.end), vias = cfg.vias.map(k => P[k]);
+  const q = new URLSearchParams({sourceApplication:"qg-trip", dev:"1", t:"0"});
+  // 住处只传名称，让高德按地址搜索；景点传坐标
+  q.set("sname", S.name); if (!S.byName) { q.set("slat", S.lat); q.set("slon", S.lon); }
+  q.set("dname", E.name); if (!E.byName) { q.set("dlat", E.lat); q.set("dlon", E.lon); }
+  if (vias.length) { q.set("vian", vias.length); q.set("vialons", vias.map(v=>v[1]).join("|")); q.set("vialats", vias.map(v=>v[2]).join("|")); q.set("vianames", vias.map(v=>v[0].replace(/\s/g,"")).join("|")); }
+  const mk = [S, ...vias.map(v=>({label:v[0],lon:v[1],lat:v[2]})), E].slice(0,10);
+  const web = "https://uri.amap.com/marker?" + new URLSearchParams({markers: mk.map(m => `${m.lon},${m.lat},${m.label}`).join("|"), coordinate:"wgs84", src:"qg-trip", callnative:"0"});
+  const ua = navigator.userAgent;
+  if (/MicroMessenger/i.test(ua)) { toast("微信里无法直接打开高德，请点右上角 ··· 选择在浏览器打开"); return; }
+  if (!IS_MOBILE) { window.open(web, "_blank", "noopener"); return; }
+  const scheme = (/iPhone|iPad|iPod/i.test(ua) ? "iosamap://path?" : "amapuri://route/plan/?") + q.toString().replace(/\+/g, "%20");
+  let left = false;
+  document.addEventListener("visibilitychange", () => { left = true; }, {once:true});
+  window.location.href = scheme;
+  setTimeout(() => { if (!left && !document.hidden) { toast("没有检测到高德地图 App，已改为打开网页版"); window.open(web, "_blank"); } }, 2000);
+}
+function openAmapRoute_old(i){
   const st = routeStops(DAYS[i]);
   const pt = k => P[st[k]];
   const start = pt(0), end = pt(st.length-1), vias = st.slice(1,-1).map(k => P[k]);
@@ -590,7 +629,8 @@ function stayBlock(d){
   if (d.stay === null) return `<div class="stay none"><div class="tag">?</div><div class="n">当晚未订</div><div class="p"></div><div class="m">返程日期确定后再安排</div></div>`;
   const s = STAYS[d.stay];
   const multi = s.nights.includes("–");
-  return `<div class="stay"><div class="tag">住</div><div class="n">${esc(s.name)}</div><div class="p">${money(s.amount)}</div><div class="m">${esc(s.area)}${s.room?"，"+esc(s.room):""}${multi?"，订单含 "+s.nights+" 两晚":""}</div></div>`;
+  const addr = s.addr ? `<div class="m addr">📍 ${esc(s.addr)} <a href="${amapSearch(s.nav)}" target="_blank" rel="noopener">高德搜索</a>${s.addrNote?`<span class="addr-warn">${esc(s.addrNote)}</span>`:""}</div>` : "";
+  return `<div class="stay"><div class="tag">住</div><div class="n">${esc(s.name)}</div><div class="p">${money(s.amount)}</div><div class="m">${esc(s.area)}${s.room?"，"+esc(s.room):""}${multi?"，订单含 "+s.nights+" 两晚":""}</div>${addr}</div>`;
 }
 $("#days").innerHTML = DAYS.map((d,i)=>`
 <article class="day" id="day-${i}" data-i="${i}" style="--c:${d.c}">
@@ -607,7 +647,7 @@ $("#days").innerHTML = DAYS.map((d,i)=>`
   ${d.flag?`<div class="flag"><b>待核实：</b>${esc(d.flag)}</div>`:""}
   ${guideBlock(d)}
   ${stayBlock(d)}
-  <div class="nav-row"><button class="nav-amap" data-i="${i}">用高德地图打开这天路线</button><span class="nav-hint">含 ${routeStops(d).length} 个点，途经点坐标为区域示意，出发前在 App 里核对</span></div>
+  <div class="nav-row"><button class="nav-amap" data-i="${i}">用高德地图打开这天路线</button><span class="nav-hint">从${navPoint(NAV[i].start).label}出发，途经 ${NAV[i].vias.length} 个景点，到${navPoint(NAV[i].end).label}。景点坐标为区域示意，出发前在 App 里核对</span></div>
 </article>`).join("");
 
 /* stay table */
@@ -622,7 +662,7 @@ $("#stay-rows").innerHTML = STAYS.map((s,i)=>{
   if (s.conflict) dtxt += `<div class="ord" style="color:var(--danxia)">${esc(s.conflict)}，待核对</div>`;
   return `<tr>
     <td style="white-space:nowrap">${s.nights}</td>
-    <td>${esc(s.name)}<div class="ord">${esc(s.area)}${s.note?"，"+esc(s.note):""}</div>
+    <td>${esc(s.name)}<div class="ord">${s.addr?esc(s.addr):esc(s.area)}${s.note?"，"+esc(s.note):""}</div>
       ${s.order?`<div class="ord">订单号 <span class="ordno">${s.order}</span><button class="copy" data-v="${s.order}">复制</button></div>`:""}</td>
     <td class="${cls}">${dtxt}</td>
     <td class="num">${money(s.amount)}</td>
@@ -692,6 +732,13 @@ function draw(){
   pins.append("title").text(d => d[0]);
   pins.append("text").attr("class","maplabel").attr("x",9).attr("y",-8)
     .style("display",(d,i)=> major.has(i) ? null : "none").text(d=>d[0]);
+  const H = STAYS.filter((s,k) => s.lon && (k===0 || s.nav !== STAYS[k-1].nav));
+  const hp = g.append("g").selectAll("g").data(H).join("g").attr("class","pin hotel").style("cursor","pointer")
+    .attr("data-lon", d=>d.lon).on("click", (e,d) => window.open(amapSearch(d.nav), "_blank"));
+  hp.append("rect").attr("x",-18).attr("y",4).attr("width",15).attr("height",15).attr("rx",3)
+    .attr("fill", cssVar("--sand")).attr("stroke", cssVar("--paper")).attr("stroke-width",1.5);
+  hp.append("text").attr("x",-10.5).attr("y",15.5).attr("text-anchor","middle").attr("fill","#fff").attr("font-size",10).attr("font-weight",700).text("住");
+  hp.append("title").text(d => `${d.name}\n${d.addr}\n点击在高德搜索`);
   updatePins();
 
   zoom = d3.zoom().scaleExtent([.7,14]).on("zoom", e => { k = e.transform.k; g.attr("transform", e.transform); updatePins(); });
@@ -699,7 +746,7 @@ function draw(){
   highlight(active, false);
 }
 function updatePins(){
-  g.selectAll(".pin").attr("transform", d => `translate(${projection([d[1],d[2]])}) scale(${1/k})`);
+  g.selectAll(".pin").attr("transform", d => `translate(${projection(Array.isArray(d)?[d[1],d[2]]:[d.lon,d.lat])}) scale(${1/k})`);
   g.selectAll(".prov").attr("font-size", 14/k);
 }
 function focusStops(ids, animate=true){
@@ -714,7 +761,7 @@ function highlight(i, move=true){
   active = i;
   g.selectAll(".route").attr("opacity", (d,j) => i<0 || i===j ? 1 : .15).attr("stroke-width",(d,j)=> i===j ? 4.5 : 3);
   const onRoute = i<0 ? null : new Set(DAYS[i].stops);
-  g.selectAll(".pin").attr("opacity", (d,j) => !onRoute || onRoute.has(j) ? 1 : .35)
+  g.selectAll(".pin:not(.hotel)").attr("opacity", (d,j) => !onRoute || onRoute.has(j) ? 1 : .35)
     .select("text").style("display", function(d){ const j = P.indexOf(d); return (onRoute ? onRoute.has(j) : [0,4,7,8,10,15,16,17,20].includes(j)) ? null : "none"; });
   document.querySelectorAll(".day").forEach(el => el.classList.toggle("active", +el.dataset.i === i));
   document.querySelectorAll("#daynav a[data-i]").forEach(a => a.classList.toggle("active", +a.dataset.i === i));
