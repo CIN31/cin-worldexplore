@@ -531,9 +531,9 @@ const DAYS = [
  {date:"9/28",iso:"2026-09-28",wd:"周一",title:"水上雅丹到敦煌",stops:[7,8,9,10],drive:[7,9],buf:[1,2],full:"12–16 小时",c:"#6B6F86",terrain:"雅丹与山口",stay:3,hard:true,
   note:"经冷湖附近的黑独山，走当金山方向到敦煌。当金山走隧道还是山口以实际导航为准。当晚不安排定时演出。",flag:"晚上到敦煌是已确定的目标，但前半程能否支撑这个目标还需验证。水上雅丹到冷湖如果走火星一号公路，路面多为搓板路，建议高底盘车；不走这段就要沿 G315 到黄瓜梁再转 S305，会绕远很多。有游记提到导航显示的近路实际不存在，出发前务必确认走哪条路。"},
  {date:"9/29",iso:"2026-09-29",wd:"周二",title:"莫高窟",stops:[10,11,12,10],drive:[1,1.5],buf:[1,1],full:"参观约 3–4 小时，其余自由",c:"#B0652F",terrain:"石窟",stay:3,
-  note:"12:45 已预约。争取 11:45 左右到莫高窟数字展示中心，以订单集合要求为准。晚上可去沙洲夜市，或看《又见敦煌》（场次另核，票未订）。",flag:"",extras:["沙洲夜市","又见敦煌"]},
+  note:"12:45 已预约。争取 11:45 左右到莫高窟数字展示中心，以订单集合要求为准。晚饭可去康记烧烤羊排总店，之后逛沙洲夜市，或看《又见敦煌》（场次另核，票未订）。",flag:"",extras:["康记烧烤羊排","沙洲夜市","又见敦煌"]},
  {date:"9/30",iso:"2026-09-30",wd:"周三",title:"鸣沙山月牙泉",stops:[10,13,10],drive:[0.5,1],buf:[1,2],full:"弹性安排",c:"#D9A23F",terrain:"沙漠绿洲",stay:4,
-  note:"上午休息或自由活动。下午提前出门去鸣沙山，留出登沙丘、看日落和回程排队的时间，晚上沙洲夜市。",flag:"",extras:["沙洲夜市","又见敦煌"]},
+  note:"上午休息或自由活动。下午提前出门去鸣沙山，留出登沙丘、看日落和回程排队的时间，晚上沙洲夜市。康记烧烤羊排如果 9/29 没去，今晚可以去。",flag:"",extras:["康记烧烤羊排","沙洲夜市","又见敦煌"]},
  {date:"10/1",iso:"2026-10-01",wd:"周四",title:"敦煌到嘉峪关",stops:[10,14,15],drive:[4,5],buf:[1.5,2.5],full:"约 9–12 小时",c:"#A7743D",terrain:"长城与戈壁",stay:5,
   note:"早出发。途经瓜州戈壁雕塑长廊（大地之子、无界、非垂直坐标等），再到嘉峪关关城。关城赶不上入园的话，挪到 10/2 上午。",flag:"国庆假期第一天，景区排队和停车会明显变慢。"},
  {date:"10/2",iso:"2026-10-02",wd:"周五",title:"嘉峪关到七彩丹霞，住张掖",stops:[15,16,17],drive:[3,4],buf:[2,3],full:"约 9–12 小时（含等日落）",c:"#C8553D",terrain:"丹霞",stay:6,
@@ -578,6 +578,7 @@ const GUIDE = {
  20:{t:"红色山体、草坡与祁连山景",d:"适合步行观景，看山谷全景。10 月植被颜色以现场为准。",stay:"2–3 小时",src:"https://www.sohu.com/a/545290288_121106869",m:"https://m.sohu.com/a/545290288_121106869"},
  21:{t:"盆地田野与远处雪峰",d:"只途经门源并远眺岗什卡，不进山、不徒步。能不能看清雪峰取决于天气。",stay:"30–60 分钟",src:"https://you.ctrip.com/sight/menyuan1446317/1713881.html",m:"https://gs.ctrip.com/html5/you/sight/menyuan1446317/1713881.html"},
  22:{t:"高处俯瞰门源盆地",d:"回西宁途中，天气和停车条件允许时短停。",stay:"15–30 分钟",src:"https://you.ctrip.com/sight/menyuan1446317/3389711.html",m:"https://gs.ctrip.com/html5/you/sight/menyuan1446317/3389711.html"},
+ "康记烧烤羊排":{t:"晚饭：烤羊排、烧烤",d:"康记烧烤羊排总店（敦煌总店）。地址：甘肃省酒泉市敦煌市栖云大酒店西门南 60 米。",stay:"晚饭约 1–1.5 小时",kw:"康记烧烤羊排总店",food:true},
  "沙洲夜市":{t:"敦煌夜间街景与小吃",d:"敦煌连住期间吃晚饭、散步、买纪念品。可以试试驴肉黄面、杏皮水和烤串。",stay:"1–2 小时",src:"https://www.travelchinaguide.com/package/dunhuang-day-tour.htm",kw:"沙洲夜市"},
  "又见敦煌":{t:"敦煌文化主题的沉浸式演出",d:"可选项目，未订票。看 9/29 或 9/30 的场次，注意和莫高窟结束时间的衔接。",stay:"按所订场次",src:"https://www.ly.com/scenery/BookSceneryTicket_229637.html",kw:"又见敦煌剧场"},
  "莫家街":{t:"西宁街巷与青海小吃",d:"集合期间或回西宁后自由安排。可以尝酿皮、甜醅和酸奶。",stay:"自由安排",src:"https://chinawondersguide.com/yak-yogurt-mojia-food-street/",kw:"西宁 莫家街"},
@@ -791,9 +792,9 @@ function guideBlock(d){
   (d.extras||[]).forEach(k => items.push([k==="又见敦煌"?"《又见敦煌》":k, GUIDE[k], `https://uri.amap.com/search?keyword=${encodeURIComponent(GUIDE[k].kw)}&src=trip&callnative=1`]));
   if (!items.length) return "";
   return `<details class="guide"><summary>景点看点与建议停留（${items.length}）</summary><ul>${items.map(([n,g,nav]) => `
-    <li><div class="g-head"><b>${esc(n)}</b><span class="g-stay">${esc(g.stay)}</span></div>
+    <li><div class="g-head"><b>${g.food?"🍖 ":""}${esc(n)}</b><span class="g-stay">${esc(g.stay)}</span></div>
     <div class="g-t">${esc(g.t)}</div><p>${esc(g.d)}</p>
-    <div class="g-links"><a href="${nav}" target="_blank" rel="noopener">高德搜索</a><a href="${srcFor(g)}" target="_blank" rel="noopener">${g.srcLabel||"参考图文"}</a></div></li>`).join("")}</ul></details>`;
+    <div class="g-links"><a href="${nav}" target="_blank" rel="noopener">高德搜索</a>${g.src?`<a href="${srcFor(g)}" target="_blank" rel="noopener">${g.srcLabel||"参考图文"}</a>`:""}</div></li>`).join("")}</ul></details>`;
 }
 function stayBlock(d){
   if (d.stay === null) return `<div class="stay none"><div class="tag">?</div><div class="n">当晚未订</div><div class="p"></div><div class="m">返程日期确定后再安排</div></div>`;
