@@ -179,7 +179,13 @@ tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
 .checklist label{display:grid;grid-template-columns:22px 1fr auto;gap:10px;padding:11px 14px;cursor:pointer;align-items:start}
 .checklist input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--lake)}
 .checklist .when{font-size:12px;color:var(--soft);white-space:nowrap}
-.checklist input:checked+span{color:var(--soft);text-decoration:line-through}
+.checklist input:checked+span .todo-text{color:var(--soft);text-decoration:line-through}
+.checklist em{font-style:normal;font-size:11px;border-radius:999px;padding:0 7px;margin-left:6px;white-space:nowrap}
+.tag-done{background:var(--lake-soft);color:var(--lake)}
+.tag-part{background:var(--sand-soft);color:var(--sand)}
+.tag-tbd{background:var(--line);color:var(--soft)}
+.tag-owner{background:var(--danxia-soft);color:var(--danxia)}
+.todo-note{display:block;font-size:12px;color:var(--soft);margin-top:2px}
 .progress{font-size:13px;color:var(--soft);margin:0 0 8px}
 
 .tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border-top:2px solid var(--ink)}
@@ -412,7 +418,7 @@ const P = [
 const STAYS = [
  {date:"9/25",nights:"9/25",name:"西宁酒店",room:"",area:"西宁，集合当晚",amount:140.88,order:"",cancel:null,note:"3 人分摊，不在 7 笔订单内"},
  {date:"9/26",nights:"9/26",name:"茶卡锦庐民宿",room:"两室",area:"茶卡镇",amount:220,order:"1128150458461157",cancel:"2026-09-25T18:00",note:""},
- {date:"9/27",nights:"9/27",name:"星舰雅丹未来城野奢营地酒店",room:"星舰全景双床房",area:"水上雅丹附近（地址待核）",amount:479.10,order:"1128150986995987",cancel:"2026-09-27T18:00",note:"在线付"},
+ {date:"9/27",nights:"9/27",name:"星舰雅丹未来城野奢营地酒店",room:"星舰全景双床房",area:"青海格尔木西莎线中国石油加油站向东 800 米处",amount:479.10,order:"1128150986995987",cancel:"2026-09-27T18:00",note:"在线付"},
  {date:"9/28",nights:"9/28–9/29",name:"归宿家 清欢",room:"2 居室 / 田园小院",area:"敦煌",amount:220,order:"1128150458476890",cancel:"2026-09-28T18:00",note:"两晚，每晚约 ¥110"},
  {date:"9/30",nights:"9/30",name:"归宿家 清欢（续住）",room:"",area:"敦煌",amount:181,order:"1128150458477482",cancel:"2026-09-29T18:00",note:""},
  {date:"10/1",nights:"10/1",name:"东湖／迎宾湖附近舒适二居",room:"可住 7 人，有电梯",area:"嘉峪关",amount:142,order:"1128150458479234",cancel:"2026-10-01T18:00",note:"房源名和地址待确认"},
@@ -424,7 +430,7 @@ const DAYS = [
  {date:"9/26",iso:"2026-09-26",wd:"周六",title:"西宁到茶卡",stops:[0,1,2,3,4],drive:[5.5,7],buf:[2,3],full:"13–16 小时",c:"#B9823A",stay:1,
   note:"07:30 全员从西宁出发，取车不占当天出发时间。行程较满，不固定到达时间，午饭按前进方向就近解决。",flag:"中秋假期期间，青海湖和茶卡要多留停车与接驳排队时间。"},
  {date:"9/27",iso:"2026-09-27",wd:"周日",title:"茶卡到水上雅丹",stops:[4,5,6,7],drive:[7.5,9],buf:[2,3],full:"14–17 小时以上",c:"#B24A3B",stay:2,hard:true,
-  note:"全程最长的一天。上午茶卡盐湖，经翡翠湖、U 型公路方向到水上雅丹附近。U 型公路只在合法停车点短停。",flag:"高负荷且尚未通过完整导航核验。先核对全部途经点导航和酒店地址，不靠压缩睡眠硬赶。"},
+  note:"全程最长的一天。上午茶卡盐湖，经翡翠湖、U 型公路方向到水上雅丹附近。U 型公路只在合法停车点短停。当晚住星舰雅丹营地，地址：青海格尔木西莎线中国石油加油站向东 800 米处。",flag:"按粗算：8:00 进茶卡盐湖玩 2 小时，开 410 公里到翡翠湖约 14:30，玩 2 小时后开到 U 型公路约 18:00，再开 120 公里到水上雅丹约 20:00，已接近天黑，水上雅丹当天基本看不了，还没算午饭和休息。可以考虑把水上雅丹挪到 9/28 早上（住得近），或缩短茶卡、翡翠湖的停留。出发前用导航按实际出发时间再算一次。"},
  {date:"9/28",iso:"2026-09-28",wd:"周一",title:"水上雅丹到敦煌",stops:[7,8,9,10],drive:[7,9],buf:[1,2],full:"12–16 小时",c:"#B24A3B",stay:3,hard:true,
   note:"经冷湖附近的黑独山，走当金山方向到敦煌。当金山走隧道还是山口以实际导航为准。当晚不安排定时演出。",flag:"晚上到敦煌是已确定的目标，但前半程能否支撑这个目标还需验证。水上雅丹到冷湖如果走火星一号公路，路面多为搓板路，建议高底盘车；不走这段就要沿 G315 到黄瓜梁再转 S305，会绕远很多。有游记提到导航显示的近路实际不存在，出发前务必确认走哪条路。"},
  {date:"9/29",iso:"2026-09-29",wd:"周二",title:"莫高窟",stops:[10,11,12,10],drive:[1,1.5],buf:[1,1],full:"参观约 3–4 小时，其余自由",c:"#17707C",stay:3,
@@ -482,22 +488,22 @@ const GUIDE = {
 };
 
 const TODO = [
- {id:"t1",text:"用导航核验 9/27、9/28 全部途经点，决定是否删景点",when:"出发前"},
- {id:"t2",text:"确认雅丹营地酒店的实际地址和到景区入口的驾车路线",when:"出发前"},
- {id:"t3",text:"用张掖酒店地址导航，补算 10/2 七彩丹霞到住处的车程",when:"出发前"},
- {id:"t4",text:"确认嘉峪关房源的名称和地址",when:"出发前"},
- {id:"t5",text:"确认祁连观岚居民宿的地址",when:"出发前"},
- {id:"t6",text:"确认敦煌 ¥220 订单确实包含 9/28、9/29 两晚及退房日期",when:"出发前"},
- {id:"t7",text:"核对每笔订单的入住人数上限、房间数和床型是否够 4 人",when:"出发前"},
- {id:"t8",text:"查看莫高窟订单，确认集合时间和需要带的证件",when:"9/28 前"},
- {id:"t9",text:"查《又见敦煌》9/29、9/30 的场次，决定看不看",when:"9/28 前"},
+ {id:"t1",text:"用导航核验 9/27、9/28 全部途经点，决定是否删景点",when:"出发前",note:"按粗算，9/27 到水上雅丹时已接近天黑，详见 9/27 的说明"},
+ {id:"t2",text:"确认雅丹营地酒店的实际地址和进营地入口",when:"出发前",status:"done",note:"青海格尔木西莎线中国石油加油站向东 800 米处"},
+ {id:"t3",text:"用张掖酒店地址导航，补算 10/2 七彩丹霞到住处的车程",when:"出发前",owner:"淡然"},
+ {id:"t4",text:"确认嘉峪关房源的名称和地址",when:"出发前",owner:"淡然"},
+ {id:"t5",text:"确认祁连观岚居民宿的地址",when:"出发前",owner:"淡然"},
+ {id:"t6",text:"确认敦煌 ¥220 订单确实包含 9/28、9/29 两晚及退房日期",when:"出发前",owner:"淡然"},
+ {id:"t7",text:"核对每笔订单的入住人数上限、房间数和床型是否够 4 人",when:"出发前",status:"done",note:"已确认够住"},
+ {id:"t8",text:"查看莫高窟订单，确认集合时间和需要带的证件",when:"9/28 前",status:"partial",note:"证件：带身份证。到数字展示中心的时间还需看订单确认"},
+ {id:"t9",text:"查《又见敦煌》9/29、9/30 的场次，决定看不看",when:"9/28 前",status:"tbd",note:"待定"},
  {id:"t10",text:"核对瓜州各雕塑的位置和开放情况",when:"9/30 前"},
  {id:"t11",text:"查七彩丹霞末班观光车时间",when:"10/1 前"},
- {id:"t12",text:"定下返程日期、航班和 10/4 晚上住哪；确认延长还车是否要补差价",when:"出发前"},
+ {id:"t12",text:"定下返程日期、航班和 10/4 晚上住哪；确认延长还车是否要补差价",when:"出发前",status:"tbd",note:"待定"},
  {id:"t15",text:"张掖、祁连两笔订单的免费取消时间，行程页写 18:00，记账表写 0 点，看订单页确认",when:"10/1 前"},
  {id:"t16",text:"成经龙确认西宁 9/25 住宿怎么安排（西宁酒店目前由另外 3 人分摊）",when:"9/25 前"},
  {id:"t13",text:"临行查一次覆盖 9/25–10/4 的逐日天气预报",when:"9/24 前后"},
- {id:"t14",text:"下载青海、甘肃离线地图",when:"出发前"}
+ {id:"t14",text:"下载青海、甘肃离线地图",when:"出发前",status:"done",note:"已下载"}
 ];
 
 const $ = s => document.querySelector(s);
@@ -634,8 +640,14 @@ document.querySelectorAll(".copy").forEach(b => b.onclick = async () => {
 const KEY = "qg-trip-todo-v1";
 let done = {};
 try { done = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { done = {}; }
-function renderProgress(){ const n = TODO.filter(t => done[t.id]).length; $("#progress").textContent = `已完成 ${n} / ${TODO.length}`; }
-$("#checklist").innerHTML = TODO.map(t=>`<li><label><input type="checkbox" data-id="${t.id}" ${done[t.id]?"checked":""}><span>${esc(t.text)}</span><span class="when">${t.when}</span></label></li>`).join("");
+const isDone = t => t.status === "done" || !!done[t.id];
+function renderProgress(){ const n = TODO.filter(isDone).length; $("#progress").textContent = `已完成 ${n} / ${TODO.length}（带"已确认"标记的是大家已同步的结果）`; }
+const TAG = {done:["已确认","tag-done"], partial:["部分确认","tag-part"], tbd:["待定","tag-tbd"]};
+$("#checklist").innerHTML = TODO.map(t=>{
+  const tag = t.status ? `<em class="${TAG[t.status][1]}">${TAG[t.status][0]}</em>` : "";
+  const owner = t.owner ? `<em class="tag-owner">@${esc(t.owner)}</em>` : "";
+  return `<li class="${t.status==="done"?"shared-done":""}"><label><input type="checkbox" data-id="${t.id}" ${isDone(t)?"checked":""} ${t.status==="done"?"disabled":""}><span><span class="todo-text">${esc(t.text)}</span>${tag}${owner}${t.note?`<span class="todo-note">${esc(t.note)}</span>`:""}</span><span class="when">${t.when}</span></label></li>`;
+}).join("");
 $("#checklist").addEventListener("change", e => {
   const id = e.target.dataset.id; if (!id) return;
   done[id] = e.target.checked;
