@@ -36,6 +36,13 @@ a{color:inherit}
 .fallback{position:fixed;inset:0;z-index:2;display:none;place-items:center;padding:24px;background:var(--night);text-align:center}
 .fallback.show{display:grid}
 .fallback a{color:var(--lake)}
+#veil{position:fixed;inset:0;z-index:3;background:#0F1A2E;opacity:0;pointer-events:none;transition:opacity .5s ease .45s}
+.hud{transition:opacity .35s ease,transform .35s ease}
+body.leaving .hud{opacity:0;transform:translateY(10px)}
+body.leaving #veil{opacity:1;pointer-events:auto}
+@media (prefers-reduced-motion:reduce){
+  #veil,.hud{transition:none}
+}
 @media (max-width:640px){
   .hud{padding:18px 16px 16px}
   .card{max-width:100%;width:100%}
@@ -63,6 +70,7 @@ a{color:inherit}
     <p><a href="./qinggan/index.html">青甘大环线 →</a></p>
   </div>
 </div>
+<div id="veil" aria-hidden="true"></div>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
 <script>
@@ -94,6 +102,19 @@ function $(s){ return document.querySelector(s); }
 
 function fail(){ $("#fallback").classList.add("show"); }
 
+function go(href){
+  if (!href || document.body.classList.contains("leaving")) return;
+  if (reduceMotion) { location.href = href; return; }
+  document.body.classList.add("leaving");
+  setTimeout(() => { location.href = href; }, 1100);
+}
+
+$("#enter").addEventListener("click", e => {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  go($("#enter").href);
+});
+
 if (typeof Globe !== "function") fail();
 else try {
   let hover = null;
@@ -124,7 +145,7 @@ else try {
     })
     .onPolygonClick(d => {
       if (!d || !d.trip) return;
-      location.href = d.trip.href;
+      go(d.trip.href);
     })
     .htmlElementsData([{ lat: 37.15, lng: 99.05, trip: TRIPS[0] }])
     .htmlElement(d => {
@@ -133,7 +154,7 @@ else try {
       node.type = "button";
       node.setAttribute("aria-label", d.trip.name);
       node.innerHTML = "<i></i><b>青甘</b>";
-      node.onclick = e => { e.stopPropagation(); location.href = d.trip.href; };
+      node.onclick = e => { e.stopPropagation(); go(d.trip.href); };
       return node;
     })
     .htmlAltitude(0.03)
@@ -146,6 +167,16 @@ else try {
   ctrl.minDistance = 140;
   ctrl.maxDistance = 520;
   ctrl.addEventListener("start", () => { ctrl.autoRotate = false; });
+
+  go = function(href){
+    if (!href || document.body.classList.contains("leaving")) return;
+    if (reduceMotion) { location.href = href; return; }
+    document.body.classList.add("leaving");
+    ctrl.autoRotate = false;
+    ctrl.enabled = false;
+    world.pointOfView({ lat: 37.15, lng: 99.05, altitude: 0.48 }, 900);
+    setTimeout(() => { location.href = href; }, 1100);
+  };
 
   const mat = world.globeMaterial();
   if (mat) {
