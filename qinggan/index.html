@@ -1056,6 +1056,14 @@ function spy(){
 addEventListener("scroll", spy, {passive:true});
 
 draw();
+// 从首页"旅程档案"带 #day-N 进入时，定位到那一天
+(function(){
+  const m = location.hash.match(/^#day-(\d)$/);
+  if (!m) return;
+  const i = +m[1], el = document.getElementById("day-" + i);
+  if (!el) return;
+  setTimeout(() => { el.scrollIntoView({block:"start"}); jumpTo(i); }, 60);
+})();
 let rT; new ResizeObserver(() => { clearTimeout(rT); rT = setTimeout(draw, 100); }).observe(svg.node());
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
 </script>

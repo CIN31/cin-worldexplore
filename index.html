@@ -98,6 +98,45 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   .card .cd{margin-top:8px}
   .enter{margin-top:10px;padding:8px 16px}
 }
+
+/* ===== 首页充实：右侧旅程档案 ===== */
+.side{position:fixed;z-index:2;top:28px;right:24px;max-height:calc(100vh - 92px);width:340px;display:flex;flex-direction:column;gap:12px;pointer-events:none}
+.panel{pointer-events:auto;background:linear-gradient(160deg,rgba(24,36,60,.72),rgba(12,20,36,.78));backdrop-filter:blur(10px);
+  border:1px solid rgba(159,176,200,.16);border-radius:16px;padding:14px 16px;box-shadow:0 18px 40px -24px #000}
+.panel h3{margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;font:500 12px/1 var(--body);letter-spacing:.14em;color:var(--star)}
+.panel h3 span{letter-spacing:0;color:var(--soft);font-size:11px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tiles div{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 0 6px;text-align:center}
+.tiles b{display:block;font:700 26px/1 var(--display);color:var(--gold);font-variant-numeric:tabular-nums}
+.tiles i{font-style:normal;font-size:11px;color:var(--soft)}
+.spark{display:block;width:100%;height:64px;margin-top:4px}
+.days{list-style:none;margin:0;padding:0;overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(159,176,200,.3) transparent}
+.days li a{display:grid;grid-template-columns:14px 44px 1fr auto;align-items:center;gap:8px;padding:7px 6px;border-radius:9px;text-decoration:none;color:var(--ink)}
+.days li a:hover,.days li a:focus-visible,.days li a.on{background:rgba(242,194,122,.09)}
+.days .dot{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
+.days .dt{font-size:12px;color:var(--soft);font-variant-numeric:tabular-nums}
+.days .ti{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.days .km{font-size:11px;color:var(--soft);font-variant-numeric:tabular-nums}
+.panel.list{flex:0 1 auto;min-height:0;display:flex;flex-direction:column}
+.next{pointer-events:auto;border:1px dashed rgba(159,176,200,.3);border-radius:14px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;color:var(--soft);font-size:13px}
+.next b{font:500 14px var(--display);color:#C5CFDD;letter-spacing:.1em}
+.next i{font-style:normal;width:22px;height:22px;border-radius:50%;border:1px dashed rgba(159,176,200,.45);display:grid;place-items:center;font-size:14px}
+.coord{position:fixed;right:24px;bottom:22px}
+.bottom{padding-right:360px}
+.chips{display:none}
+.stop{pointer-events:none;display:flex;align-items:center;gap:4px;transform:translate(-4px,-50%);font-size:12px;color:#FFF1D2;text-shadow:0 1px 6px #0F1A2E;white-space:nowrap;opacity:0;transition:opacity .3s}
+.stop i{width:5px;height:5px;border-radius:50%;background:#FFF1D2;box-shadow:0 0 6px rgba(242,194,122,.8)}
+body.near .stop{opacity:1}
+body.near .pin{opacity:0;transition:opacity .3s}
+@media (max-width:1100px){
+  .side{display:none}
+  .bottom{padding-right:0}
+  .chips{display:flex;gap:6px;overflow-x:auto;pointer-events:auto;margin:0 0 10px;scrollbar-width:none}
+  .chips a{flex:none;display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:12px;padding:5px 10px;border-radius:999px;
+    background:rgba(15,26,46,.7);border:1px solid rgba(159,176,200,.2);backdrop-filter:blur(6px)}
+  .chips a::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+}
+@media (min-width:1101px){ .card .cd{display:none} }
 </style>
 </head>
 <body>
@@ -109,6 +148,8 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     <span class="rule" aria-hidden="true"></span>
   </header>
   <div class="bottom">
+  <div class="bottom-left">
+  <nav class="chips" id="chips" aria-label="按天进入行程"></nav>
   <article class="card" id="card">
     <div class="tag" id="card-tag">青海 × 甘肃</div>
     <h2 id="card-title">青甘大环线</h2>
@@ -122,9 +163,25 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     <p class="cd" id="cd">距出发<b id="cd-v">--</b></p>
     <a class="enter" id="enter" href="./qinggan/index.html">进入行程</a>
   </article>
+  </div>
   <div class="coord" id="coord" aria-hidden="true"><b id="coord-v">N 36.60°　E 99.20°</b>ALT 1.85</div>
   </div>
 </div>
+<aside class="side" aria-label="旅程档案">
+  <section class="panel">
+    <h3>出发倒计时 <span>9/26 07:30 西宁</span></h3>
+    <div class="tiles"><div><b id="t-d">--</b><i>天</i></div><div><b id="t-h">--</b><i>时</i></div><div><b id="t-m">--</b><i>分</i></div><div><b id="t-s">--</b><i>秒</i></div></div>
+  </section>
+  <section class="panel">
+    <h3>沿途海拔 <span>1140–3790 m</span></h3>
+    <svg class="spark" id="spark" viewBox="0 0 300 64" preserveAspectRatio="none" aria-hidden="true"></svg>
+  </section>
+  <section class="panel list">
+    <h3>旅程档案 <span>9 天 · 约 2,750 km</span></h3>
+    <ul class="days" id="days"></ul>
+  </section>
+  <div class="next"><b>下一站</b><span>待点亮</span><i>+</i></div>
+</aside>
 <div class="fallback" id="fallback">
   <div>
     <h1>世界探索计划</h1>
@@ -149,6 +206,39 @@ const ROUTE = [[36.62,101.78],[36.49,101.57],[36.44,101.10],[36.58,100.49],[36.7
     else if (now <= end) { el.firstChild.textContent = "旅途中"; v.textContent = `第 ${Math.floor((now-start)/864e5)+1} 天`; }
     else { el.firstChild.textContent = "已完成"; v.textContent = "青甘大环线"; }
   }
+  tick(); setInterval(tick, 1000);
+})();
+
+const DAYLIST = [
+  {d:"9/26", t:"西宁 → 茶卡", km:360, c:"#2F8FA3", at:[36.6,100.4]},
+  {d:"9/27", t:"茶卡 → 水上雅丹", km:630, c:"#C58B3A", at:[37.5,96.2]},
+  {d:"9/28", t:"水上雅丹 → 敦煌", km:450, c:"#6B6F86", at:[38.9,94.0]},
+  {d:"9/29", t:"莫高窟", km:30, c:"#B0652F", at:[40.05,94.8]},
+  {d:"9/30", t:"鸣沙山月牙泉", km:10, c:"#D9A23F", at:[40.09,94.67]},
+  {d:"10/1", t:"敦煌 → 嘉峪关", km:400, c:"#A7743D", at:[40.1,96.5]},
+  {d:"10/2", t:"七彩丹霞 · 张掖", km:250, c:"#C8553D", at:[39.3,99.2]},
+  {d:"10/3", t:"张掖 → 祁连", km:240, c:"#5E8C4A", at:[38.4,100.6]},
+  {d:"10/4", t:"祁连 → 西宁", km:380, c:"#4F78A8", at:[37.2,101.2]}
+];
+(function(){
+  const li = (x,i) => `<li><a href="./qinggan/index.html#day-${i}" data-i="${i}" style="--c:${x.c}"><span class="dot"></span><span class="dt">${x.d}</span><span class="ti">${x.t}</span><span class="km">${x.km} km</span></a></li>`;
+  document.getElementById("days").innerHTML = DAYLIST.map(li).join("");
+  document.getElementById("chips").innerHTML = DAYLIST.map((x,i)=>`<a href="./qinggan/index.html#day-${i}" style="--c:${x.c}">${x.d} ${x.t}</a>`).join("");
+  // 海拔迷你曲线
+  const P = [[0,2275],[90,3520],[210,3200],[360,3059],[770,3170],[990,2700],[1250,3648],[1440,1140],[1880,1600],[2130,1480],[2290,3685],[2370,2800],[2600,3790],[2750,2275]];
+  const X = k => k/2750*300, Y = a => 60 - (a-900)/(4000-900)*54;
+  let dstr = `M${X(P[0][0])},${Y(P[0][1])}`;
+  for (let i=1;i<P.length;i++){ const [x0,y0]=[X(P[i-1][0]),Y(P[i-1][1])], [x1,y1]=[X(P[i][0]),Y(P[i][1])], mx=(x0+x1)/2; dstr += ` C${mx},${y0} ${mx},${y1} ${x1},${y1}`; }
+  document.getElementById("spark").innerHTML = `<defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0" stop-color="#2F8FA3"/><stop offset=".45" stop-color="#D9A23F"/><stop offset=".75" stop-color="#C8553D"/><stop offset="1" stop-color="#4F78A8"/></linearGradient>
+    <linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2C27A" stop-opacity=".28"/><stop offset="1" stop-color="#F2C27A" stop-opacity="0"/></linearGradient></defs>
+    <path d="${dstr} L300,64 L0,64 Z" fill="url(#sf)"/><path d="${dstr}" fill="none" stroke="url(#sg)" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+  // 倒计时方块
+  const start = new Date("2026-09-26T07:30:00+08:00"), pad = n => String(n).padStart(2,"0");
+  function tick(){ let t = Math.max(0, Math.floor((start - new Date())/1000));
+    document.getElementById("t-d").textContent = Math.floor(t/86400); t%=86400;
+    document.getElementById("t-h").textContent = pad(Math.floor(t/3600));
+    document.getElementById("t-m").textContent = pad(Math.floor(t%3600/60));
+    document.getElementById("t-s").textContent = pad(t%60); }
   tick(); setInterval(tick, 1000);
 })();
 const TRIPS = [
@@ -229,6 +319,7 @@ else try {
     .pathDashGap(0.012)
     .pathDashAnimateTime(reduceMotion ? 0 : 14000)
     .pathTransitionDuration(0)
+
     .polygonCapCurvatureResolution(6)
     .polygonsTransitionDuration(220)
     .polygonLabel(d => d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker}` : "")
@@ -242,8 +333,11 @@ else try {
       if (!d || !d.trip) return;
       go(d.trip.href);
     })
-    .htmlElementsData([{ lat: 37.15, lng: 99.05, trip: TRIPS[0] }])
+    .htmlElementsData([{ lat: 37.15, lng: 99.05, trip: TRIPS[0] }].concat([
+      {lat:36.62,lng:101.78,t:"西宁"},{lat:36.79,lng:99.08,t:"茶卡"},{lat:37.57,lng:93.68,t:"水上雅丹"},
+      {lat:40.14,lng:94.66,t:"敦煌"},{lat:39.81,lng:98.22,t:"嘉峪关"},{lat:38.93,lng:100.45,t:"张掖"},{lat:38.18,lng:100.25,t:"祁连"}]))
     .htmlElement(d => {
+      if (!d.trip) { const n = document.createElement("span"); n.className = "stop"; n.innerHTML = `<i></i>${d.t}`; return n; }
       const node = document.createElement("button");
       node.className = "pin";
       node.type = "button";
@@ -262,12 +356,24 @@ else try {
   ctrl.minDistance = 140;
   ctrl.maxDistance = 520;
   ctrl.addEventListener("start", () => { ctrl.autoRotate = false; });
+  document.querySelectorAll("#days a").forEach(a => {
+    a.addEventListener("mouseenter", () => {
+      const x = DAYLIST[+a.dataset.i]; ctrl.autoRotate = false;
+      world.pointOfView({ lat: x.at[0], lng: x.at[1], altitude: 0.9 }, 800);
+      world.ringsData([{ lat: x.at[0], lng: x.at[1] }]);
+    });
+  });
+  document.getElementById("days").addEventListener("mouseleave", () => {
+    world.pointOfView({ lat: 36.6, lng: 99.2, altitude: 1.85 }, 900);
+    world.ringsData([{ lat: 37.15, lng: 99.05 }]);
+  });
   const coordV = document.getElementById("coord-v"), coordBox = document.getElementById("coord");
   ctrl.addEventListener("change", () => {
     const pov = world.pointOfView();
     const lat = pov.lat, lng = ((pov.lng + 540) % 360) - 180;
     coordV.textContent = `${lat >= 0 ? "N" : "S"} ${Math.abs(lat).toFixed(2)}°　${lng >= 0 ? "E" : "W"} ${Math.abs(lng).toFixed(2)}°`;
     coordBox.lastChild.textContent = `ALT ${pov.altitude.toFixed(2)}`;
+    document.body.classList.toggle("near", pov.altitude < 1.2);
   });
 
   go = function(href){
@@ -286,7 +392,11 @@ else try {
     if (mat.emissive) mat.emissive.setHex(0x0a1424);
   }
 
-  function size(){ world.width(innerWidth).height(innerHeight); }
+  function size(){
+    const shift = innerWidth > 1100 ? 360 : 0;
+    el.style.left = -shift + "px"; el.style.width = (innerWidth + shift) + "px";
+    world.width(innerWidth + shift).height(innerHeight);
+  }
   size();
   addEventListener("resize", size);
   world.polygonsData(lit);
