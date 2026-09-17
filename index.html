@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>世界探索计划</title>
-<meta name="description" content="世界探索计划。青海 × 甘肃。">
+<meta name="description" content="世界探索计划：已走过新疆、西藏、日本，下一站青甘大环线。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@
   --mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
   --body:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
-  --mx:0; --my:0; --gx:0px; --gy:0px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--ink-0);color:var(--ivory);font:15px/1.6 var(--body)}
@@ -32,15 +31,14 @@ a{color:inherit}
 #dust,.aura{position:fixed;inset:0;z-index:0;pointer-events:none}
 #globe{position:fixed;inset:0;z-index:0;opacity:0;transform:scale(.96);transition:opacity 1.2s ease,transform 1.4s var(--ease)}
 body.ready #globe{opacity:1;transform:none}
-.aura i{position:absolute;width:42vw;height:42vw;border-radius:50%;filter:blur(40px);
+.aura i{position:absolute;width:42vw;height:42vw;border-radius:50%;
   background:radial-gradient(circle,rgba(201,164,108,.10),transparent 60%)}
 .aura i:first-child{top:16%;left:26%;animation:driftA 26s var(--ease) infinite}
 .aura i:last-child{bottom:12%;right:18%;animation:driftB 34s var(--ease) infinite}
 @keyframes driftA{0%,100%{translate:-4% 2%}50%{translate:8% -6%}}
 @keyframes driftB{0%,100%{translate:3% -3%}50%{translate:-7% 5%}}
-body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:soft-light;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  background-position:var(--gx) var(--gy)}
+body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(ellipse 62% 58% at 50% 50%,transparent 55%,rgba(7,9,12,.85) 100%)}
 .plate{position:fixed;inset:20px;z-index:2;pointer-events:none}
@@ -58,7 +56,7 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .brand h1{margin:14px 0 0;font:500 clamp(40px,5.6vw,72px)/1.05 var(--display);letter-spacing:.12em;color:var(--ivory)}
 .brand h1 span{display:inline-block;opacity:0;translate:0 .35em;filter:blur(6px);animation:glyph .9s var(--ease) forwards;animation-delay:calc(.6s + var(--c) * 70ms)}
 @keyframes glyph{to{opacity:1;translate:0 0;filter:blur(0)}}
-.brand .status{margin:18px 0 0;display:flex;align-items:center;gap:10px;font:400 13px/1 var(--body);letter-spacing:.04em;color:var(--soft)}
+.brand .status{margin:18px 0 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:400 13px/1 var(--body);letter-spacing:.04em;color:var(--soft)}
 .brand .status::before{content:"";width:28px;height:1px;background:var(--brass);transform-origin:left;animation:draw .8s var(--ease) 1.1s both}
 @keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
@@ -77,8 +75,12 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .enter::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--brass);
   transform:scaleX(.18);transform-origin:left;transition:transform .5s var(--ease)}
 .enter i{font-style:normal;transition:transform .4s var(--ease)}
-.enter:hover::after,.entry.hot .enter::after{transform:scaleX(1)}
-.enter:hover i,.entry.hot .enter i{transform:translateX(6px)}
+.enter:hover::after,.entry.hot .enter:not(.muted)::after{transform:scaleX(1)}
+.enter:hover i,.entry.hot .enter:not(.muted) i{transform:translateX(6px)}
+.enter:not(.muted){pointer-events:auto}
+.enter.muted{color:var(--soft);pointer-events:none;letter-spacing:.12em}
+.enter.muted::after{transform:scaleX(0)}
+.enter.muted i{display:none}
 .entry.hot .no{color:var(--ivory)}
 
 .count{position:fixed;z-index:3;right:44px;bottom:72px;text-align:right}
@@ -91,6 +93,7 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .count .hms{margin:8px 0 0;font:400 14px/1 var(--mono);letter-spacing:.12em;color:var(--soft);font-variant-numeric:tabular-nums}
 
 .ticker{position:fixed;z-index:3;left:50%;bottom:28px;transform:translateX(-50%);width:min(520px,48vw);display:flex}
+.ticker.empty{display:none}
 .ticker::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line)}
 .ticker a{position:relative;flex:1;padding:12px 0 0;text-align:center;text-decoration:none;
   font:400 10px/1 var(--mono);letter-spacing:.08em;color:var(--soft);font-variant-numeric:tabular-nums;transition:color .3s}
@@ -104,6 +107,18 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .spine{position:fixed;z-index:3;right:22px;top:50%;translate:0 -50%;margin:0;writing-mode:vertical-rl;
   font:400 10px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--soft);opacity:.6;pointer-events:none}
 
+.rail{position:fixed;z-index:3;right:52px;top:50%;translate:0 -50%;display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
+.rail button{appearance:none;background:none;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:8px 6px;color:var(--soft);font:400 11px/1 var(--mono);letter-spacing:.14em;text-align:left;white-space:nowrap}
+.rail button .dot{width:7px;height:7px;border-radius:50%;flex:none;background:rgba(237,230,216,.28)}
+.rail button[data-st="done"] .dot{background:rgba(237,230,216,.55)}
+.rail button[data-st="next"] .dot,.rail button[data-st="now"] .dot{background:var(--brass);box-shadow:0 0 0 3px rgba(var(--brass-rgb),.18)}
+.rail button[data-st="plan"] .dot{background:transparent;border:1px solid var(--brass)}
+.rail button .no{opacity:.45;font-variant-numeric:tabular-nums}
+.rail button.on{color:var(--ivory)}
+.rail button.on .no{opacity:1;color:var(--brass)}
+.rail button:hover{color:var(--ivory)}
+
 .pin{appearance:none;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;
   transform:translate(-50%,-100%);color:var(--ivory);font:inherit;transition:opacity .3s}
 .pin b{font:500 13px/1 var(--display);letter-spacing:.24em;transition:letter-spacing .2s var(--ease)}
@@ -111,34 +126,35 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .pin i{position:relative;margin-top:6px;width:1px;height:22px;background:linear-gradient(var(--brass),transparent);transition:height .2s var(--ease)}
 .pin i::before{content:"";position:absolute;left:50%;top:-3px;translate:-50% 0;width:6px;height:6px;border-radius:50%;
   background:var(--brass);box-shadow:0 0 0 4px rgba(var(--brass-rgb),.18)}
+.pin.done i::before{background:var(--ivory);box-shadow:0 0 0 4px rgba(237,230,216,.12)}
+.pin.done small{color:var(--soft)}
+.pin.plan i::before{background:transparent;border:1px solid var(--brass);box-shadow:none}
 .pin:hover b{letter-spacing:.32em}
 .pin:hover i{height:32px}
 .stop{pointer-events:none;display:flex;align-items:center;gap:6px;transform:translate(-4px,-50%);
   font:400 10px/1 var(--mono);letter-spacing:.14em;color:var(--ivory);white-space:nowrap;opacity:0;transition:opacity .3s}
 .stop i{width:4px;height:4px;border-radius:50%;background:var(--ivory)}
 .stop.flash{opacity:1}
-body.near .stop{opacity:1}
-body.near .pin{opacity:0}
+body.near.has-stops .stop{opacity:1}
+body.near.has-stops .pin{opacity:0}
 
 #veil{position:fixed;inset:0;z-index:5;background:var(--ink-0);opacity:0;pointer-events:none;transition:opacity .5s ease .45s}
-.brand,.coord,.entry,.count,.ticker,.spine{transition:opacity .35s ease}
-body.leaving .brand,body.leaving .coord,body.leaving .entry,body.leaving .count,body.leaving .ticker,body.leaving .spine{opacity:0}
+.brand,.coord,.entry,.count,.ticker,.spine,.rail{transition:opacity .35s ease}
+body.leaving .brand,body.leaving .coord,body.leaving .entry,body.leaving .count,body.leaving .ticker,body.leaving .spine,body.leaving .rail{opacity:0}
 body.leaving #veil{opacity:1;pointer-events:auto}
 .fallback{position:fixed;inset:0;z-index:4;display:none;place-items:center;padding:24px;background:var(--ink-0);text-align:center}
 .fallback.show{display:grid}
 .fallback h1{font:500 40px/1.1 var(--display);letter-spacing:.12em;margin:12px 0}
 .fallback a{color:var(--brass)}
+.fallback .list{display:flex;flex-direction:column;gap:8px;margin:18px 0 0}
 
 .cursor{position:fixed;z-index:6;left:0;top:0;width:22px;height:22px;border:1px solid var(--ivory);border-radius:50%;
-  pointer-events:none;opacity:0;transform:translate(var(--cx,0px),var(--cy,0px)) translate(-50%,-50%);
-  transition:width .25s var(--ease),height .25s var(--ease),border-color .25s,opacity .2s,transform .08s linear}
+  pointer-events:none;opacity:0;transform:translate(-50%,-50%);
+  transition:width .25s var(--ease),height .25s var(--ease),border-color .25s,opacity .2s}
 .cursor.on{opacity:.9}
 .cursor.hot{width:34px;height:34px;border-color:var(--brass)}
 .cursor i{position:absolute;left:50%;top:50%;width:2px;height:2px;border-radius:50%;background:var(--brass);translate:-50% -50%}
 #globe canvas{cursor:none}
-
-body.settled .brand,body.settled .entry{translate:calc(var(--mx) * -6px) calc(var(--my) * -4px)}
-body.settled .count,body.settled .coord{translate:calc(var(--mx) * 6px) calc(var(--my) * 4px)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -154,113 +170,150 @@ body.settled .count,body.settled .coord{translate:calc(var(--mx) * 6px) calc(var
   .count{right:auto;left:20px;top:150px;bottom:auto;text-align:left}
   .count .big{justify-content:flex-start}
   .count .big b{font-size:56px}
-  .entry{left:20px;bottom:76px;max-width:calc(100vw - 40px)}
+  .entry{left:20px;bottom:118px;max-width:calc(100vw - 40px)}
   .entry h2{font-size:26px}
+  .rail{left:20px;right:20px;top:auto;bottom:64px;translate:none;flex-direction:row;gap:4px;overflow-x:auto;scrollbar-width:none}
+  .rail button{padding:6px 8px}
   .ticker{left:20px;right:20px;transform:none;width:auto;bottom:22px;overflow-x:auto;scrollbar-width:none}
   .ticker a{flex:none;min-width:52px}
   .ticker a .t{display:none}
-  body.settled .brand,body.settled .entry,body.settled .count,body.settled .coord{translate:none}
 }
 </style>
 </head>
 <body>
 <canvas id="dust" aria-hidden="true"></canvas>
 <div class="aura" aria-hidden="true"><i></i><i></i></div>
-<div id="globe" role="img" aria-label="可旋转的地球，青海和甘肃已点亮"></div>
+<div id="globe" role="img" aria-label="可旋转的地球，已点亮走过的地方"></div>
 <div class="plate" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <header class="brand reveal" style="--i:0">
   <p class="kicker">World Exploration Programme · Vol. I</p>
   <h1>世界探索计划</h1>
-  <p class="status"><span id="lit-count">已点亮 1 站</span><span>·</span><span>下一站待定</span></p>
+  <p class="status" id="brand-status"></p>
 </header>
 <div class="coord reveal" style="--i:1" id="coord" aria-hidden="true">
-  <i class="live"></i><span id="coord-v">N 36.60° · E 99.20°</span><span id="coord-alt">ALT 1.85</span>
+  <i class="live"></i><span id="coord-v">N 32.00° · E 105.00°</span><span id="coord-alt">ALT 2.05</span>
 </div>
 <article class="entry reveal" style="--i:2" id="entry">
-  <p class="no" id="entry-no">No. 01</p>
+  <p class="no" id="entry-no">No. 04</p>
   <h2 id="entry-title">青甘大环线</h2>
   <p class="en" id="entry-en">Qinghai – Gansu Grand Loop</p>
-  <p class="meta" id="entry-meta">2026.09.26 — 10.04 · 9 天 · 2,750 km · 4 人</p>
+  <p class="meta" id="entry-meta"></p>
   <a class="enter" id="enter" href="./qinggan/index.html"><span>进入行程</span><i aria-hidden="true">⟶</i></a>
 </article>
 <div class="count reveal" style="--i:3" id="count" aria-live="off">
-  <p class="label" id="count-label">距出发 · 西宁 07:30</p>
+  <p class="label" id="count-label">距出发</p>
   <p class="big"><b id="count-d">--</b><span id="count-unit">天</span></p>
   <p class="hms" id="count-hms">--:--:--</p>
 </div>
-<nav class="ticker reveal" style="--i:4" id="ticker" aria-label="按天进入行程"></nav>
-<p class="spine" aria-hidden="true">Qinghai · Gansu · MMXXVI</p>
+<nav class="rail reveal" style="--i:4" id="rail" aria-label="行程列表"></nav>
+<nav class="ticker reveal" style="--i:5" id="ticker" aria-label="按天进入行程"></nav>
+<p class="spine" id="spine" aria-hidden="true"></p>
 <div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
 <div class="fallback" id="fallback">
   <div>
     <p class="kicker">World Exploration Programme</p>
     <h1>世界探索计划</h1>
     <p>地球加载失败时，可以直接进入行程。</p>
-    <p><a href="./qinggan/index.html">青甘大环线 ⟶</a></p>
+    <p class="list" id="fallback-list"></p>
   </div>
 </div>
 <div id="veil" aria-hidden="true"></div>
+<script src="./trips.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
 <script>
-const ROUTE = [[36.62,101.78],[36.49,101.57],[36.44,101.10],[36.58,100.49],[36.79,99.08],[37.83,95.27],[37.42,94.15],[37.57,93.68],[38.87,93.45],[39.39,94.34],[40.14,94.66],[40.43,95.80],[39.81,98.22],[38.97,100.04],[38.93,100.45],[38.24,100.94],[38.08,100.72],[38.18,100.25],[37.47,101.62],[37.36,101.42],[36.62,101.78]];
-const DAYLIST = [
-  {d:"9/26", t:"西宁 → 茶卡", km:360, at:[36.6,100.4], seg:[0,4]},
-  {d:"9/27", t:"茶卡 → 水上雅丹", km:630, at:[37.5,96.2], seg:[4,7]},
-  {d:"9/28", t:"水上雅丹 → 敦煌", km:450, at:[38.9,94.0], seg:[7,10]},
-  {d:"9/29", t:"莫高窟", km:30, at:[40.05,94.8], seg:[10,11]},
-  {d:"9/30", t:"鸣沙山月牙泉", km:10, at:[40.09,94.67], seg:[10,11]},
-  {d:"10/1", t:"敦煌 → 嘉峪关", km:400, at:[40.1,96.5], seg:[10,12]},
-  {d:"10/2", t:"七彩丹霞 · 张掖", km:250, at:[39.3,99.2], seg:[12,14]},
-  {d:"10/3", t:"张掖 → 祁连", km:240, at:[38.4,100.6], seg:[14,17]},
-  {d:"10/4", t:"祁连 → 西宁", km:380, at:[37.2,101.2], seg:[17,20]}
-];
-const STOPS = [
-  {lat:36.62,lng:101.78,t:"西宁"},{lat:36.79,lng:99.08,t:"茶卡"},{lat:37.57,lng:93.68,t:"水上雅丹"},
-  {lat:40.14,lng:94.66,t:"敦煌"},{lat:39.81,lng:98.22,t:"嘉峪关"},{lat:38.93,lng:100.45,t:"张掖"},{lat:38.18,lng:100.25,t:"祁连"}
-];
-const TRIPS = [{
-  id:"qinggan", name:"青甘大环线", href:"./qinggan/index.html",
-  regions:["青海省","甘肃省"], kicker:"青海 × 甘肃",
-  date:"2026/9/26–10/4", summary:"西宁出发，环线回到西宁",
-  no:"01", en:"Qinghai – Gansu Grand Loop",
-  meta:"2026.09.26 — 10.04 · 9 天 · 2,750 km · 4 人"
-}];
-const GEO = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"青海省"},"geometry":{"type":"Polygon","coordinates":[[[89.7363,36.0791],[89.9121,36.0791],[90,36.2549],[90.8789,36.0352],[91.0547,36.0791],[91.0547,36.5186],[90.791,36.6064],[90.7031,36.7822],[91.3184,37.0898],[91.0547,37.4414],[90.5273,37.8369],[90.6152,38.3203],[90.3516,38.2324],[90.1758,38.4961],[92.373,39.0234],[92.373,39.1113],[93.1641,39.1992],[93.1641,38.9795],[93.6914,38.9355],[93.8672,38.7158],[94.3066,38.7598],[94.5703,38.3643],[95.0098,38.4082],[95.4492,38.2764],[95.7129,38.3643],[96.2402,38.1006],[96.416,38.2324],[96.6797,38.1885],[96.6797,38.4521],[97.1191,38.584],[97.0313,39.1992],[98.1738,38.8037],[98.3496,39.0234],[98.6133,38.9355],[98.7891,39.0674],[99.1406,38.9355],[99.8438,38.3643],[100.1953,38.2764],[100.0195,38.4521],[100.1074,38.4961],[100.459,38.2764],[100.7227,38.2324],[101.1621,37.8369],[101.5137,37.8809],[101.7773,37.6172],[101.9531,37.7051],[102.1289,37.4414],[102.5684,37.1777],[102.4805,36.958],[102.6563,36.8262],[102.5684,36.7383],[102.832,36.3428],[103.0078,36.2549],[102.9199,36.0791],[102.9199,35.9033],[102.6563,35.7715],[102.832,35.5957],[102.4805,35.5957],[102.3047,35.4199],[102.3926,35.2002],[101.9531,34.8486],[101.9531,34.6289],[102.2168,34.4092],[102.1289,34.2773],[101.6895,34.1016],[100.9863,34.3652],[100.8105,34.2773],[101.25,33.6621],[101.5137,33.7061],[101.6016,33.5303],[101.7773,33.5303],[101.6895,33.3105],[101.7773,33.2227],[101.6016,33.1348],[101.1621,33.2227],[101.25,32.6953],[100.7227,32.6514],[100.7227,32.5195],[100.3711,32.7393],[100.1074,32.6514],[100.1074,32.8711],[99.8438,33.0029],[99.7559,32.7393],[99.2285,32.915],[99.2285,33.0469],[98.877,33.1787],[98.4375,34.0576],[97.8223,34.1895],[97.6465,34.1016],[97.7344,33.9258],[97.3828,33.8818],[97.4707,33.5742],[97.7344,33.3984],[97.3828,32.8711],[97.4707,32.6953],[97.7344,32.5195],[97.3828,32.5635],[97.2949,32.0801],[96.7676,31.9922],[96.8555,31.6846],[96.5039,31.7285],[96.2402,31.9482],[96.1523,31.5967],[95.9766,31.8164],[95.8008,31.6846],[95.4492,31.8164],[95.3613,31.9922],[95.3613,32.168],[95.2734,32.2119],[95.1855,32.3438],[95.0098,32.2998],[95.1855,32.4316],[94.6582,32.6074],[94.1309,32.4316],[93.7793,32.5635],[93.5156,32.4756],[92.9883,32.7393],[92.2852,32.7393],[92.1973,32.8271],[91.9336,32.8271],[91.4063,33.1348],[90.7031,33.1348],[90.0879,33.4863],[89.6484,34.0137],[89.8242,34.3652],[89.7363,34.6729],[89.8242,34.8486],[89.5605,34.8926],[89.4727,35.2441],[89.4727,35.376],[89.7363,35.4199],[89.7363,35.7715],[89.4727,35.9033],[89.3848,36.0352],[89.7363,36.0791]]]}},{"type":"Feature","properties":{"name":"甘肃省"},"geometry":{"type":"Polygon","coordinates":[[[96.416,42.7148],[97.207,42.8027],[97.8223,41.748],[97.8223,41.6162],[97.4707,41.4844],[98.3496,40.9131],[98.3496,40.5615],[98.6133,40.6494],[98.5254,40.7373],[98.7891,40.6055],[98.9648,40.7813],[99.0527,40.6934],[99.2285,40.8691],[99.9316,41.001],[100.1953,40.6494],[100.1074,40.2539],[99.4922,39.8584],[100.0195,39.7705],[100.5469,39.4189],[100.8105,39.4189],[100.9863,38.9355],[101.25,39.0234],[101.3379,38.7598],[101.7773,38.6719],[102.041,38.8916],[101.8652,39.1113],[102.4805,39.2432],[103.0078,39.1113],[103.3594,39.3311],[104.0625,39.4189],[104.2383,38.9795],[103.4473,38.3643],[103.5352,38.1445],[103.3594,38.0127],[103.4473,37.8369],[104.3262,37.4414],[104.5898,37.4414],[104.5898,37.2217],[104.8535,37.2217],[105.293,36.8262],[105.2051,36.6943],[105.4688,36.123],[105.293,35.9912],[105.3809,35.7715],[105.7324,35.7275],[105.8203,35.5518],[105.9961,35.4639],[105.9082,35.4199],[105.9961,35.4199],[106.084,35.376],[106.2598,35.4199],[106.3477,35.2441],[106.5234,35.332],[106.4355,35.6836],[106.6992,35.6836],[106.9629,35.8154],[106.875,36.123],[106.5234,36.2549],[106.5234,36.4746],[106.4355,36.5625],[106.6113,36.7822],[106.6113,37.0898],[107.3145,37.0898],[107.3145,36.9141],[108.7207,36.3428],[108.6328,35.9912],[108.5449,35.8594],[108.6328,35.5518],[108.5449,35.2881],[107.7539,35.2881],[107.7539,35.1123],[107.8418,35.0244],[107.666,34.9365],[107.2266,34.8926],[106.9629,35.0684],[106.6113,35.0684],[106.5234,34.7607],[106.3477,34.585],[106.6992,34.3213],[106.5234,34.2773],[106.6113,34.1455],[106.4355,33.9258],[106.5234,33.5303],[105.9961,33.6182],[105.7324,33.3984],[105.9961,33.1787],[105.9082,33.0029],[105.4688,32.915],[105.3809,32.8711],[105.3809,32.7393],[105.2051,32.6074],[104.4141,32.7393],[104.3262,32.8711],[104.4141,33.0469],[104.3262,33.2227],[104.4141,33.3105],[104.2383,33.3984],[104.1504,33.6182],[103.1836,33.7939],[103.0957,34.1895],[102.9199,34.3213],[102.2168,33.9258],[102.4805,33.4424],[101.8652,33.0908],[101.9531,33.4424],[101.8652,33.5742],[101.7773,33.5303],[101.6016,33.5303],[101.5137,33.7061],[101.25,33.6621],[100.8105,34.2773],[100.9863,34.3652],[101.6895,34.1016],[102.1289,34.2773],[102.2168,34.4092],[101.9531,34.6289],[101.9531,34.8486],[102.3926,35.2002],[102.3047,35.4199],[102.4805,35.5957],[102.832,35.5957],[102.6563,35.7715],[102.9199,35.9033],[102.9199,36.0791],[103.0078,36.2549],[102.832,36.3428],[102.5684,36.7383],[102.6563,36.8262],[102.4805,36.958],[102.5684,37.1777],[102.1289,37.4414],[101.9531,37.7051],[101.7773,37.6172],[101.5137,37.8809],[101.1621,37.8369],[100.7227,38.2324],[100.459,38.2764],[100.1074,38.4961],[100.0195,38.4521],[100.1953,38.2764],[99.8438,38.3643],[99.1406,38.9355],[98.7891,39.0674],[98.6133,38.9355],[98.3496,39.0234],[98.1738,38.8037],[97.0313,39.1992],[97.1191,38.584],[96.6797,38.4521],[96.6797,38.1885],[96.416,38.2324],[96.2402,38.1006],[95.7129,38.3643],[95.4492,38.2764],[95.0098,38.4082],[94.5703,38.3643],[94.3066,38.7598],[93.8672,38.7158],[93.6914,38.9355],[93.1641,38.9795],[93.1641,39.1992],[92.373,39.1113],[92.373,39.3311],[92.6367,39.6387],[93.0762,40.6494],[93.8672,40.6934],[94.043,41.0889],[94.5703,41.4844],[95.1855,41.792],[95.2734,41.6162],[95.9766,41.9238],[96.2402,42.2314],[96.0645,42.3193],[95.9766,42.4951],[96.416,42.7148]]]}}]};
-const REGION_TRIP = Object.fromEntries(TRIPS.flatMap(t => t.regions.map(r => [r, t])));
-const lit = GEO.features.map(f => Object.assign({}, f, { trip: REGION_TRIP[f.properties.name] }));
+const TRIPS = window.TRIPS || [];
 const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isMobile = () => innerWidth < 900;
-const HOME = () => isMobile() ? { lat: 16, lng: 99.2, altitude: 2.4 } : { lat: 30, lng: 99.2, altitude: 1.9 };
-const RING_HOME = { lat: 37.15, lng: 99.05 };
-const START = new Date("2026-09-26T07:30:00+08:00");
-const END = new Date("2026-10-04T23:59:59+08:00");
+const WORLD_HOME = () => isMobile() ? { lat: 18, lng: 105, altitude: 2.5 } : { lat: 32, lng: 105, altitude: 2.05 };
+const tripView = t => ({ lat: t.center[0], lng: t.center[1], altitude: t.zoom || 1 });
 const pad = n => String(n).padStart(2, "0");
 const $ = s => document.querySelector(s);
+const hashId = () => decodeURIComponent(location.hash.replace(/^#/, "")).split(/[/?]/)[0];
+
+function defaultTrip(){
+  const id = hashId();
+  if (id) {
+    const hit = TRIPS.find(t => t.id === id);
+    if (hit) return hit;
+  }
+  return TRIPS.find(t => t.status === "now")
+    || TRIPS.find(t => t.status === "next")
+    || TRIPS[0];
+}
+
+let active = defaultTrip();
+let preview = active;
+let leaveTimer = 0;
+let world, ctrl, pauseGlobe, resumeGlobe;
+
+function fail(){ $("#fallback").classList.add("show"); }
+
+function tripMeta(trip){
+  if (trip.meta) return trip.meta;
+  if (trip.status === "done") return "已抵达 · 档案待补";
+  if (trip.status === "plan") return "计划中 · 日期待定";
+  return trip.kicker || "";
+}
 
 function showTrip(trip){
   if (!trip) return;
+  preview = trip;
   $("#entry-no").textContent = "No. " + trip.no;
   $("#entry-title").textContent = trip.name;
   $("#entry-en").textContent = trip.en;
-  $("#entry-meta").textContent = trip.meta;
-  $("#enter").href = trip.href;
+  $("#entry-meta").textContent = tripMeta(trip);
+  $("#spine").textContent = trip.start ? trip.en + " · MMXXVI" : trip.en;
+  $("#ticker").classList.toggle("empty", !(trip.days && trip.days.length));
+  const enter = $("#enter");
+  const label = enter.querySelector("span");
+  if (trip.href) {
+    enter.href = trip.href;
+    enter.classList.remove("muted");
+    enter.removeAttribute("aria-disabled");
+    label.textContent = "进入行程";
+  } else {
+    enter.removeAttribute("href");
+    enter.classList.add("muted");
+    enter.setAttribute("aria-disabled", "true");
+    label.textContent = trip.status === "plan" ? "手册筹备中" : "手册待补";
+  }
 }
 
-function fail(){ $("#fallback").classList.add("show"); }
+function paintStatus(){
+  const litN = TRIPS.filter(t => t.status !== "plan").length;
+  const planN = TRIPS.filter(t => t.status === "plan").length;
+  const next = TRIPS.find(t => t.status === "next" || t.status === "now");
+  const bits = [`<span>已点亮 ${litN} 站</span>`];
+  if (next) bits.push("<span>·</span>", `<span>下一站 ${next.short}</span>`);
+  if (planN) bits.push("<span>·</span>", `<span>计划中 ${planN} 站</span>`);
+  $("#brand-status").innerHTML = bits.join("");
+  $("#globe").setAttribute("aria-label", "可旋转的地球，" + TRIPS.map(t => t.short).join("、") + "已点亮");
+  $("#fallback-list").innerHTML = TRIPS.map(t =>
+    t.href ? `<a href="${t.href}">${t.name} ⟶</a>` : `<span>${t.name} · ${tripMeta(t)}</span>`
+  ).join("");
+}
+
+function renderRail(){
+  $("#rail").innerHTML = TRIPS.map(t =>
+    `<button type="button" data-id="${t.id}" data-st="${t.status}" class="${t === active ? "on" : ""}" aria-current="${t === active ? "true" : "false"}"><i class="dot"></i><span class="no">No.${t.no}</span><span>${t.short}</span></button>`
+  ).join("");
+}
 
 let go = function(href){
   if (!href || document.body.classList.contains("leaving")) return;
   if (reduceMotion) { location.href = href; return; }
   document.body.classList.add("leaving");
-  setTimeout(() => { location.href = href; }, 1100);
+  leaveTimer = setTimeout(() => { location.href = href; }, 1100);
 };
 
 $("#enter").addEventListener("click", e => {
   if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const href = $("#enter").getAttribute("href") || $("#enter").href;
+  if (!href || $("#enter").classList.contains("muted")) { e.preventDefault(); return; }
   e.preventDefault();
-  go($("#enter").href);
+  go(href);
 });
 
 (function splitTitle(){
@@ -268,27 +321,40 @@ $("#enter").addEventListener("click", e => {
   h1.innerHTML = [...h1.textContent].map((ch, i) => `<span style="--c:${i}">${ch}</span>`).join("");
 })();
 
+document.querySelectorAll(".reveal").forEach(el => {
+  el.addEventListener("animationend", ev => {
+    if (ev.target === el) el.classList.remove("reveal");
+  });
+});
+
 (function countdown(){
   const L = $("#count-label"), D = $("#count-d"), U = $("#count-unit"), H = $("#count-hms");
   let last = "";
   function tick(){
+    const trip = preview || active;
     const now = new Date();
-    let days, label, unit, hms;
-    if (now < START) {
-      let t = Math.floor((START - now) / 1000);
+    let days = "--", label, unit = "天", hms = "--";
+    const start = trip.start ? new Date(trip.start) : null;
+    const end = trip.end ? new Date(trip.end) : null;
+    if (start && now < start) {
+      let t = Math.floor((start - now) / 1000);
       days = pad(Math.floor(t / 86400)); t %= 86400;
-      label = "距出发 · 西宁 07:30"; unit = "天";
-      hms = `${pad(Math.floor(t / 3600))}:${pad(Math.floor(t % 3600 / 60))}:${pad(t % 60)}`;
-    } else if (now <= END) {
-      const day = Math.floor((now - START) / 864e5) + 1;
-      days = pad(day); label = "旅途中"; unit = "日"; hms = `第 ${day} 天 / 9`;
+      label = "距出发" + (trip.startLabel ? " · " + trip.startLabel : "");
+      hms = `${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:${pad(t % 60)}`;
+    } else if (start && end && now <= end) {
+      const day = Math.floor((now - start) / 864e5) + 1;
+      const total = Math.round((end - start) / 864e5) + 1;
+      days = pad(day); label = "旅途中"; unit = "日"; hms = `第 ${day} 天 / ${total}`;
+    } else if (trip.status === "done" || (end && now > end)) {
+      days = trip.days ? pad(trip.days.length) : "--";
+      label = "已完成"; hms = trip.meta ? trip.meta.split("·")[0].trim() : "档案待补";
     } else {
-      days = "09"; label = "已完成"; unit = "天"; hms = "2026.09.26 — 10.04";
+      days = "--"; label = "计划中"; hms = "日期待定";
     }
     L.textContent = label; U.textContent = unit; H.textContent = hms;
     if (days !== last) {
       D.textContent = days;
-      if (!reduceMotion) {
+      if (!reduceMotion && days !== "--") {
         D.classList.remove("roll");
         void D.offsetWidth;
         D.classList.add("roll");
@@ -298,24 +364,19 @@ $("#enter").addEventListener("click", e => {
   }
   tick();
   setInterval(tick, 1000);
+  window._tickCount = tick;
 })();
-
-$("#ticker").innerHTML = DAYLIST.map((x, i) =>
-  `<a href="./qinggan/index.html#day-${i}" data-i="${i}"><span class="t">${x.t}</span>${x.d}</a>`).join("");
-
-if (!reduceMotion) setTimeout(() => document.body.classList.add("settled"), 1800);
-else document.body.classList.add("ready", "settled");
 
 function initDust(){
   const c = document.getElementById("dust");
-  const ctx = c.getContext("2d");
+  const ctx = c.getContext("2d", { alpha: true });
   let stars = [];
   function resize(){
-    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const dpr = Math.min(devicePixelRatio || 1, 1.5);
     c.width = innerWidth * dpr; c.height = innerHeight * dpr;
     c.style.width = innerWidth + "px"; c.style.height = innerHeight + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = isMobile() ? 80 : 200;
+    const n = isMobile() ? 60 : 140;
     stars = Array.from({ length: n }, () => ({
       x: Math.random() * innerWidth,
       y: Math.random() * innerHeight,
@@ -338,54 +399,98 @@ function initDust(){
 }
 const drawDust = reduceMotion ? () => {} : initDust();
 
-if (typeof Globe !== "function") fail();
+if (!reduceMotion) setTimeout(() => document.body.classList.add("settled"), 1800);
+else document.body.classList.add("ready", "settled");
+
+paintStatus();
+renderRail();
+showTrip(active);
+
+if (!TRIPS.length) fail();
+else if (typeof Globe !== "function") fail();
 else try {
   let hover = null;
   let litPhase = reduceMotion ? "idle" : "off";
   let pathReady = reduceMotion;
+  let overHud = false;
+  let cruiseI = -1, cruiseAt = 0, lastAct = Date.now();
+  let lastCoord = "", lastNear = false, lastCoordAt = 0;
+  const pointer = { x: 0, y: 0, mx: 0, my: 0, on: false, dirty: false };
+
+  const ringArea = r => { let a = 0; for (let i = 0; i < r.length - 1; i++) a += r[i][0] * r[i + 1][1] - r[i + 1][0] * r[i][1]; return a; };
+  const windRing = (r, outer) => (outer ? ringArea(r) > 0 : ringArea(r) < 0) ? r.slice().reverse() : r;
+  function rewind(geom){
+    if (!geom) return geom;
+    if (geom.type === "Polygon") return { type: "Polygon", coordinates: geom.coordinates.map((r, i) => windRing(r, i === 0)) };
+    if (geom.type === "MultiPolygon") return { type: "MultiPolygon", coordinates: geom.coordinates.map(p => p.map((r, i) => windRing(r, i === 0))) };
+    return geom;
+  }
+  const lit = TRIPS.flatMap(t => (t.regions || []).map(f => Object.assign({}, f, { geometry: rewind(f.geometry), trip: t })));
+
   const capColor = d => {
     if (!d.trip) return "rgba(237,230,216,0.02)";
+    const st = d.trip.status;
+    const hot = d === hover || d.trip === preview;
     if (litPhase === "off") return "rgba(201,164,108,0)";
-    if (litPhase === "rise" || d === hover) return "rgba(201,164,108,0.55)";
+    if (litPhase === "rise" || hot) {
+      if (st === "done") return "rgba(237,230,216,0.40)";
+      if (st === "plan") return "rgba(201,164,108,0.30)";
+      return "rgba(201,164,108,0.55)";
+    }
+    if (st === "done") return "rgba(237,230,216,0.16)";
+    if (st === "plan") return "rgba(201,164,108,0.10)";
     return "rgba(201,164,108,0.32)";
   };
   const altitude = d => {
-    if (!d.trip) return 0.004;
+    if (!d.trip) return 0.003;
     if (litPhase === "off") return 0.004;
     if (litPhase === "rise") return 0.05;
-    return d === hover ? 0.035 : 0.014;
+    if (d === hover || d.trip === preview) return 0.035;
+    if (d.trip.status === "done") return 0.010;
+    if (d.trip.status === "plan") return 0.012;
+    return 0.014;
+  };
+  const strokeColor = d => {
+    if (!d.trip) return "rgba(237,230,216,0.18)";
+    if (d.trip.status === "done") return "rgba(237,230,216,0.55)";
+    if (d.trip.status === "plan") return "rgba(201,164,108,0.42)";
+    return "rgba(201,164,108,0.90)";
   };
   const pathColor = d => {
     if (d && d.kind === "day") return "rgba(201,164,108,0.95)";
     if (d && d.kind === "dim") return "rgba(237,230,216,0.35)";
     return ["rgba(237,230,216,0.90)", "rgba(201,164,108,0.90)"];
   };
+
   const el = document.getElementById("globe");
-  const world = Globe()(el)
+  world = Globe({ rendererConfig: { antialias: true, powerPreference: "high-performance", alpha: false } })(el)
     .backgroundColor("#07090C")
     .showAtmosphere(true)
     .atmosphereColor("#C9A46C")
     .atmosphereAltitude(0.10)
-    .hexPolygonResolution(3)
+    .hexPolygonResolution(isMobile() ? 2 : 3)
     .hexPolygonMargin(0.72)
     .hexPolygonAltitude(0.003)
     .hexPolygonColor(() => "rgba(237,230,216,0.10)")
     .polygonAltitude(altitude)
     .polygonCapColor(capColor)
-    .polygonSideColor(d => d.trip ? "rgba(201,164,108,0.10)" : "rgba(0,0,0,0)")
-    .polygonStrokeColor(d => d.trip ? "rgba(201,164,108,0.90)" : "rgba(237,230,216,0.20)")
-    .polygonCapCurvatureResolution(6)
+    .polygonSideColor(d => d.trip ? (d.trip.status === "done" ? "rgba(237,230,216,0.06)" : "rgba(201,164,108,0.10)") : "rgba(0,0,0,0)")
+    .polygonStrokeColor(strokeColor)
+    .polygonCapCurvatureResolution(12)
     .polygonsTransitionDuration(reduceMotion ? 0 : 220)
-    .polygonLabel(d => d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker}` : "")
+    .polygonLabel(d => d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker || tripMeta(d.trip)}` : "")
     .onPolygonHover(d => {
       hover = d && d.trip ? d : null;
       world.polygonAltitude(altitude).polygonCapColor(capColor);
       $("#entry").classList.toggle("hot", !!hover);
       $("#cursor").classList.toggle("hot", !!hover);
-      showTrip(hover ? hover.trip : TRIPS[0]);
+      showTrip(hover ? hover.trip : active);
+      if (window._tickCount) window._tickCount();
     })
-    .onPolygonClick(d => { if (d && d.trip) go(d.trip.href); })
-    .ringsData([RING_HOME])
+    .onPolygonClick(d => {
+      if (d && d.trip) selectTrip(d.trip, { fly: true, enter: false });
+    })
+    .ringsData([])
     .ringColor(() => t => `rgba(201,164,108,${(1 - t) * 0.7})`)
     .ringMaxRadius(6).ringPropagationSpeed(1.6).ringRepeatPeriod(2200).ringAltitude(0.016)
     .pathPoints(d => d.pts || d)
@@ -395,7 +500,7 @@ else try {
     .pathColor(pathColor)
     .pathStroke(1.2).pathDashLength(0.06).pathDashGap(0.012)
     .pathDashAnimateTime(0).pathTransitionDuration(0)
-    .htmlElementsData([{ lat: 37.15, lng: 99.05, trip: TRIPS[0] }].concat(STOPS))
+    .htmlElementsData([])
     .htmlElement(d => {
       if (!d.trip) {
         const n = document.createElement("span");
@@ -404,15 +509,27 @@ else try {
         return n;
       }
       const b = document.createElement("button");
-      b.className = "pin"; b.type = "button";
+      b.className = "pin " + (d.trip.status === "done" ? "done" : d.trip.status === "plan" ? "plan" : "");
+      b.type = "button";
       b.setAttribute("aria-label", d.trip.name);
-      b.innerHTML = `<b>青甘</b><small>NO.${d.trip.no}</small><i></i>`;
-      b.onclick = e => { e.stopPropagation(); go(d.trip.href); };
+      b.innerHTML = `<b>${d.trip.short}</b><small>NO.${d.trip.no}</small><i></i>`;
+      b.onclick = e => {
+        e.stopPropagation();
+        if (d.trip.href && d.trip === active) go(d.trip.href);
+        else selectTrip(d.trip, { fly: true, enter: false });
+      };
       return b;
     })
     .htmlAltitude(0.03)
     .onGlobeReady(() => document.body.classList.add("ready"))
-    .pointOfView(HOME(), 0);
+    .pointOfView(WORLD_HOME(), 0);
+
+  try {
+    const renderer = world.renderer();
+    if (renderer && renderer.setPixelRatio) {
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isMobile() ? 1.25 : 1.5));
+    }
+  } catch (e) {}
 
   const mat = world.globeMaterial();
   if (mat) {
@@ -422,78 +539,145 @@ else try {
     if (mat.specular) mat.specular.set("#111820");
   }
 
-  const ctrl = world.controls();
+  ctrl = world.controls();
   ctrl.enableDamping = true;
   ctrl.autoRotate = !reduceMotion;
   ctrl.autoRotateSpeed = 0.22;
   ctrl.minDistance = 140;
   ctrl.maxDistance = 520;
+  pauseGlobe = () => { try { world.pauseAnimation(); } catch (e) {} };
+  resumeGlobe = () => { try { world.resumeAnimation(); } catch (e) {} };
 
-  let lastAct = Date.now();
-  let cruiseI = -1, cruiseAt = 0, overTicker = false;
+  function ringsFor(trip, at){
+    if (!trip || trip.status === "done" || trip.status === "plan") return [];
+    const loc = at || { lat: trip.center[0], lng: trip.center[1] };
+    return [loc];
+  }
+
+  function htmlData(){
+    const pins = TRIPS.map(t => ({ lat: t.center[0], lng: t.center[1], trip: t }));
+    const stops = (active.stops || []).map(s => Object.assign({}, s));
+    return pins.concat(stops);
+  }
+
+  function setPaths(mode, seg){
+    const trip = active;
+    if (!trip || !trip.route) { world.pathsData([]); return; }
+    const route = trip.route;
+    if (mode === "day" && seg) {
+      world.pathsData([
+        { pts: route, kind: "dim" },
+        { pts: route.slice(seg[0], seg[1] + 1), kind: "day" }
+      ]).pathDashAnimateTime(0);
+    } else if (mode === "draw") {
+      world.pathsData([{ pts: route.slice(0, seg), kind: "full" }]).pathDashAnimateTime(0);
+    } else {
+      world.pathsData([{ pts: route, kind: "full" }]).pathDashAnimateTime(reduceMotion ? 0 : 16000);
+    }
+  }
+
+  function bindTicker(){
+    const box = $("#ticker");
+    const days = active.days || [];
+    if (!days.length) {
+      box.classList.add("empty");
+      box.innerHTML = "";
+      return;
+    }
+    box.classList.remove("empty");
+    box.innerHTML = days.map((x, i) =>
+      `<a href="${active.href || "#"}#day-${i}" data-i="${i}"><span class="t">${x.t}</span>${x.d}</a>`
+    ).join("");
+    box.querySelectorAll("a").forEach(a => {
+      a.addEventListener("mouseenter", () => {
+        overHud = true;
+        lastAct = Date.now();
+        cruiseI = -1;
+        flyDay(+a.dataset.i, false);
+      });
+      a.addEventListener("click", e => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (!active.href) return;
+        e.preventDefault();
+        go(a.getAttribute("href"));
+      });
+    });
+    box.onmouseleave = () => {
+      overHud = false;
+      lastAct = Date.now();
+      homeView();
+    };
+  }
+
+  function flyDay(i, fromCruise){
+    const days = active.days;
+    if (!days || !days[i]) return;
+    const x = days[i];
+    $("#ticker").querySelectorAll("a").forEach((a, n) => a.classList.toggle("on", n === i));
+    if (pathReady) setPaths("day", x.seg);
+    ctrl.autoRotate = false;
+    world.pointOfView({ lat: x.at[0], lng: x.at[1], altitude: 0.9 }, 800);
+    world.ringsData(ringsFor(active, { lat: x.at[0], lng: x.at[1] }));
+  }
+
+  function homeView(){
+    $("#ticker").querySelectorAll("a").forEach(a => a.classList.remove("on"));
+    if (pathReady) setPaths("full");
+    world.pointOfView(tripView(active), 900);
+    world.ringsData(ringsFor(active));
+  }
+
+  function selectTrip(trip, opts){
+    if (!trip) return;
+    const fly = !opts || opts.fly !== false;
+    active = trip;
+    showTrip(trip);
+    if (window._tickCount) window._tickCount();
+    renderRail();
+    bindTicker();
+    document.body.classList.toggle("has-stops", !!(trip.stops && trip.stops.length));
+    world.htmlElementsData(htmlData());
+    if (pathReady) setPaths("full");
+    world.ringsData(ringsFor(trip));
+    world.polygonAltitude(altitude).polygonCapColor(capColor);
+    if (history.replaceState) history.replaceState(null, "", "#" + trip.id);
+    if (fly) {
+      ctrl.autoRotate = false;
+      world.pointOfView(tripView(trip), 900);
+    }
+    if (opts && opts.enter && trip.href) go(trip.href);
+    lastAct = Date.now();
+    cruiseI = -1;
+  }
+
   function bump(){
     lastAct = Date.now();
-    if (cruiseI >= 0 && !overTicker) {
+    if (cruiseI >= 0 && !overHud) {
       cruiseI = -1;
-      setPaths("full");
-      $("#ticker").querySelectorAll("a").forEach(a => a.classList.remove("on"));
-      world.pointOfView(HOME(), 900);
-      world.ringsData([RING_HOME]);
+      homeView();
     }
   }
   ["pointerdown", "wheel", "keydown", "touchstart"].forEach(ev =>
     addEventListener(ev, bump, { passive: true }));
   ctrl.addEventListener("start", () => { ctrl.autoRotate = false; bump(); });
 
-  function setPaths(mode, seg){
-    if (mode === "day" && seg) {
-      world.pathsData([
-        { pts: ROUTE, kind: "dim" },
-        { pts: ROUTE.slice(seg[0], seg[1] + 1), kind: "day" }
-      ]).pathDashAnimateTime(0);
-    } else if (mode === "draw") {
-      world.pathsData([{ pts: ROUTE.slice(0, seg), kind: "full" }]).pathDashAnimateTime(0);
-    } else {
-      world.pathsData([{ pts: ROUTE, kind: "full" }]).pathDashAnimateTime(reduceMotion ? 0 : 16000);
-    }
-  }
-
-  function flyDay(i, fromCruise){
-    const x = DAYLIST[i];
-    $("#ticker").querySelectorAll("a").forEach((a, n) => a.classList.toggle("on", n === i));
-    if (pathReady) setPaths("day", x.seg);
-    ctrl.autoRotate = false;
-    world.pointOfView({ lat: x.at[0], lng: x.at[1], altitude: 0.9 }, 800);
-    world.ringsData([{ lat: x.at[0], lng: x.at[1] }]);
-    if (fromCruise) cruiseI = i;
-  }
-
-  function homeView(){
-    $("#ticker").querySelectorAll("a").forEach(a => a.classList.remove("on"));
-    if (pathReady) setPaths("full");
-    world.pointOfView(HOME(), 900);
-    world.ringsData([RING_HOME]);
-  }
-
-  document.querySelectorAll("#ticker a").forEach(a => {
-    a.addEventListener("mouseenter", () => {
-      overTicker = true;
-      lastAct = Date.now();
-      cruiseI = -1;
-      flyDay(+a.dataset.i, false);
-    });
-  });
-  $("#ticker").addEventListener("mouseleave", () => {
-    overTicker = false;
-    lastAct = Date.now();
-    homeView();
-  });
-
   ctrl.addEventListener("change", () => {
+    const now = performance.now();
+    if (now - lastCoordAt < 100) return;
+    lastCoordAt = now;
     const pov = world.pointOfView(), lng = ((pov.lng + 540) % 360) - 180;
-    $("#coord-v").textContent = `${pov.lat >= 0 ? "N" : "S"} ${Math.abs(pov.lat).toFixed(2)}° · ${lng >= 0 ? "E" : "W"} ${Math.abs(lng).toFixed(2)}°`;
-    $("#coord-alt").textContent = `ALT ${pov.altitude.toFixed(2)}`;
-    document.body.classList.toggle("near", pov.altitude < 1.2);
+    const text = `${pov.lat >= 0 ? "N" : "S"} ${Math.abs(pov.lat).toFixed(2)}° · ${lng >= 0 ? "E" : "W"} ${Math.abs(lng).toFixed(2)}°`;
+    const alt = `ALT ${pov.altitude.toFixed(2)}`;
+    if (text !== lastCoord) {
+      lastCoord = text;
+      $("#coord-v").textContent = text;
+      $("#coord-alt").textContent = alt;
+    }
+    const near = pov.altitude < 1.2;
+    if (near !== lastNear) {
+      lastNear = near;
+      document.body.classList.toggle("near", near);
+    }
   });
 
   go = function(href){
@@ -502,14 +686,69 @@ else try {
     document.body.classList.add("leaving");
     ctrl.autoRotate = false;
     ctrl.enabled = false;
-    world.pointOfView({ lat: 37.15, lng: 99.05, altitude: 0.48 }, 900);
-    setTimeout(() => { location.href = href; }, 1100);
+    const t = preview && preview.href === href ? preview : active;
+    world.pointOfView({ lat: t.center[0], lng: t.center[1], altitude: 0.48 }, 900);
+    leaveTimer = setTimeout(() => { location.href = href; }, 1100);
   };
 
-  function size(){ world.width(innerWidth).height(innerHeight); }
+  function restorePage(){
+    if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = 0; }
+    document.body.classList.remove("leaving");
+    if (ctrl) { ctrl.enabled = true; ctrl.autoRotate = !reduceMotion; }
+    if (resumeGlobe) resumeGlobe();
+    if (world) homeView();
+  }
+  addEventListener("pageshow", e => { if (e.persisted) restorePage(); });
+  addEventListener("visibilitychange", () => {
+    if (document.hidden) { if (pauseGlobe) pauseGlobe(); }
+    else if (resumeGlobe) resumeGlobe();
+  });
+  addEventListener("hashchange", () => {
+    const t = TRIPS.find(x => x.id === hashId());
+    if (t && t !== active) selectTrip(t, { fly: true });
+  });
+
+  $("#rail").addEventListener("click", e => {
+    const btn = e.target.closest("button[data-id]");
+    if (!btn) return;
+    const trip = TRIPS.find(t => t.id === btn.dataset.id);
+    selectTrip(trip, { fly: true });
+  });
+  $("#rail").addEventListener("pointerover", e => {
+    const btn = e.target.closest("button[data-id]");
+    if (!btn) return;
+    overHud = true;
+    const trip = TRIPS.find(t => t.id === btn.dataset.id);
+    showTrip(trip);
+    if (window._tickCount) window._tickCount();
+    ctrl.autoRotate = false;
+    world.pointOfView(tripView(trip), 700);
+    world.ringsData(ringsFor(trip));
+  });
+  $("#rail").addEventListener("pointerleave", () => {
+    overHud = false;
+    lastAct = Date.now();
+    showTrip(active);
+    if (window._tickCount) window._tickCount();
+    homeView();
+  });
+
+  function size(){
+    world.width(innerWidth).height(innerHeight);
+    try {
+      const renderer = world.renderer();
+      if (renderer && renderer.setPixelRatio) {
+        renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isMobile() ? 1.25 : 1.5));
+      }
+    } catch (e) {}
+  }
   size();
   addEventListener("resize", size);
   world.polygonsData(lit);
+  world.htmlElementsData(htmlData());
+  document.body.classList.toggle("has-stops", !!(active.stops && active.stops.length));
+  bindTicker();
+  world.ringsData(ringsFor(active));
 
   (async () => {
     let countries = [];
@@ -520,12 +759,26 @@ else try {
       });
       countries = topojson.feature(topo, topo.objects.countries).features
         .filter(d => d.id !== 10 && d.id !== "010");
-    } catch (e) { /* 世界底图失败时仍可点青海、甘肃 */ }
+    } catch (e) { /* 世界底图失败时仍可点亮本地行程 */ }
     if (countries.length) {
-      try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
-      catch (e) { world.hexPolygonsData(countries); }
+      const byId = new Map(countries.map(d => [String(d.id), d]));
+      for (const trip of TRIPS) {
+        for (const cid of (trip.countries || [])) {
+          const feat = byId.get(String(cid)) || byId.get(String(+cid));
+          if (feat && !feat.trip) {
+            feat.trip = trip;
+            lit.push(feat);
+          }
+        }
+      }
+      const shells = countries.filter(d => !d.trip);
+      world.polygonsData(shells.concat(lit));
+      const applyHex = () => {
+        try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
+        catch (e) { try { world.hexPolygonsData(countries); } catch (err) {} }
+      };
+      applyHex();
     }
-    world.polygonsData(countries.concat(lit));
   })();
 
   function lightProvinces(){
@@ -540,11 +793,13 @@ else try {
   }
 
   function drawRoute(){
+    const route = active.route;
+    if (!route) { pathReady = true; setPaths("full"); return; }
     let k = 2;
-    const gap = 2400 / ROUTE.length;
+    const gap = 2400 / route.length;
     const step = () => {
       setPaths("draw", k);
-      if (++k <= ROUTE.length) setTimeout(step, gap);
+      if (++k <= route.length) setTimeout(step, gap);
       else { pathReady = true; setPaths("full"); }
     };
     step();
@@ -558,11 +813,15 @@ else try {
     });
   }
 
-  if (reduceMotion) setPaths("full");
+  if (reduceMotion) { pathReady = true; setPaths("full"); }
   else {
     setTimeout(lightProvinces, 700);
     setTimeout(drawRoute, 900);
     setTimeout(flashStops, 1600);
+  }
+
+  if (hashId() && active) {
+    setTimeout(() => world.pointOfView(tripView(active), reduceMotion ? 0 : 1200), reduceMotion ? 0 : 400);
   }
 
   let dirLight = null;
@@ -574,46 +833,76 @@ else try {
     }
   } catch (e) {}
 
-  let sunA = 0.6, lastAtmo = 0, lastGrain = 0, lastBreath = 0;
   const cursor = $("#cursor");
+  const parallaxEls = {
+    brand: document.querySelector(".brand"),
+    entry: $("#entry"),
+    count: $("#count"),
+    coord: $("#coord")
+  };
   addEventListener("pointermove", e => {
     if (isMobile() || reduceMotion) return;
-    document.documentElement.style.setProperty("--mx", ((e.clientX / innerWidth) * 2 - 1).toFixed(3));
-    document.documentElement.style.setProperty("--my", ((e.clientY / innerHeight) * 2 - 1).toFixed(3));
-    cursor.style.setProperty("--cx", e.clientX + "px");
-    cursor.style.setProperty("--cy", e.clientY + "px");
-    const overHud = e.target.closest(".brand,.entry,.count,.ticker,.pin,.fallback");
-    const overGlobe = e.target.closest("#globe");
-    cursor.classList.toggle("on", !!(overGlobe && !overHud));
+    pointer.mx = (e.clientX / innerWidth) * 2 - 1;
+    pointer.my = (e.clientY / innerHeight) * 2 - 1;
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    const hud = e.target.closest(".brand,.entry,.count,.ticker,.rail,.pin,.fallback");
+    pointer.on = !!(e.target.closest("#globe") && !hud);
+    pointer.dirty = true;
   });
-  el.addEventListener("pointerleave", () => cursor.classList.remove("on"));
+  el.addEventListener("pointerleave", () => { pointer.on = false; pointer.dirty = true; });
 
+  const cruiseSeq = [];
+  TRIPS.forEach(trip => {
+    if (trip.days && trip.days.length) trip.days.forEach((day, i) => cruiseSeq.push({ trip, i }));
+    else cruiseSeq.push({ trip, i: -1 });
+  });
+
+  function flyCruise(n){
+    const item = cruiseSeq[n];
+    if (!item) return;
+    if (item.trip !== active) selectTrip(item.trip, { fly: false });
+    cruiseI = n;
+    if (item.i >= 0) flyDay(item.i, true);
+    else {
+      ctrl.autoRotate = false;
+      world.pointOfView(tripView(item.trip), 900);
+      world.ringsData(ringsFor(item.trip));
+    }
+  }
+
+  let sunA = 0.6, lastBreath = 0;
   function loop(t){
-    if (!document.hidden && !reduceMotion) {
+    const leaving = document.body.classList.contains("leaving");
+    if (!document.hidden && !reduceMotion && !leaving) {
       drawDust(t);
       if (dirLight && !isMobile()) {
         sunA += 0.0009;
         dirLight.position.set(Math.cos(sunA), 0.4, Math.sin(sunA));
       }
-      if (t - lastAtmo > 200) {
-        lastAtmo = t;
-        world.atmosphereAltitude(0.105 + Math.sin(t / 9000 * Math.PI * 2) * 0.015);
-      }
-      if (t - lastGrain > 120) {
-        lastGrain = t;
-        document.body.style.setProperty("--gx", (Math.random() * 4 - 2) + "px");
-        document.body.style.setProperty("--gy", (Math.random() * 4 - 2) + "px");
+      if (pointer.dirty) {
+        pointer.dirty = false;
+        cursor.style.transform = `translate(${pointer.x}px, ${pointer.y}px) translate(-50%,-50%)`;
+        cursor.classList.toggle("on", pointer.on);
+        if (document.body.classList.contains("settled") && !isMobile()) {
+          const mx = pointer.mx, my = pointer.my;
+          parallaxEls.brand.style.translate = `${mx * -6}px ${my * -4}px`;
+          parallaxEls.entry.style.translate = `${mx * -6}px ${my * -4}px`;
+          parallaxEls.count.style.translate = `${mx * 6}px ${my * 4}px`;
+          parallaxEls.coord.style.translate = `${mx * 6}px ${my * 4}px`;
+        }
       }
       const idle = Date.now() - lastAct;
-      if (!isMobile() && !overTicker && !document.body.classList.contains("leaving") && !ctrl.autoRotate && idle > 8000 && idle < 20000 && t - lastBreath > 2000) {
+      if (!isMobile() && !overHud && !ctrl.autoRotate && idle > 8000 && idle < 20000 && t - lastBreath > 2000) {
         lastBreath = t;
         const pov = world.pointOfView();
-        const wave = HOME().altitude + Math.sin(Date.now() / 14000 * Math.PI * 2) * 0.05;
+        const wave = tripView(active).altitude + Math.sin(Date.now() / 14000 * Math.PI * 2) * 0.05;
         world.pointOfView({ lat: pov.lat, lng: pov.lng, altitude: wave }, 2000);
       }
-      if (!isMobile() && !overTicker && !document.body.classList.contains("leaving") && idle > 20000 && t - cruiseAt > 6000) {
+      if (!isMobile() && !overHud && idle > 20000 && t - cruiseAt > 6000) {
         cruiseAt = t;
-        flyDay((cruiseI + 1) % DAYLIST.length, true);
+        const next = (Math.max(cruiseI, -1) + 1) % cruiseSeq.length;
+        flyCruise(next);
       }
     }
     requestAnimationFrame(loop);
