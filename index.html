@@ -7,274 +7,255 @@
 <meta name="description" content="世界探索计划。青海 × 甘肃。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --night:#0F1A2E; --night-2:#152238; --ink:#E6EBF2; --soft:#9FB0C8; --star:#F3E3B5;
-  --lake:#5CB6C1; --sand:#E2A857; --line:#2A3C5A;
+  --ink-0:#07090C;
+  --ink-1:#0C1016;
+  --ivory:#EDE6D8;
+  --soft:#A9A395;
+  --line:rgba(237,230,216,.14);
+  --brass:#C9A46C;
+  --brass-rgb:201,164,108;
+  --danxia:#E07D6D;
   --display:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --latin:"Instrument Serif","Cormorant Garamond","Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
   --body:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --mx:0; --my:0; --gx:0px; --gy:0px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:var(--night);color:var(--ink);font:15px/1.6 var(--body)}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--ink-0);color:var(--ivory);font:15px/1.6 var(--body)}
 a{color:inherit}
-#globe{position:fixed;inset:0;z-index:0}
-.hud{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:28px 24px 24px}
-.hud a,.hud button{pointer-events:auto}
-.brand .kicker{margin:0;font-size:13px;letter-spacing:.14em;color:var(--star);text-transform:none}
-.brand h1{margin:6px 0 0;font:700 clamp(32px,6vw,56px)/1.1 var(--display);letter-spacing:.06em}
-.card{pointer-events:auto;align-self:flex-start;background:color-mix(in srgb,var(--night) 72%,transparent);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;min-width:min(100%,280px);max-width:340px;box-shadow:0 18px 40px -24px #000}
-.card.hot{border-color:color-mix(in srgb,var(--lake) 55%,var(--line))}
-.card .tag{font-size:12px;letter-spacing:.08em;color:var(--star)}
-.card h2{margin:4px 0 0;font:500 22px/1.3 var(--display)}
-.card .meta{margin:4px 0 0;color:var(--soft);font-size:13px}
-.enter{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:8px 14px;border-radius:999px;border:0;background:var(--lake);color:#0F1A2E;font-weight:600;text-decoration:none;cursor:pointer}
-.enter:hover{filter:brightness(1.08)}
-.pin{appearance:none;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%);cursor:pointer;color:var(--star);text-shadow:0 1px 8px #0F1A2E;font:inherit}
-.pin i{width:8px;height:8px;border-radius:50%;background:color-mix(in srgb,var(--lake) 70%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--lake) 18%,transparent)}
-.pin b{margin-top:6px;font:500 14px/1 var(--display);letter-spacing:.12em}
-.fallback{position:fixed;inset:0;z-index:2;display:none;place-items:center;padding:24px;background:var(--night);text-align:center}
-.fallback.show{display:grid}
-.fallback a{color:var(--lake)}
-#veil{position:fixed;inset:0;z-index:3;background:#0F1A2E;opacity:0;pointer-events:none;transition:opacity .5s ease .45s}
-.hud{transition:opacity .35s ease,transform .35s ease}
-body.leaving .hud{opacity:0;transform:translateY(10px)}
-body.leaving #veil{opacity:1;pointer-events:auto}
-@media (prefers-reduced-motion:reduce){
-  #veil,.hud{transition:none}
-}
-@media (max-width:640px){
-  .hud{padding:18px 16px 16px}
-  .card{max-width:100%;width:100%}
-}
+:focus-visible{outline:1px solid var(--brass);outline-offset:3px}
+#dust,.aura{position:fixed;inset:0;z-index:0;pointer-events:none}
+#globe{position:fixed;inset:0;z-index:0;opacity:0;transform:scale(.96);transition:opacity 1.2s ease,transform 1.4s var(--ease)}
+body.ready #globe{opacity:1;transform:none}
+.aura i{position:absolute;width:42vw;height:42vw;border-radius:50%;filter:blur(40px);
+  background:radial-gradient(circle,rgba(201,164,108,.10),transparent 60%)}
+.aura i:first-child{top:16%;left:26%;animation:driftA 26s var(--ease) infinite}
+.aura i:last-child{bottom:12%;right:18%;animation:driftB 34s var(--ease) infinite}
+@keyframes driftA{0%,100%{translate:-4% 2%}50%{translate:8% -6%}}
+@keyframes driftB{0%,100%{translate:3% -3%}50%{translate:-7% 5%}}
+body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-position:var(--gx) var(--gy)}
+body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 62% 58% at 50% 50%,transparent 55%,rgba(7,9,12,.85) 100%)}
+.plate{position:fixed;inset:20px;z-index:2;pointer-events:none}
+.plate i{position:absolute;width:10px;height:10px;border:1px solid var(--line)}
+.plate i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.plate i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.plate i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.plate i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
 
-/* ===== 视觉升级 ===== */
-:root{ --gold:#F2C27A; --ember:#E27D5A; }
-body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 70% 60% at 50% 50%, transparent 55%, rgba(8,13,24,.72) 100%),
-             linear-gradient(180deg, rgba(8,13,24,.75) 0%, transparent 22%, transparent 70%, rgba(8,13,24,.85) 100%)}
-.hud{z-index:2}
-.brand .kicker{display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 10px;border-radius:999px;
-  background:rgba(242,194,122,.08);border:1px solid rgba(242,194,122,.28);letter-spacing:.12em}
-.brand .kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(242,194,122,.6);animation:beacon 2.4s ease-out infinite}
-@keyframes beacon{0%{box-shadow:0 0 0 0 rgba(242,194,122,.55)}70%{box-shadow:0 0 0 9px rgba(242,194,122,0)}100%{box-shadow:0 0 0 0 rgba(242,194,122,0)}}
-.brand h1{margin-top:12px;font-size:clamp(38px,7vw,76px);letter-spacing:.08em;
-  background:linear-gradient(95deg,#FFF6DD 0%,var(--gold) 45%,var(--ember) 80%,#9FC7D3 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 4px 24px rgba(242,194,122,.18))}
-.brand .rule{display:block;width:72px;height:2px;margin-top:14px;background:linear-gradient(90deg,var(--gold),transparent)}
-.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
-.card{position:relative;overflow:hidden;max-width:360px;padding:18px 20px 16px;border-radius:18px;
-  background:linear-gradient(160deg,rgba(24,36,60,.78),rgba(12,20,36,.82));border:1px solid rgba(159,176,200,.18)}
-.card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,#2F8FA3,var(--gold),var(--ember),#4F78A8)}
-.card.hot{border-color:rgba(242,194,122,.45);box-shadow:0 18px 50px -20px rgba(242,194,122,.35)}
-.card .tag{display:flex;align-items:center;gap:8px}
-.card .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
-.card h2{font-weight:700;font-size:26px;margin-top:6px}
-.card .route{margin:6px 0 0;font-size:13px;color:#C5CFDD;letter-spacing:.02em}
-.card .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:14px 0 0;padding:10px 0 0;border-top:1px solid rgba(159,176,200,.16)}
-.card .stats div{display:flex;flex-direction:column}
-.card .stats b{font:700 20px/1.1 var(--display);color:#fff;font-variant-numeric:tabular-nums}
-.card .stats b small{font-size:11px;color:var(--soft);font-weight:400;margin-left:2px}
-.card .stats span{font-size:11px;color:var(--soft);margin-top:2px}
-.card .cd{margin:12px 0 0;font-size:13px;color:var(--soft)}
-.card .cd b{color:var(--gold);font-variant-numeric:tabular-nums;font-weight:600;margin-left:4px}
-.enter{margin-top:14px;padding:10px 18px;background:linear-gradient(135deg,var(--gold),var(--ember));color:#1A1206;box-shadow:0 8px 24px -10px rgba(226,125,90,.7)}
-.enter::after{content:"→";transition:transform .2s ease}
-.enter:hover::after{transform:translateX(3px)}
-.coord{pointer-events:none;text-align:right;font-size:11px;letter-spacing:.14em;color:rgba(159,176,200,.7);font-variant-numeric:tabular-nums;line-height:1.7}
-.coord b{display:block;color:rgba(243,227,181,.85);font-weight:500}
-.pin{color:#FFF1D2}
-.pin i{width:10px;height:10px;background:var(--gold);box-shadow:0 0 0 3px rgba(242,194,122,.25),0 0 18px 4px rgba(242,194,122,.55)}
-.pin b{font-weight:700;letter-spacing:.2em;text-shadow:0 0 12px rgba(242,194,122,.6),0 1px 6px #0F1A2E}
-@media (max-width:640px){
-  .bottom{flex-direction:column;align-items:stretch}
-  .coord{display:none}
-  .card{max-width:100%}
-  .brand h1{font-size:40px}
-  .card{padding:14px 16px 12px}
-  .card h2{font-size:22px}
-  .card .route{display:none}
-  .card .stats{margin-top:10px;padding-top:8px}
-  .card .cd{margin-top:8px}
-  .enter{margin-top:10px;padding:8px 16px}
-}
+.reveal{opacity:0;translate:0 14px;animation:rise .9s var(--ease) forwards;animation-delay:calc(.45s + var(--i) * .12s)}
+@keyframes rise{to{opacity:1;translate:0 0}}
 
-/* ===== 首页充实：右侧旅程档案 ===== */
-.side{position:fixed;z-index:2;top:28px;right:24px;max-height:calc(100vh - 92px);width:340px;display:flex;flex-direction:column;gap:12px;pointer-events:none}
-.panel{pointer-events:auto;background:linear-gradient(160deg,rgba(24,36,60,.72),rgba(12,20,36,.78));backdrop-filter:blur(10px);
-  border:1px solid rgba(159,176,200,.16);border-radius:16px;padding:14px 16px;box-shadow:0 18px 40px -24px #000}
-.panel h3{margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;font:500 12px/1 var(--body);letter-spacing:.14em;color:var(--star)}
-.panel h3 span{letter-spacing:0;color:var(--soft);font-size:11px}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.tiles div{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 0 6px;text-align:center}
-.tiles b{display:block;font:700 26px/1 var(--display);color:var(--gold);font-variant-numeric:tabular-nums}
-.tiles i{font-style:normal;font-size:11px;color:var(--soft)}
-.spark{display:block;width:100%;height:64px;margin-top:4px}
-.days{list-style:none;margin:0;padding:0;overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(159,176,200,.3) transparent}
-.days li a{display:grid;grid-template-columns:14px 44px 1fr auto;align-items:center;gap:8px;padding:7px 6px;border-radius:9px;text-decoration:none;color:var(--ink)}
-.days li a:hover,.days li a:focus-visible,.days li a.on{background:rgba(242,194,122,.09)}
-.days .dot{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
-.days .dt{font-size:12px;color:var(--soft);font-variant-numeric:tabular-nums}
-.days .ti{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.days .km{font-size:11px;color:var(--soft);font-variant-numeric:tabular-nums}
-.panel.list{flex:0 1 auto;min-height:0;display:flex;flex-direction:column}
-.next{pointer-events:auto;border:1px dashed rgba(159,176,200,.3);border-radius:14px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;color:var(--soft);font-size:13px}
-.next b{font:500 14px var(--display);color:#C5CFDD;letter-spacing:.1em}
-.next i{font-style:normal;width:22px;height:22px;border-radius:50%;border:1px dashed rgba(159,176,200,.45);display:grid;place-items:center;font-size:14px}
-.coord{position:fixed;right:24px;bottom:22px}
-.bottom{padding-right:360px}
-.chips{display:none}
-.stop{pointer-events:none;display:flex;align-items:center;gap:4px;transform:translate(-4px,-50%);font-size:12px;color:#FFF1D2;text-shadow:0 1px 6px #0F1A2E;white-space:nowrap;opacity:0;transition:opacity .3s}
-.stop i{width:5px;height:5px;border-radius:50%;background:#FFF1D2;box-shadow:0 0 6px rgba(242,194,122,.8)}
+.brand{position:fixed;z-index:3;left:44px;top:40px;max-width:min(560px,48vw)}
+.kicker{margin:0;font:400 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.brand h1{margin:14px 0 0;font:500 clamp(40px,5.6vw,72px)/1.05 var(--display);letter-spacing:.12em;color:var(--ivory)}
+.brand h1 span{display:inline-block;opacity:0;translate:0 .35em;filter:blur(6px);animation:glyph .9s var(--ease) forwards;animation-delay:calc(.6s + var(--c) * 70ms)}
+@keyframes glyph{to{opacity:1;translate:0 0;filter:blur(0)}}
+.brand .status{margin:18px 0 0;display:flex;align-items:center;gap:10px;font:400 13px/1 var(--body);letter-spacing:.04em;color:var(--soft)}
+.brand .status::before{content:"";width:28px;height:1px;background:var(--brass);transform-origin:left;animation:draw .8s var(--ease) 1.1s both}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.coord{position:fixed;z-index:3;right:44px;top:44px;display:flex;align-items:center;gap:14px;
+  font:400 11px/1 var(--mono);letter-spacing:.14em;color:var(--soft);font-variant-numeric:tabular-nums;pointer-events:none}
+.coord .live{width:6px;height:6px;border-radius:50%;background:var(--danxia);box-shadow:0 0 0 0 rgba(224,125,109,.6);animation:beacon 2.6s ease-out infinite}
+@keyframes beacon{0%{box-shadow:0 0 0 0 rgba(224,125,109,.55)}70%{box-shadow:0 0 0 8px rgba(224,125,109,0)}100%{box-shadow:0 0 0 0 rgba(224,125,109,0)}}
+
+.entry{position:fixed;z-index:3;left:44px;bottom:72px;max-width:min(460px,44vw)}
+.entry .no{margin:0;font:italic 400 22px/1 var(--latin);color:var(--brass);letter-spacing:.02em;transition:color .4s}
+.entry h2{margin:8px 0 0;font:700 clamp(28px,2.6vw,36px)/1.15 var(--display);letter-spacing:.06em;color:var(--ivory)}
+.entry .en{margin:4px 0 0;font:italic 400 18px/1.3 var(--latin);color:var(--soft)}
+.entry .meta{margin:12px 0 0;font:400 11px/1.6 var(--mono);letter-spacing:.1em;color:var(--soft);font-variant-numeric:tabular-nums}
+.enter{position:relative;display:inline-flex;align-items:baseline;gap:10px;margin-top:18px;padding:6px 0;
+  text-decoration:none;color:var(--ivory);font:500 15px/1 var(--display);letter-spacing:.16em}
+.enter::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--brass);
+  transform:scaleX(.18);transform-origin:left;transition:transform .5s var(--ease)}
+.enter i{font-style:normal;transition:transform .4s var(--ease)}
+.enter:hover::after,.entry.hot .enter::after{transform:scaleX(1)}
+.enter:hover i,.entry.hot .enter i{transform:translateX(6px)}
+.entry.hot .no{color:var(--ivory)}
+
+.count{position:fixed;z-index:3;right:44px;bottom:72px;text-align:right}
+.count .label{margin:0;font:400 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
+.count .big{margin:8px 0 0;display:flex;justify-content:flex-end;align-items:baseline;gap:10px;overflow:hidden}
+.count .big b{font:400 clamp(72px,9vw,112px)/.9 var(--latin);letter-spacing:-.02em;color:var(--ivory);font-variant-numeric:tabular-nums}
+.count .big b.roll{animation:roll .8s var(--ease)}
+@keyframes roll{from{translate:0 40%;opacity:0}to{translate:0 0;opacity:1}}
+.count .big span{font:500 18px/1 var(--display);color:var(--brass);letter-spacing:.1em}
+.count .hms{margin:8px 0 0;font:400 14px/1 var(--mono);letter-spacing:.12em;color:var(--soft);font-variant-numeric:tabular-nums}
+
+.ticker{position:fixed;z-index:3;left:50%;bottom:28px;transform:translateX(-50%);width:min(520px,48vw);display:flex}
+.ticker::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line)}
+.ticker a{position:relative;flex:1;padding:12px 0 0;text-align:center;text-decoration:none;
+  font:400 10px/1 var(--mono);letter-spacing:.08em;color:var(--soft);font-variant-numeric:tabular-nums;transition:color .3s}
+.ticker a::before{content:"";position:absolute;left:50%;top:-3px;width:1px;height:7px;background:var(--soft);transition:.3s var(--ease)}
+.ticker a .t{position:absolute;left:50%;bottom:calc(100% + 6px);transform:translate(-50%,4px);white-space:nowrap;
+  font:500 12px/1 var(--display);letter-spacing:.08em;color:var(--ivory);opacity:0;pointer-events:none;transition:.3s var(--ease)}
+.ticker a:hover,.ticker a:focus-visible,.ticker a.on{color:var(--ivory)}
+.ticker a:hover::before,.ticker a:focus-visible::before,.ticker a.on::before{top:-7px;height:14px;background:var(--brass)}
+.ticker a:hover .t,.ticker a:focus-visible .t,.ticker a.on .t{opacity:1;transform:translate(-50%,0)}
+
+.spine{position:fixed;z-index:3;right:22px;top:50%;translate:0 -50%;margin:0;writing-mode:vertical-rl;
+  font:400 10px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--soft);opacity:.6;pointer-events:none}
+
+.pin{appearance:none;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;
+  transform:translate(-50%,-100%);color:var(--ivory);font:inherit;transition:opacity .3s}
+.pin b{font:500 13px/1 var(--display);letter-spacing:.24em;transition:letter-spacing .2s var(--ease)}
+.pin small{margin-top:5px;font:400 9px/1 var(--mono);letter-spacing:.22em;color:var(--brass)}
+.pin i{position:relative;margin-top:6px;width:1px;height:22px;background:linear-gradient(var(--brass),transparent);transition:height .2s var(--ease)}
+.pin i::before{content:"";position:absolute;left:50%;top:-3px;translate:-50% 0;width:6px;height:6px;border-radius:50%;
+  background:var(--brass);box-shadow:0 0 0 4px rgba(var(--brass-rgb),.18)}
+.pin:hover b{letter-spacing:.32em}
+.pin:hover i{height:32px}
+.stop{pointer-events:none;display:flex;align-items:center;gap:6px;transform:translate(-4px,-50%);
+  font:400 10px/1 var(--mono);letter-spacing:.14em;color:var(--ivory);white-space:nowrap;opacity:0;transition:opacity .3s}
+.stop i{width:4px;height:4px;border-radius:50%;background:var(--ivory)}
+.stop.flash{opacity:1}
 body.near .stop{opacity:1}
-body.near .pin{opacity:0;transition:opacity .3s}
-@media (max-width:1100px){
-  .side{display:none}
-  .bottom{padding-right:0}
-  .chips{display:flex;gap:6px;overflow-x:auto;pointer-events:auto;margin:0 0 10px;scrollbar-width:none}
-  .chips a{flex:none;display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:12px;padding:5px 10px;border-radius:999px;
-    background:rgba(15,26,46,.7);border:1px solid rgba(159,176,200,.2);backdrop-filter:blur(6px)}
-  .chips a::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+body.near .pin{opacity:0}
+
+#veil{position:fixed;inset:0;z-index:5;background:var(--ink-0);opacity:0;pointer-events:none;transition:opacity .5s ease .45s}
+.brand,.coord,.entry,.count,.ticker,.spine{transition:opacity .35s ease}
+body.leaving .brand,body.leaving .coord,body.leaving .entry,body.leaving .count,body.leaving .ticker,body.leaving .spine{opacity:0}
+body.leaving #veil{opacity:1;pointer-events:auto}
+.fallback{position:fixed;inset:0;z-index:4;display:none;place-items:center;padding:24px;background:var(--ink-0);text-align:center}
+.fallback.show{display:grid}
+.fallback h1{font:500 40px/1.1 var(--display);letter-spacing:.12em;margin:12px 0}
+.fallback a{color:var(--brass)}
+
+.cursor{position:fixed;z-index:6;left:0;top:0;width:22px;height:22px;border:1px solid var(--ivory);border-radius:50%;
+  pointer-events:none;opacity:0;transform:translate(var(--cx,0px),var(--cy,0px)) translate(-50%,-50%);
+  transition:width .25s var(--ease),height .25s var(--ease),border-color .25s,opacity .2s,transform .08s linear}
+.cursor.on{opacity:.9}
+.cursor.hot{width:34px;height:34px;border-color:var(--brass)}
+.cursor i{position:absolute;left:50%;top:50%;width:2px;height:2px;border-radius:50%;background:var(--brass);translate:-50% -50%}
+#globe canvas{cursor:none}
+
+body.settled .brand,body.settled .entry{translate:calc(var(--mx) * -6px) calc(var(--my) * -4px)}
+body.settled .count,body.settled .coord{translate:calc(var(--mx) * 6px) calc(var(--my) * 4px)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;translate:0 0}
+  .brand h1 span{opacity:1;translate:0 0;filter:none}
+  #globe{opacity:1;transform:none}
+  .aura i{animation:none}
 }
-@media (min-width:1101px){ .card .cd{display:none} }
+@media (max-width:900px){
+  .plate,.spine,.coord,.cursor,.aura{display:none}
+  .brand{left:20px;top:24px;max-width:calc(100vw - 40px)}
+  .brand h1{font-size:40px}
+  .count{right:auto;left:20px;top:150px;bottom:auto;text-align:left}
+  .count .big{justify-content:flex-start}
+  .count .big b{font-size:56px}
+  .entry{left:20px;bottom:76px;max-width:calc(100vw - 40px)}
+  .entry h2{font-size:26px}
+  .ticker{left:20px;right:20px;transform:none;width:auto;bottom:22px;overflow-x:auto;scrollbar-width:none}
+  .ticker a{flex:none;min-width:52px}
+  .ticker a .t{display:none}
+  body.settled .brand,body.settled .entry,body.settled .count,body.settled .coord{translate:none}
+}
 </style>
 </head>
 <body>
+<canvas id="dust" aria-hidden="true"></canvas>
+<div class="aura" aria-hidden="true"><i></i><i></i></div>
 <div id="globe" role="img" aria-label="可旋转的地球，青海和甘肃已点亮"></div>
-<div class="hud">
-  <header class="brand">
-    <p class="kicker">已点亮 1 站</p>
-    <h1>世界探索计划</h1>
-    <span class="rule" aria-hidden="true"></span>
-  </header>
-  <div class="bottom">
-  <div class="bottom-left">
-  <nav class="chips" id="chips" aria-label="按天进入行程"></nav>
-  <article class="card" id="card">
-    <div class="tag" id="card-tag">青海 × 甘肃</div>
-    <h2 id="card-title">青甘大环线</h2>
-    <p class="meta" id="card-meta">2026/9/26–10/4 · 西宁出发，环线回到西宁</p>
-    <p class="route">西宁 → 柴达木 → 敦煌 → 河西走廊 → 祁连</p>
-    <div class="stats">
-      <div><b>9<small>天</small></b><span>行程</span></div>
-      <div><b>2,750<small>km</small></b><span>参考里程</span></div>
-      <div><b>4<small>人</small></b><span>同行</span></div>
-    </div>
-    <p class="cd" id="cd">距出发<b id="cd-v">--</b></p>
-    <a class="enter" id="enter" href="./qinggan/index.html">进入行程</a>
-  </article>
-  </div>
-  <div class="coord" id="coord" aria-hidden="true"><b id="coord-v">N 36.60°　E 99.20°</b>ALT 1.85</div>
-  </div>
+<div class="plate" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<header class="brand reveal" style="--i:0">
+  <p class="kicker">World Exploration Programme · Vol. I</p>
+  <h1>世界探索计划</h1>
+  <p class="status"><span id="lit-count">已点亮 1 站</span><span>·</span><span>下一站待定</span></p>
+</header>
+<div class="coord reveal" style="--i:1" id="coord" aria-hidden="true">
+  <i class="live"></i><span id="coord-v">N 36.60° · E 99.20°</span><span id="coord-alt">ALT 1.85</span>
 </div>
-<aside class="side" aria-label="旅程档案">
-  <section class="panel">
-    <h3>出发倒计时 <span>9/26 07:30 西宁</span></h3>
-    <div class="tiles"><div><b id="t-d">--</b><i>天</i></div><div><b id="t-h">--</b><i>时</i></div><div><b id="t-m">--</b><i>分</i></div><div><b id="t-s">--</b><i>秒</i></div></div>
-  </section>
-  <section class="panel">
-    <h3>沿途海拔 <span>1140–3790 m</span></h3>
-    <svg class="spark" id="spark" viewBox="0 0 300 64" preserveAspectRatio="none" aria-hidden="true"></svg>
-  </section>
-  <section class="panel list">
-    <h3>旅程档案 <span>9 天 · 约 2,750 km</span></h3>
-    <ul class="days" id="days"></ul>
-  </section>
-  <div class="next"><b>下一站</b><span>待点亮</span><i>+</i></div>
-</aside>
+<article class="entry reveal" style="--i:2" id="entry">
+  <p class="no" id="entry-no">No. 01</p>
+  <h2 id="entry-title">青甘大环线</h2>
+  <p class="en" id="entry-en">Qinghai – Gansu Grand Loop</p>
+  <p class="meta" id="entry-meta">2026.09.26 — 10.04 · 9 天 · 2,750 km · 4 人</p>
+  <a class="enter" id="enter" href="./qinggan/index.html"><span>进入行程</span><i aria-hidden="true">⟶</i></a>
+</article>
+<div class="count reveal" style="--i:3" id="count" aria-live="off">
+  <p class="label" id="count-label">距出发 · 西宁 07:30</p>
+  <p class="big"><b id="count-d">--</b><span id="count-unit">天</span></p>
+  <p class="hms" id="count-hms">--:--:--</p>
+</div>
+<nav class="ticker reveal" style="--i:4" id="ticker" aria-label="按天进入行程"></nav>
+<p class="spine" aria-hidden="true">Qinghai · Gansu · MMXXVI</p>
+<div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
 <div class="fallback" id="fallback">
   <div>
+    <p class="kicker">World Exploration Programme</p>
     <h1>世界探索计划</h1>
     <p>地球加载失败时，可以直接进入行程。</p>
-    <p><a href="./qinggan/index.html">青甘大环线 →</a></p>
+    <p><a href="./qinggan/index.html">青甘大环线 ⟶</a></p>
   </div>
 </div>
 <div id="veil" aria-hidden="true"></div>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
 <script>
-
 const ROUTE = [[36.62,101.78],[36.49,101.57],[36.44,101.10],[36.58,100.49],[36.79,99.08],[37.83,95.27],[37.42,94.15],[37.57,93.68],[38.87,93.45],[39.39,94.34],[40.14,94.66],[40.43,95.80],[39.81,98.22],[38.97,100.04],[38.93,100.45],[38.24,100.94],[38.08,100.72],[38.18,100.25],[37.47,101.62],[37.36,101.42],[36.62,101.78]];
-(function(){
-  const start = new Date("2026-09-26T07:30:00+08:00"), end = new Date("2026-10-04T23:59:59+08:00");
-  const pad = n => String(n).padStart(2,"0");
-  function tick(){
-    const now = new Date(), el = document.getElementById("cd"), v = document.getElementById("cd-v");
-    if (!el) return;
-    if (now < start) { let t = Math.floor((start-now)/1000); const d = Math.floor(t/86400); t%=86400;
-      v.textContent = `${d} 天 ${pad(Math.floor(t/3600))}:${pad(Math.floor(t%3600/60))}:${pad(t%60)}`; }
-    else if (now <= end) { el.firstChild.textContent = "旅途中"; v.textContent = `第 ${Math.floor((now-start)/864e5)+1} 天`; }
-    else { el.firstChild.textContent = "已完成"; v.textContent = "青甘大环线"; }
-  }
-  tick(); setInterval(tick, 1000);
-})();
-
 const DAYLIST = [
-  {d:"9/26", t:"西宁 → 茶卡", km:360, c:"#2F8FA3", at:[36.6,100.4]},
-  {d:"9/27", t:"茶卡 → 水上雅丹", km:630, c:"#C58B3A", at:[37.5,96.2]},
-  {d:"9/28", t:"水上雅丹 → 敦煌", km:450, c:"#6B6F86", at:[38.9,94.0]},
-  {d:"9/29", t:"莫高窟", km:30, c:"#B0652F", at:[40.05,94.8]},
-  {d:"9/30", t:"鸣沙山月牙泉", km:10, c:"#D9A23F", at:[40.09,94.67]},
-  {d:"10/1", t:"敦煌 → 嘉峪关", km:400, c:"#A7743D", at:[40.1,96.5]},
-  {d:"10/2", t:"七彩丹霞 · 张掖", km:250, c:"#C8553D", at:[39.3,99.2]},
-  {d:"10/3", t:"张掖 → 祁连", km:240, c:"#5E8C4A", at:[38.4,100.6]},
-  {d:"10/4", t:"祁连 → 西宁", km:380, c:"#4F78A8", at:[37.2,101.2]}
+  {d:"9/26", t:"西宁 → 茶卡", km:360, at:[36.6,100.4], seg:[0,4]},
+  {d:"9/27", t:"茶卡 → 水上雅丹", km:630, at:[37.5,96.2], seg:[4,7]},
+  {d:"9/28", t:"水上雅丹 → 敦煌", km:450, at:[38.9,94.0], seg:[7,10]},
+  {d:"9/29", t:"莫高窟", km:30, at:[40.05,94.8], seg:[10,11]},
+  {d:"9/30", t:"鸣沙山月牙泉", km:10, at:[40.09,94.67], seg:[10,11]},
+  {d:"10/1", t:"敦煌 → 嘉峪关", km:400, at:[40.1,96.5], seg:[10,12]},
+  {d:"10/2", t:"七彩丹霞 · 张掖", km:250, at:[39.3,99.2], seg:[12,14]},
+  {d:"10/3", t:"张掖 → 祁连", km:240, at:[38.4,100.6], seg:[14,17]},
+  {d:"10/4", t:"祁连 → 西宁", km:380, at:[37.2,101.2], seg:[17,20]}
 ];
-(function(){
-  const li = (x,i) => `<li><a href="./qinggan/index.html#day-${i}" data-i="${i}" style="--c:${x.c}"><span class="dot"></span><span class="dt">${x.d}</span><span class="ti">${x.t}</span><span class="km">${x.km} km</span></a></li>`;
-  document.getElementById("days").innerHTML = DAYLIST.map(li).join("");
-  document.getElementById("chips").innerHTML = DAYLIST.map((x,i)=>`<a href="./qinggan/index.html#day-${i}" style="--c:${x.c}">${x.d} ${x.t}</a>`).join("");
-  // 海拔迷你曲线
-  const P = [[0,2275],[90,3520],[210,3200],[360,3059],[770,3170],[990,2700],[1250,3648],[1440,1140],[1880,1600],[2130,1480],[2290,3685],[2370,2800],[2600,3790],[2750,2275]];
-  const X = k => k/2750*300, Y = a => 60 - (a-900)/(4000-900)*54;
-  let dstr = `M${X(P[0][0])},${Y(P[0][1])}`;
-  for (let i=1;i<P.length;i++){ const [x0,y0]=[X(P[i-1][0]),Y(P[i-1][1])], [x1,y1]=[X(P[i][0]),Y(P[i][1])], mx=(x0+x1)/2; dstr += ` C${mx},${y0} ${mx},${y1} ${x1},${y1}`; }
-  document.getElementById("spark").innerHTML = `<defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0" stop-color="#2F8FA3"/><stop offset=".45" stop-color="#D9A23F"/><stop offset=".75" stop-color="#C8553D"/><stop offset="1" stop-color="#4F78A8"/></linearGradient>
-    <linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2C27A" stop-opacity=".28"/><stop offset="1" stop-color="#F2C27A" stop-opacity="0"/></linearGradient></defs>
-    <path d="${dstr} L300,64 L0,64 Z" fill="url(#sf)"/><path d="${dstr}" fill="none" stroke="url(#sg)" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
-  // 倒计时方块
-  const start = new Date("2026-09-26T07:30:00+08:00"), pad = n => String(n).padStart(2,"0");
-  function tick(){ let t = Math.max(0, Math.floor((start - new Date())/1000));
-    document.getElementById("t-d").textContent = Math.floor(t/86400); t%=86400;
-    document.getElementById("t-h").textContent = pad(Math.floor(t/3600));
-    document.getElementById("t-m").textContent = pad(Math.floor(t%3600/60));
-    document.getElementById("t-s").textContent = pad(t%60); }
-  tick(); setInterval(tick, 1000);
-})();
-const TRIPS = [
-  {
-    id: "qinggan",
-    name: "青甘大环线",
-    href: "./qinggan/index.html",
-    regions: ["青海省", "甘肃省"],
-    kicker: "青海 × 甘肃",
-    date: "2026/9/26–10/4",
-    summary: "西宁出发，环线回到西宁"
-  }
+const STOPS = [
+  {lat:36.62,lng:101.78,t:"西宁"},{lat:36.79,lng:99.08,t:"茶卡"},{lat:37.57,lng:93.68,t:"水上雅丹"},
+  {lat:40.14,lng:94.66,t:"敦煌"},{lat:39.81,lng:98.22,t:"嘉峪关"},{lat:38.93,lng:100.45,t:"张掖"},{lat:38.18,lng:100.25,t:"祁连"}
 ];
+const TRIPS = [{
+  id:"qinggan", name:"青甘大环线", href:"./qinggan/index.html",
+  regions:["青海省","甘肃省"], kicker:"青海 × 甘肃",
+  date:"2026/9/26–10/4", summary:"西宁出发，环线回到西宁",
+  no:"01", en:"Qinghai – Gansu Grand Loop",
+  meta:"2026.09.26 — 10.04 · 9 天 · 2,750 km · 4 人"
+}];
 const GEO = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"青海省"},"geometry":{"type":"Polygon","coordinates":[[[89.7363,36.0791],[89.9121,36.0791],[90,36.2549],[90.8789,36.0352],[91.0547,36.0791],[91.0547,36.5186],[90.791,36.6064],[90.7031,36.7822],[91.3184,37.0898],[91.0547,37.4414],[90.5273,37.8369],[90.6152,38.3203],[90.3516,38.2324],[90.1758,38.4961],[92.373,39.0234],[92.373,39.1113],[93.1641,39.1992],[93.1641,38.9795],[93.6914,38.9355],[93.8672,38.7158],[94.3066,38.7598],[94.5703,38.3643],[95.0098,38.4082],[95.4492,38.2764],[95.7129,38.3643],[96.2402,38.1006],[96.416,38.2324],[96.6797,38.1885],[96.6797,38.4521],[97.1191,38.584],[97.0313,39.1992],[98.1738,38.8037],[98.3496,39.0234],[98.6133,38.9355],[98.7891,39.0674],[99.1406,38.9355],[99.8438,38.3643],[100.1953,38.2764],[100.0195,38.4521],[100.1074,38.4961],[100.459,38.2764],[100.7227,38.2324],[101.1621,37.8369],[101.5137,37.8809],[101.7773,37.6172],[101.9531,37.7051],[102.1289,37.4414],[102.5684,37.1777],[102.4805,36.958],[102.6563,36.8262],[102.5684,36.7383],[102.832,36.3428],[103.0078,36.2549],[102.9199,36.0791],[102.9199,35.9033],[102.6563,35.7715],[102.832,35.5957],[102.4805,35.5957],[102.3047,35.4199],[102.3926,35.2002],[101.9531,34.8486],[101.9531,34.6289],[102.2168,34.4092],[102.1289,34.2773],[101.6895,34.1016],[100.9863,34.3652],[100.8105,34.2773],[101.25,33.6621],[101.5137,33.7061],[101.6016,33.5303],[101.7773,33.5303],[101.6895,33.3105],[101.7773,33.2227],[101.6016,33.1348],[101.1621,33.2227],[101.25,32.6953],[100.7227,32.6514],[100.7227,32.5195],[100.3711,32.7393],[100.1074,32.6514],[100.1074,32.8711],[99.8438,33.0029],[99.7559,32.7393],[99.2285,32.915],[99.2285,33.0469],[98.877,33.1787],[98.4375,34.0576],[97.8223,34.1895],[97.6465,34.1016],[97.7344,33.9258],[97.3828,33.8818],[97.4707,33.5742],[97.7344,33.3984],[97.3828,32.8711],[97.4707,32.6953],[97.7344,32.5195],[97.3828,32.5635],[97.2949,32.0801],[96.7676,31.9922],[96.8555,31.6846],[96.5039,31.7285],[96.2402,31.9482],[96.1523,31.5967],[95.9766,31.8164],[95.8008,31.6846],[95.4492,31.8164],[95.3613,31.9922],[95.3613,32.168],[95.2734,32.2119],[95.1855,32.3438],[95.0098,32.2998],[95.1855,32.4316],[94.6582,32.6074],[94.1309,32.4316],[93.7793,32.5635],[93.5156,32.4756],[92.9883,32.7393],[92.2852,32.7393],[92.1973,32.8271],[91.9336,32.8271],[91.4063,33.1348],[90.7031,33.1348],[90.0879,33.4863],[89.6484,34.0137],[89.8242,34.3652],[89.7363,34.6729],[89.8242,34.8486],[89.5605,34.8926],[89.4727,35.2441],[89.4727,35.376],[89.7363,35.4199],[89.7363,35.7715],[89.4727,35.9033],[89.3848,36.0352],[89.7363,36.0791]]]}},{"type":"Feature","properties":{"name":"甘肃省"},"geometry":{"type":"Polygon","coordinates":[[[96.416,42.7148],[97.207,42.8027],[97.8223,41.748],[97.8223,41.6162],[97.4707,41.4844],[98.3496,40.9131],[98.3496,40.5615],[98.6133,40.6494],[98.5254,40.7373],[98.7891,40.6055],[98.9648,40.7813],[99.0527,40.6934],[99.2285,40.8691],[99.9316,41.001],[100.1953,40.6494],[100.1074,40.2539],[99.4922,39.8584],[100.0195,39.7705],[100.5469,39.4189],[100.8105,39.4189],[100.9863,38.9355],[101.25,39.0234],[101.3379,38.7598],[101.7773,38.6719],[102.041,38.8916],[101.8652,39.1113],[102.4805,39.2432],[103.0078,39.1113],[103.3594,39.3311],[104.0625,39.4189],[104.2383,38.9795],[103.4473,38.3643],[103.5352,38.1445],[103.3594,38.0127],[103.4473,37.8369],[104.3262,37.4414],[104.5898,37.4414],[104.5898,37.2217],[104.8535,37.2217],[105.293,36.8262],[105.2051,36.6943],[105.4688,36.123],[105.293,35.9912],[105.3809,35.7715],[105.7324,35.7275],[105.8203,35.5518],[105.9961,35.4639],[105.9082,35.4199],[105.9961,35.4199],[106.084,35.376],[106.2598,35.4199],[106.3477,35.2441],[106.5234,35.332],[106.4355,35.6836],[106.6992,35.6836],[106.9629,35.8154],[106.875,36.123],[106.5234,36.2549],[106.5234,36.4746],[106.4355,36.5625],[106.6113,36.7822],[106.6113,37.0898],[107.3145,37.0898],[107.3145,36.9141],[108.7207,36.3428],[108.6328,35.9912],[108.5449,35.8594],[108.6328,35.5518],[108.5449,35.2881],[107.7539,35.2881],[107.7539,35.1123],[107.8418,35.0244],[107.666,34.9365],[107.2266,34.8926],[106.9629,35.0684],[106.6113,35.0684],[106.5234,34.7607],[106.3477,34.585],[106.6992,34.3213],[106.5234,34.2773],[106.6113,34.1455],[106.4355,33.9258],[106.5234,33.5303],[105.9961,33.6182],[105.7324,33.3984],[105.9961,33.1787],[105.9082,33.0029],[105.4688,32.915],[105.3809,32.8711],[105.3809,32.7393],[105.2051,32.6074],[104.4141,32.7393],[104.3262,32.8711],[104.4141,33.0469],[104.3262,33.2227],[104.4141,33.3105],[104.2383,33.3984],[104.1504,33.6182],[103.1836,33.7939],[103.0957,34.1895],[102.9199,34.3213],[102.2168,33.9258],[102.4805,33.4424],[101.8652,33.0908],[101.9531,33.4424],[101.8652,33.5742],[101.7773,33.5303],[101.6016,33.5303],[101.5137,33.7061],[101.25,33.6621],[100.8105,34.2773],[100.9863,34.3652],[101.6895,34.1016],[102.1289,34.2773],[102.2168,34.4092],[101.9531,34.6289],[101.9531,34.8486],[102.3926,35.2002],[102.3047,35.4199],[102.4805,35.5957],[102.832,35.5957],[102.6563,35.7715],[102.9199,35.9033],[102.9199,36.0791],[103.0078,36.2549],[102.832,36.3428],[102.5684,36.7383],[102.6563,36.8262],[102.4805,36.958],[102.5684,37.1777],[102.1289,37.4414],[101.9531,37.7051],[101.7773,37.6172],[101.5137,37.8809],[101.1621,37.8369],[100.7227,38.2324],[100.459,38.2764],[100.1074,38.4961],[100.0195,38.4521],[100.1953,38.2764],[99.8438,38.3643],[99.1406,38.9355],[98.7891,39.0674],[98.6133,38.9355],[98.3496,39.0234],[98.1738,38.8037],[97.0313,39.1992],[97.1191,38.584],[96.6797,38.4521],[96.6797,38.1885],[96.416,38.2324],[96.2402,38.1006],[95.7129,38.3643],[95.4492,38.2764],[95.0098,38.4082],[94.5703,38.3643],[94.3066,38.7598],[93.8672,38.7158],[93.6914,38.9355],[93.1641,38.9795],[93.1641,39.1992],[92.373,39.1113],[92.373,39.3311],[92.6367,39.6387],[93.0762,40.6494],[93.8672,40.6934],[94.043,41.0889],[94.5703,41.4844],[95.1855,41.792],[95.2734,41.6162],[95.9766,41.9238],[96.2402,42.2314],[96.0645,42.3193],[95.9766,42.4951],[96.416,42.7148]]]}}]};
 const REGION_TRIP = Object.fromEntries(TRIPS.flatMap(t => t.regions.map(r => [r, t])));
 const lit = GEO.features.map(f => Object.assign({}, f, { trip: REGION_TRIP[f.properties.name] }));
 const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isMobile = () => innerWidth < 900;
+const HOME = () => isMobile() ? { lat: 16, lng: 99.2, altitude: 2.4 } : { lat: 30, lng: 99.2, altitude: 1.9 };
+const RING_HOME = { lat: 37.15, lng: 99.05 };
+const START = new Date("2026-09-26T07:30:00+08:00");
+const END = new Date("2026-10-04T23:59:59+08:00");
+const pad = n => String(n).padStart(2, "0");
+const $ = s => document.querySelector(s);
 
 function showTrip(trip){
   if (!trip) return;
-  $("#card-tag").textContent = trip.kicker;
-  $("#card-title").textContent = trip.name;
-  $("#card-meta").textContent = trip.date + " · " + trip.summary;
+  $("#entry-no").textContent = "No. " + trip.no;
+  $("#entry-title").textContent = trip.name;
+  $("#entry-en").textContent = trip.en;
+  $("#entry-meta").textContent = trip.meta;
   $("#enter").href = trip.href;
 }
-function $(s){ return document.querySelector(s); }
 
 function fail(){ $("#fallback").classList.add("show"); }
 
-function go(href){
+let go = function(href){
   if (!href || document.body.classList.contains("leaving")) return;
   if (reduceMotion) { location.href = href; return; }
   document.body.classList.add("leaving");
   setTimeout(() => { location.href = href; }, 1100);
-}
+};
 
 $("#enter").addEventListener("click", e => {
   if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -282,96 +263,236 @@ $("#enter").addEventListener("click", e => {
   go($("#enter").href);
 });
 
+(function splitTitle(){
+  const h1 = document.querySelector(".brand h1");
+  h1.innerHTML = [...h1.textContent].map((ch, i) => `<span style="--c:${i}">${ch}</span>`).join("");
+})();
+
+(function countdown(){
+  const L = $("#count-label"), D = $("#count-d"), U = $("#count-unit"), H = $("#count-hms");
+  let last = "";
+  function tick(){
+    const now = new Date();
+    let days, label, unit, hms;
+    if (now < START) {
+      let t = Math.floor((START - now) / 1000);
+      days = pad(Math.floor(t / 86400)); t %= 86400;
+      label = "距出发 · 西宁 07:30"; unit = "天";
+      hms = `${pad(Math.floor(t / 3600))}:${pad(Math.floor(t % 3600 / 60))}:${pad(t % 60)}`;
+    } else if (now <= END) {
+      const day = Math.floor((now - START) / 864e5) + 1;
+      days = pad(day); label = "旅途中"; unit = "日"; hms = `第 ${day} 天 / 9`;
+    } else {
+      days = "09"; label = "已完成"; unit = "天"; hms = "2026.09.26 — 10.04";
+    }
+    L.textContent = label; U.textContent = unit; H.textContent = hms;
+    if (days !== last) {
+      D.textContent = days;
+      if (!reduceMotion) {
+        D.classList.remove("roll");
+        void D.offsetWidth;
+        D.classList.add("roll");
+      }
+      last = days;
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+$("#ticker").innerHTML = DAYLIST.map((x, i) =>
+  `<a href="./qinggan/index.html#day-${i}" data-i="${i}"><span class="t">${x.t}</span>${x.d}</a>`).join("");
+
+if (!reduceMotion) setTimeout(() => document.body.classList.add("settled"), 1800);
+else document.body.classList.add("ready", "settled");
+
+function initDust(){
+  const c = document.getElementById("dust");
+  const ctx = c.getContext("2d");
+  let stars = [];
+  function resize(){
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    c.width = innerWidth * dpr; c.height = innerHeight * dpr;
+    c.style.width = innerWidth + "px"; c.style.height = innerHeight + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = isMobile() ? 80 : 200;
+    stars = Array.from({ length: n }, () => ({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      a: .15 + Math.random() * .35,
+      s: .6 + Math.random() * .8,
+      p: Math.random() * Math.PI * 2
+    }));
+  }
+  resize();
+  addEventListener("resize", resize);
+  return function draw(t){
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (const st of stars) {
+      st.y -= 0.02;
+      if (st.y < 0) st.y = innerHeight;
+      ctx.fillStyle = `rgba(237,230,216,${st.a * (.7 + .3 * Math.sin(t / 1800 + st.p))})`;
+      ctx.fillRect(st.x, st.y, st.s, st.s);
+    }
+  };
+}
+const drawDust = reduceMotion ? () => {} : initDust();
+
 if (typeof Globe !== "function") fail();
 else try {
   let hover = null;
-  const capColor = d => d.trip
-    ? (d === hover ? "rgba(242,194,122,0.50)" : "rgba(242,194,122,0.30)")
-    : "rgba(36,52,78,0.28)";
-  const altitude = d => d.trip ? (d === hover ? 0.045 : 0.018) : 0.004;
+  let litPhase = reduceMotion ? "idle" : "off";
+  let pathReady = reduceMotion;
+  const capColor = d => {
+    if (!d.trip) return "rgba(237,230,216,0.02)";
+    if (litPhase === "off") return "rgba(201,164,108,0)";
+    if (litPhase === "rise" || d === hover) return "rgba(201,164,108,0.55)";
+    return "rgba(201,164,108,0.32)";
+  };
+  const altitude = d => {
+    if (!d.trip) return 0.004;
+    if (litPhase === "off") return 0.004;
+    if (litPhase === "rise") return 0.05;
+    return d === hover ? 0.035 : 0.014;
+  };
+  const pathColor = d => {
+    if (d && d.kind === "day") return "rgba(201,164,108,0.95)";
+    if (d && d.kind === "dim") return "rgba(237,230,216,0.35)";
+    return ["rgba(237,230,216,0.90)", "rgba(201,164,108,0.90)"];
+  };
   const el = document.getElementById("globe");
   const world = Globe()(el)
-    .backgroundColor("#0F1A2E")
-    .backgroundImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png")
-    .globeImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-dark.jpg")
+    .backgroundColor("#07090C")
     .showAtmosphere(true)
-    .atmosphereColor("#7FB3D9")
-    .atmosphereAltitude(0.18)
+    .atmosphereColor("#C9A46C")
+    .atmosphereAltitude(0.10)
+    .hexPolygonResolution(3)
+    .hexPolygonMargin(0.72)
+    .hexPolygonAltitude(0.003)
+    .hexPolygonColor(() => "rgba(237,230,216,0.10)")
     .polygonAltitude(altitude)
     .polygonCapColor(capColor)
-    .polygonSideColor(d => d.trip ? "rgba(242,194,122,0.16)" : "rgba(15,26,46,0.2)")
-    .polygonStrokeColor(d => d.trip ? "rgba(255,236,196,0.75)" : "rgba(80,104,140,0.35)")
-    .ringsData([{ lat: 37.15, lng: 99.05 }])
-    .ringColor(() => t => `rgba(242,194,122,${(1 - t) * 0.8})`)
-    .ringMaxRadius(7)
-    .ringPropagationSpeed(2.2)
-    .ringRepeatPeriod(1600)
-    .ringAltitude(0.021)
-    .pathsData([ROUTE])
-    .pathPoints(d => d)
-    .pathPointLat(p => p[0])
-    .pathPointLng(p => p[1])
-    .pathPointAlt(0.024)
-    .pathColor(() => ["rgba(255,241,210,0.95)", "rgba(226,125,90,0.95)"])
-    .pathStroke(1.6)
-    .pathDashLength(0.06)
-    .pathDashGap(0.012)
-    .pathDashAnimateTime(reduceMotion ? 0 : 14000)
-    .pathTransitionDuration(0)
-
+    .polygonSideColor(d => d.trip ? "rgba(201,164,108,0.10)" : "rgba(0,0,0,0)")
+    .polygonStrokeColor(d => d.trip ? "rgba(201,164,108,0.90)" : "rgba(237,230,216,0.20)")
     .polygonCapCurvatureResolution(6)
-    .polygonsTransitionDuration(220)
+    .polygonsTransitionDuration(reduceMotion ? 0 : 220)
     .polygonLabel(d => d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker}` : "")
     .onPolygonHover(d => {
       hover = d && d.trip ? d : null;
       world.polygonAltitude(altitude).polygonCapColor(capColor);
-      $("#card").classList.toggle("hot", !!hover);
+      $("#entry").classList.toggle("hot", !!hover);
+      $("#cursor").classList.toggle("hot", !!hover);
       showTrip(hover ? hover.trip : TRIPS[0]);
     })
-    .onPolygonClick(d => {
-      if (!d || !d.trip) return;
-      go(d.trip.href);
-    })
-    .htmlElementsData([{ lat: 37.15, lng: 99.05, trip: TRIPS[0] }].concat([
-      {lat:36.62,lng:101.78,t:"西宁"},{lat:36.79,lng:99.08,t:"茶卡"},{lat:37.57,lng:93.68,t:"水上雅丹"},
-      {lat:40.14,lng:94.66,t:"敦煌"},{lat:39.81,lng:98.22,t:"嘉峪关"},{lat:38.93,lng:100.45,t:"张掖"},{lat:38.18,lng:100.25,t:"祁连"}]))
+    .onPolygonClick(d => { if (d && d.trip) go(d.trip.href); })
+    .ringsData([RING_HOME])
+    .ringColor(() => t => `rgba(201,164,108,${(1 - t) * 0.7})`)
+    .ringMaxRadius(6).ringPropagationSpeed(1.6).ringRepeatPeriod(2200).ringAltitude(0.016)
+    .pathPoints(d => d.pts || d)
+    .pathPointLat(p => p[0])
+    .pathPointLng(p => p[1])
+    .pathPointAlt(0.02)
+    .pathColor(pathColor)
+    .pathStroke(1.2).pathDashLength(0.06).pathDashGap(0.012)
+    .pathDashAnimateTime(0).pathTransitionDuration(0)
+    .htmlElementsData([{ lat: 37.15, lng: 99.05, trip: TRIPS[0] }].concat(STOPS))
     .htmlElement(d => {
-      if (!d.trip) { const n = document.createElement("span"); n.className = "stop"; n.innerHTML = `<i></i>${d.t}`; return n; }
-      const node = document.createElement("button");
-      node.className = "pin";
-      node.type = "button";
-      node.setAttribute("aria-label", d.trip.name);
-      node.innerHTML = "<i></i><b>青甘</b>";
-      node.onclick = e => { e.stopPropagation(); go(d.trip.href); };
-      return node;
+      if (!d.trip) {
+        const n = document.createElement("span");
+        n.className = "stop";
+        n.innerHTML = `<i></i>${d.t}`;
+        return n;
+      }
+      const b = document.createElement("button");
+      b.className = "pin"; b.type = "button";
+      b.setAttribute("aria-label", d.trip.name);
+      b.innerHTML = `<b>青甘</b><small>NO.${d.trip.no}</small><i></i>`;
+      b.onclick = e => { e.stopPropagation(); go(d.trip.href); };
+      return b;
     })
     .htmlAltitude(0.03)
-    .pointOfView(innerWidth < 640 ? { lat: 16, lng: 99.2, altitude: 2.4 } : { lat: 36.6, lng: 99.2, altitude: 1.85 }, 0);
+    .onGlobeReady(() => document.body.classList.add("ready"))
+    .pointOfView(HOME(), 0);
+
+  const mat = world.globeMaterial();
+  if (mat) {
+    if (mat.color) mat.color.set("#0C1016");
+    if (mat.emissive) mat.emissive.set("#0B0F15");
+    mat.shininess = 2;
+    if (mat.specular) mat.specular.set("#111820");
+  }
 
   const ctrl = world.controls();
   ctrl.enableDamping = true;
   ctrl.autoRotate = !reduceMotion;
-  ctrl.autoRotateSpeed = 0.32;
+  ctrl.autoRotateSpeed = 0.22;
   ctrl.minDistance = 140;
   ctrl.maxDistance = 520;
-  ctrl.addEventListener("start", () => { ctrl.autoRotate = false; });
-  document.querySelectorAll("#days a").forEach(a => {
+
+  let lastAct = Date.now();
+  let cruiseI = -1, cruiseAt = 0, overTicker = false;
+  function bump(){
+    lastAct = Date.now();
+    if (cruiseI >= 0 && !overTicker) {
+      cruiseI = -1;
+      setPaths("full");
+      $("#ticker").querySelectorAll("a").forEach(a => a.classList.remove("on"));
+      world.pointOfView(HOME(), 900);
+      world.ringsData([RING_HOME]);
+    }
+  }
+  ["pointerdown", "wheel", "keydown", "touchstart"].forEach(ev =>
+    addEventListener(ev, bump, { passive: true }));
+  ctrl.addEventListener("start", () => { ctrl.autoRotate = false; bump(); });
+
+  function setPaths(mode, seg){
+    if (mode === "day" && seg) {
+      world.pathsData([
+        { pts: ROUTE, kind: "dim" },
+        { pts: ROUTE.slice(seg[0], seg[1] + 1), kind: "day" }
+      ]).pathDashAnimateTime(0);
+    } else if (mode === "draw") {
+      world.pathsData([{ pts: ROUTE.slice(0, seg), kind: "full" }]).pathDashAnimateTime(0);
+    } else {
+      world.pathsData([{ pts: ROUTE, kind: "full" }]).pathDashAnimateTime(reduceMotion ? 0 : 16000);
+    }
+  }
+
+  function flyDay(i, fromCruise){
+    const x = DAYLIST[i];
+    $("#ticker").querySelectorAll("a").forEach((a, n) => a.classList.toggle("on", n === i));
+    if (pathReady) setPaths("day", x.seg);
+    ctrl.autoRotate = false;
+    world.pointOfView({ lat: x.at[0], lng: x.at[1], altitude: 0.9 }, 800);
+    world.ringsData([{ lat: x.at[0], lng: x.at[1] }]);
+    if (fromCruise) cruiseI = i;
+  }
+
+  function homeView(){
+    $("#ticker").querySelectorAll("a").forEach(a => a.classList.remove("on"));
+    if (pathReady) setPaths("full");
+    world.pointOfView(HOME(), 900);
+    world.ringsData([RING_HOME]);
+  }
+
+  document.querySelectorAll("#ticker a").forEach(a => {
     a.addEventListener("mouseenter", () => {
-      const x = DAYLIST[+a.dataset.i]; ctrl.autoRotate = false;
-      world.pointOfView({ lat: x.at[0], lng: x.at[1], altitude: 0.9 }, 800);
-      world.ringsData([{ lat: x.at[0], lng: x.at[1] }]);
+      overTicker = true;
+      lastAct = Date.now();
+      cruiseI = -1;
+      flyDay(+a.dataset.i, false);
     });
   });
-  document.getElementById("days").addEventListener("mouseleave", () => {
-    world.pointOfView({ lat: 36.6, lng: 99.2, altitude: 1.85 }, 900);
-    world.ringsData([{ lat: 37.15, lng: 99.05 }]);
+  $("#ticker").addEventListener("mouseleave", () => {
+    overTicker = false;
+    lastAct = Date.now();
+    homeView();
   });
-  const coordV = document.getElementById("coord-v"), coordBox = document.getElementById("coord");
+
   ctrl.addEventListener("change", () => {
-    const pov = world.pointOfView();
-    const lat = pov.lat, lng = ((pov.lng + 540) % 360) - 180;
-    coordV.textContent = `${lat >= 0 ? "N" : "S"} ${Math.abs(lat).toFixed(2)}°　${lng >= 0 ? "E" : "W"} ${Math.abs(lng).toFixed(2)}°`;
-    coordBox.lastChild.textContent = `ALT ${pov.altitude.toFixed(2)}`;
+    const pov = world.pointOfView(), lng = ((pov.lng + 540) % 360) - 180;
+    $("#coord-v").textContent = `${pov.lat >= 0 ? "N" : "S"} ${Math.abs(pov.lat).toFixed(2)}° · ${lng >= 0 ? "E" : "W"} ${Math.abs(lng).toFixed(2)}°`;
+    $("#coord-alt").textContent = `ALT ${pov.altitude.toFixed(2)}`;
     document.body.classList.toggle("near", pov.altitude < 1.2);
   });
 
@@ -385,17 +506,7 @@ else try {
     setTimeout(() => { location.href = href; }, 1100);
   };
 
-  const mat = world.globeMaterial();
-  if (mat) {
-    mat.shininess = 8;
-    if (mat.emissive) mat.emissive.setHex(0x0a1424);
-  }
-
-  function size(){
-    const shift = innerWidth > 1100 ? 360 : 0;
-    el.style.left = -shift + "px"; el.style.width = (innerWidth + shift) + "px";
-    world.width(innerWidth + shift).height(innerHeight);
-  }
+  function size(){ world.width(innerWidth).height(innerHeight); }
   size();
   addEventListener("resize", size);
   world.polygonsData(lit);
@@ -410,9 +521,107 @@ else try {
       countries = topojson.feature(topo, topo.objects.countries).features
         .filter(d => d.id !== 10 && d.id !== "010");
     } catch (e) { /* 世界底图失败时仍可点青海、甘肃 */ }
+    if (countries.length) {
+      try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
+      catch (e) { world.hexPolygonsData(countries); }
+    }
     world.polygonsData(countries.concat(lit));
   })();
-} catch (e) { fail(); }
+
+  function lightProvinces(){
+    world.polygonsTransitionDuration(700);
+    litPhase = "rise";
+    world.polygonAltitude(altitude).polygonCapColor(capColor);
+    setTimeout(() => {
+      litPhase = "idle";
+      world.polygonsTransitionDuration(220);
+      world.polygonAltitude(altitude).polygonCapColor(capColor);
+    }, 900);
+  }
+
+  function drawRoute(){
+    let k = 2;
+    const gap = 2400 / ROUTE.length;
+    const step = () => {
+      setPaths("draw", k);
+      if (++k <= ROUTE.length) setTimeout(step, gap);
+      else { pathReady = true; setPaths("full"); }
+    };
+    step();
+  }
+
+  function flashStops(){
+    const nodes = [...document.querySelectorAll(".stop")];
+    nodes.forEach((n, i) => {
+      setTimeout(() => n.classList.add("flash"), 120 * i);
+      setTimeout(() => n.classList.remove("flash"), 120 * i + 360);
+    });
+  }
+
+  if (reduceMotion) setPaths("full");
+  else {
+    setTimeout(lightProvinces, 700);
+    setTimeout(drawRoute, 900);
+    setTimeout(flashStops, 1600);
+  }
+
+  let dirLight = null;
+  try {
+    const lights = typeof world.lights === "function" ? world.lights() : null;
+    if (lights) dirLight = lights.find(l => l.isDirectionalLight) || null;
+    if (!dirLight && world.scene) {
+      world.scene().traverse(o => { if (!dirLight && o.isDirectionalLight) dirLight = o; });
+    }
+  } catch (e) {}
+
+  let sunA = 0.6, lastAtmo = 0, lastGrain = 0, lastBreath = 0;
+  const cursor = $("#cursor");
+  addEventListener("pointermove", e => {
+    if (isMobile() || reduceMotion) return;
+    document.documentElement.style.setProperty("--mx", ((e.clientX / innerWidth) * 2 - 1).toFixed(3));
+    document.documentElement.style.setProperty("--my", ((e.clientY / innerHeight) * 2 - 1).toFixed(3));
+    cursor.style.setProperty("--cx", e.clientX + "px");
+    cursor.style.setProperty("--cy", e.clientY + "px");
+    const overHud = e.target.closest(".brand,.entry,.count,.ticker,.pin,.fallback");
+    const overGlobe = e.target.closest("#globe");
+    cursor.classList.toggle("on", !!(overGlobe && !overHud));
+  });
+  el.addEventListener("pointerleave", () => cursor.classList.remove("on"));
+
+  function loop(t){
+    if (!document.hidden && !reduceMotion) {
+      drawDust(t);
+      if (dirLight && !isMobile()) {
+        sunA += 0.0009;
+        dirLight.position.set(Math.cos(sunA), 0.4, Math.sin(sunA));
+      }
+      if (t - lastAtmo > 200) {
+        lastAtmo = t;
+        world.atmosphereAltitude(0.105 + Math.sin(t / 9000 * Math.PI * 2) * 0.015);
+      }
+      if (t - lastGrain > 120) {
+        lastGrain = t;
+        document.body.style.setProperty("--gx", (Math.random() * 4 - 2) + "px");
+        document.body.style.setProperty("--gy", (Math.random() * 4 - 2) + "px");
+      }
+      const idle = Date.now() - lastAct;
+      if (!isMobile() && !overTicker && !document.body.classList.contains("leaving") && !ctrl.autoRotate && idle > 8000 && idle < 20000 && t - lastBreath > 2000) {
+        lastBreath = t;
+        const pov = world.pointOfView();
+        const wave = HOME().altitude + Math.sin(Date.now() / 14000 * Math.PI * 2) * 0.05;
+        world.pointOfView({ lat: pov.lat, lng: pov.lng, altitude: wave }, 2000);
+      }
+      if (!isMobile() && !overTicker && !document.body.classList.contains("leaving") && idle > 20000 && t - cruiseAt > 6000) {
+        cruiseAt = t;
+        flyDay((cruiseI + 1) % DAYLIST.length, true);
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  setTimeout(() => document.body.classList.add("ready"), 2500);
+} catch (e) { console.error(e); fail(); }
 </script>
 </body>
 </html>
