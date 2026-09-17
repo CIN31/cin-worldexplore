@@ -67,7 +67,11 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 
 .entry{position:fixed;z-index:3;left:44px;bottom:72px;max-width:min(460px,44vw)}
 .entry .no{margin:0;font:italic 400 22px/1 var(--latin);color:var(--brass);letter-spacing:.02em;transition:color .4s}
-.entry h2{margin:8px 0 0;font:700 clamp(28px,2.6vw,36px)/1.15 var(--display);letter-spacing:.06em;color:var(--ivory)}
+.entry h2{margin:8px 0 0;font:700 clamp(28px,2.6vw,36px)/1.25 var(--display);letter-spacing:.06em;color:var(--ivory)}
+.entry.long-names h2{font-size:clamp(16px,1.6vw,22px);font-weight:500;letter-spacing:.04em;line-height:1.45;
+  max-height:4.8em;overflow:hidden;
+  mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 14px),transparent);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 14px),transparent)}
 .entry .en{margin:4px 0 0;font:italic 400 18px/1.3 var(--latin);color:var(--soft)}
 .entry .meta{margin:12px 0 0;font:400 11px/1.6 var(--mono);letter-spacing:.1em;color:var(--soft);font-variant-numeric:tabular-nums}
 .enter{position:relative;display:inline-flex;align-items:baseline;gap:10px;margin-top:18px;padding:6px 0;
@@ -107,17 +111,27 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .spine{position:fixed;z-index:3;right:22px;top:50%;translate:0 -50%;margin:0;writing-mode:vertical-rl;
   font:400 10px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--soft);opacity:.6;pointer-events:none}
 
-.rail{position:fixed;z-index:3;right:52px;top:50%;translate:0 -50%;display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
-.rail button{appearance:none;background:none;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;
-  padding:8px 6px;color:var(--soft);font:400 11px/1 var(--mono);letter-spacing:.14em;text-align:left;white-space:nowrap}
+.rail{position:fixed;z-index:3;right:52px;top:110px;bottom:240px;display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none;
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(237,230,216,.22) transparent;
+  mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 18px),transparent);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 18px),transparent)}
+.rail-year{appearance:none;background:none;border:0;cursor:pointer;display:flex;align-items:baseline;gap:8px;
+  margin:8px 0 2px;padding:6px;color:var(--brass);font:400 10px/1 var(--mono);letter-spacing:.16em;text-align:left;opacity:.75;white-space:nowrap}
+.rail-year.open,.rail-year.on{opacity:1;color:var(--ivory)}
+.rail-year:hover{opacity:1;color:var(--ivory)}
+.rail-year .n{margin-left:auto;opacity:.45;font-variant-numeric:tabular-nums}
+.rail button[data-id]{appearance:none;background:none;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:5px 6px;color:var(--soft);font:400 11px/1 var(--mono);letter-spacing:.14em;text-align:left;white-space:nowrap}
+.rail button.rail-year{align-items:baseline;padding:6px;color:var(--brass);font:400 10px/1 var(--mono);letter-spacing:.16em;opacity:.75}
+.rail button.rail-year.open,.rail button.rail-year.on,.rail button.rail-year:hover{opacity:1;color:var(--ivory)}
+.rail button.month{padding-left:16px}
+.rail button .n{margin-left:auto;opacity:.45;font-variant-numeric:tabular-nums}
 .rail button .dot{width:7px;height:7px;border-radius:50%;flex:none;background:rgba(237,230,216,.28)}
 .rail button[data-st="done"] .dot{background:rgba(237,230,216,.55)}
 .rail button[data-st="next"] .dot,.rail button[data-st="now"] .dot{background:var(--brass);box-shadow:0 0 0 3px rgba(var(--brass-rgb),.18)}
 .rail button[data-st="plan"] .dot{background:transparent;border:1px solid var(--brass)}
-.rail button .no{opacity:.45;font-variant-numeric:tabular-nums}
-.rail button.on{color:var(--ivory)}
-.rail button.on .no{opacity:1;color:var(--brass)}
-.rail button:hover{color:var(--ivory)}
+.rail button[data-id].on{color:var(--ivory)}
+.rail button[data-id]:hover{color:var(--ivory)}
 
 .pin{appearance:none;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;
   transform:translate(-50%,-100%);color:var(--ivory);font:inherit;transition:opacity .3s}
@@ -179,8 +193,12 @@ body.leaving #veil{opacity:1;pointer-events:auto}
   .count .big b{font-size:56px}
   .entry{left:20px;bottom:118px;max-width:calc(100vw - 40px)}
   .entry h2{font-size:26px}
-  .rail{left:20px;right:20px;top:auto;bottom:64px;translate:none;flex-direction:row;gap:4px;overflow-x:auto;scrollbar-width:none}
-  .rail button{padding:6px 8px}
+  .rail{left:20px;right:20px;top:auto;bottom:64px;flex-direction:row;align-items:center;gap:4px;
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+    mask-image:none;-webkit-mask-image:none}
+  .rail-year{margin:0 8px 0 10px;flex:none;writing-mode:horizontal-tb}
+  .rail button[data-id]{padding:6px 8px}
+  .rail button.month{padding-left:8px}
   .ticker{left:20px;right:20px;transform:none;width:auto;bottom:22px;overflow-x:auto;scrollbar-width:none}
   .ticker a{flex:none;min-width:52px}
   .ticker a .t{display:none}
@@ -212,7 +230,7 @@ body.leaving #veil{opacity:1;pointer-events:auto}
   <p class="big"><b id="count-d">--</b><span id="count-unit">天</span></p>
   <p class="hms" id="count-hms">--:--:--</p>
 </div>
-<nav class="rail reveal" style="--i:4" id="rail" aria-label="行程列表"></nav>
+<nav class="rail reveal" style="--i:4" id="rail" aria-label="足迹"></nav>
 <nav class="ticker reveal" style="--i:5" id="ticker" aria-label="按天进入行程"></nav>
 <p class="spine" id="spine" aria-hidden="true"></p>
 <div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
@@ -231,8 +249,137 @@ body.leaving #veil{opacity:1;pointer-events:auto}
 <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
 <script>
 const TRIPS = window.TRIPS || [];
-const VISITED = window.VISITED || [];
+const VISITED = (window.VISITED || []).filter(c => c.name !== "青岛市");
 const skipCities = /(?:\?|&)nocity(?:&|$|#)/.test(location.search + location.hash);
+function cityShort(name){
+  return name.replace(/特别行政区$|土家族苗族自治州$|藏族羌族自治州$|蒙古族藏族自治州$|哈萨克自治州$|蒙古自治州$|回族自治州$|白族自治州$|彝族自治州$|黎族苗族自治县$|藏族自治州$|自治州$|地区$|盟$|市$|县$|区$|町$/, "");
+}
+const cityNo = new Map(
+  VISITED.slice().sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name))
+    .map((c, i) => [c.name, String(i + 1).padStart(2, "0")])
+);
+const CITIES = VISITED.map(c => ({
+  kind: "city",
+  id: "v-" + c.name,
+  no: cityNo.get(c.name),
+  name: c.name,
+  short: cityShort(c.name),
+  en: c.country,
+  status: "done",
+  center: [c.lat, c.lng],
+  zoom: 0.5,
+  date: c.date,
+  meta: c.date.replace(/-/g, "."),
+  country: c.country,
+  regions: c.regions || []
+}));
+const CITY_BY_NAME = new Map(CITIES.map(c => [c.name, c]));
+function finishFootprint(g, label){
+  const n = g.cities.length;
+  let lat = 0, lng = 0;
+  let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
+  for (const c of g.cities) {
+    lat += c.center[0]; lng += c.center[1];
+    minLat = Math.min(minLat, c.center[0]);
+    maxLat = Math.max(maxLat, c.center[0]);
+    minLng = Math.min(minLng, c.center[1]);
+    maxLng = Math.max(maxLng, c.center[1]);
+  }
+  g.center = [lat / n, lng / n];
+  const span = Math.max(maxLat - minLat, (maxLng - minLng) * Math.cos((g.center[0] * Math.PI) / 180));
+  g.zoom = span > 25 ? 1.45 : span > 12 ? 1.05 : span > 5 ? 0.72 : 0.5;
+  g.no = String(n).padStart(2, "0");
+  g.name = label;
+  g.short = label;
+  g.en = n + " 城";
+  g.meta = n + " 城 · " + label;
+}
+const MONTHS = [];
+{
+  const by = new Map();
+  for (const c of CITIES) {
+    const k = c.date.slice(0, 7);
+    if (!by.has(k)) {
+      const g = { kind: "month", id: "m-" + k, key: k, cities: [], status: "done" };
+      by.set(k, g);
+      MONTHS.push(g);
+    }
+    by.get(k).cities.push(c);
+  }
+  for (const g of MONTHS) finishFootprint(g, g.key.replace("-", "."));
+  MONTHS.sort((a, b) => b.key.localeCompare(a.key));
+}
+const YEARS = [];
+{
+  const by = new Map();
+  for (const m of MONTHS) {
+    const y = m.key.slice(0, 4);
+    if (!by.has(y)) {
+      const g = { kind: "year", id: "y-" + y, key: y, months: [], cities: [], status: "done" };
+      by.set(y, g);
+      YEARS.push(g);
+    }
+    const g = by.get(y);
+    g.months.push(m);
+    for (const c of m.cities) g.cities.push(c);
+  }
+  for (const g of YEARS) finishFootprint(g, g.key);
+}
+function findPlace(id){
+  return TRIPS.find(t => t.id === id) || YEARS.find(y => y.id === id) || MONTHS.find(m => m.id === id) || CITIES.find(c => c.id === id);
+}
+function placeYear(p){
+  if (!p) return null;
+  if (p.kind === "year") return p.key;
+  if (p.kind === "month") return p.key.slice(0, 4);
+  if (p.kind === "city" && p.date) return p.date.slice(0, 4);
+  return null;
+}
+function railOnId(p){
+  if (!p) return null;
+  if (p.kind === "year" || p.kind === "month") return p.id;
+  if (p.kind === "city" && p.date) return "m-" + p.date.slice(0, 7);
+  if (p.id === "qinggan") return "qinggan";
+  if (p.id === "japan") return "m-2025-10";
+  if (p.id === "xinjiang") return "m-2026-03";
+  if (p.id === "xizang") return "m-2024-03";
+  return null;
+}
+function nearestPlace(places, lat, lng){
+  let best = places[0], bestD = Infinity;
+  for (const p of places) {
+    const dlat = p.center[0] - lat, dlng = p.center[1] - lng;
+    const d = dlat * dlat + dlng * dlng;
+    if (d < bestD) { bestD = d; best = p; }
+  }
+  return best;
+}
+function placeFromPoly(d, coords){
+  if (!d) return null;
+  if (d.trip) return d.trip;
+  if (d.mates && d.mates.length > 1 && coords) return nearestPlace(d.mates, coords.lat, coords.lng);
+  return d.place || null;
+}
+function footprintHasCity(fp, d){
+  if (!fp || (fp.kind !== "month" && fp.kind !== "year") || !fp.cities) return false;
+  const hit = p => fp.cities.indexOf(p) !== -1;
+  return hit(d.place) || (d.mates && d.mates.some(hit));
+}
+function cityIsOn(d){
+  if (!d || !d.place) return false;
+  if (footprintHasCity(preview, d)) return true;
+  if ((!preview || preview === active || preview.kind === "city") && footprintHasCity(active, d)) return true;
+  if (preview && preview.kind === "city") {
+    return d.mates ? d.mates.indexOf(preview) !== -1 : d.place === preview;
+  }
+  return false;
+}
+function asRailPlace(place){
+  if (!place) return place;
+  if (place.kind === "month" || place.kind === "year" || place.id === "qinggan") return place;
+  const id = railOnId(place);
+  return (id && findPlace(id)) || place;
+}
 const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isMobile = () => innerWidth < 900;
@@ -245,8 +392,8 @@ const hashId = () => decodeURIComponent(location.hash.replace(/^#/, "")).split(/
 function defaultTrip(){
   const id = hashId();
   if (id) {
-    const hit = TRIPS.find(t => t.id === id);
-    if (hit) return hit;
+    const hit = findPlace(id);
+    if (hit) return hit.kind === "city" ? hit : asRailPlace(hit);
   }
   return TRIPS.find(t => t.status === "now")
     || TRIPS.find(t => t.status === "next")
@@ -270,10 +417,19 @@ function tripMeta(trip){
 function showTrip(trip){
   if (!trip) return;
   preview = trip;
-  $("#entry-no").textContent = "No. " + trip.no;
-  $("#entry-title").textContent = trip.name;
-  $("#entry-en").textContent = trip.en;
-  $("#entry-meta").textContent = tripMeta(trip);
+  if (trip.kind === "month" || trip.kind === "year") {
+    $("#entry-no").textContent = trip.short;
+    $("#entry-title").textContent = trip.cities.map(c => c.short).join(" · ");
+    $("#entry-en").textContent = trip.en;
+    $("#entry-meta").textContent = trip.meta;
+    $("#entry").classList.toggle("long-names", trip.cities.length > 8);
+  } else {
+    $("#entry-no").textContent = "No. " + trip.no;
+    $("#entry-title").textContent = trip.name;
+    $("#entry-en").textContent = trip.en;
+    $("#entry-meta").textContent = tripMeta(trip);
+    $("#entry").classList.remove("long-names");
+  }
   $("#spine").textContent = trip.start ? trip.en + " · MMXXVI" : trip.en;
   $("#ticker").classList.toggle("empty", !(trip.days && trip.days.length));
   const enter = $("#enter");
@@ -306,10 +462,40 @@ function paintStatus(){
 }
 
 function renderRail(){
-  $("#rail").innerHTML = TRIPS.map(t =>
-    `<button type="button" data-id="${t.id}" data-st="${t.status}" class="${t === active ? "on" : ""}" aria-current="${t === active ? "true" : "false"}"><i class="dot"></i><span class="no">No.${t.no}</span><span>${t.short}</span></button>`
-  ).join("");
+  const qinggan = TRIPS.find(t => t.id === "qinggan");
+  const onId = railOnId(active);
+  const expand = (active.kind === "year" || active.kind === "month" || active.kind === "city") ? placeYear(active) : null;
+  const qBtn = qinggan
+    ? `<button type="button" data-id="qinggan" data-st="${qinggan.status}" class="${onId === "qinggan" ? "on" : ""}" aria-current="${onId === "qinggan" ? "true" : "false"}"><i class="dot"></i><span>${qinggan.short}</span></button>`
+    : "";
+  const years = YEARS.map(g => {
+    const open = expand === g.key;
+    const yearOn = onId === g.id;
+    const head = `<button type="button" class="rail-year${open ? " open" : ""}${yearOn ? " on" : ""}" data-id="${g.id}" data-st="done" aria-expanded="${open}" aria-current="${yearOn ? "true" : "false"}"><span>${g.short}</span><span class="n">${g.cities.length}</span></button>`;
+    if (!open) return head;
+    return head + g.months.map(m =>
+      `<button type="button" class="month${onId === m.id ? " on" : ""}" data-id="${m.id}" data-st="done" aria-current="${onId === m.id ? "true" : "false"}"><i class="dot"></i><span>${m.key.slice(5)}</span><span class="n">${m.cities.length}</span></button>`
+    ).join("");
+  }).join("");
+  $("#rail").innerHTML = qBtn + years;
+  const on = $("#rail button.on");
+  if (on) on.scrollIntoView({ block: "nearest", inline: "nearest" });
 }
+
+let choosePlace = function(trip){
+  if (!trip) return;
+  active = trip;
+  showTrip(trip);
+  if (window._tickCount) window._tickCount();
+  renderRail();
+  if (history.replaceState) history.replaceState(null, "", "#" + trip.id);
+};
+
+$("#rail").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-id]");
+  if (!btn) return;
+  choosePlace(findPlace(btn.dataset.id));
+});
 
 let go = function(href){
   if (!href || document.body.classList.contains("leaving")) return;
@@ -355,9 +541,16 @@ document.querySelectorAll(".reveal").forEach(el => {
       const day = Math.floor((now - start) / 864e5) + 1;
       const total = Math.round((end - start) / 864e5) + 1;
       days = pad(day); label = "旅途中"; unit = "日"; hms = `第 ${day} 天 / ${total}`;
+    } else if (trip.kind === "month" || trip.kind === "year") {
+      days = pad(trip.cities.length);
+      label = "已完成";
+      unit = "城";
+      hms = trip.short;
     } else if (trip.status === "done" || (end && now > end)) {
-      days = trip.days ? pad(trip.days.length) : "--";
-      label = "已完成"; hms = trip.meta ? trip.meta.split("·")[0].trim() : "档案待补";
+      days = trip.kind === "city" ? trip.no : (trip.days ? pad(trip.days.length) : "--");
+      label = "已完成";
+      unit = trip.kind === "city" ? "城" : "天";
+      hms = trip.meta ? trip.meta.split("·")[0].trim() : "档案待补";
     } else {
       days = "--"; label = "计划中"; hms = "日期待定";
     }
@@ -435,25 +628,54 @@ else try {
     if (geom.type === "MultiPolygon") return { type: "MultiPolygon", coordinates: geom.coordinates.map(p => p.map((r, i) => windRing(r, i === 0))) };
     return geom;
   }
-  const lit = TRIPS.flatMap(t => (t.regions || []).map(f => Object.assign({}, f, { geometry: rewind(f.geometry), trip: t })));
+  const lit = TRIPS.flatMap(t => {
+    if (t.id === "xinjiang" || t.id === "xizang" || t.id === "qingdao") return [];
+    return (t.regions || []).map(f => Object.assign({}, f, { geometry: rewind(f.geometry), trip: t }));
+  });
+  function ptInRing(lng, lat, ring){
+    let n = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+      if ((yi > lat) !== (yj > lat) && lng < (xj - xi) * (lat - yi) / ((yj - yi) || 1e-12) + xi) n = !n;
+    }
+    return n;
+  }
+  function ptInGeom(lng, lat, geom){
+    if (!geom) return false;
+    const polys = geom.type === "Polygon" ? [geom.coordinates] : geom.coordinates || [];
+    for (const poly of polys) {
+      if (!poly || !poly[0]) continue;
+      if (ptInRing(lng, lat, poly[0]) && !poly.slice(1).some(h => ptInRing(lng, lat, h))) return true;
+    }
+    return false;
+  }
+  const tripGeoms = lit.filter(d => d.trip && d.geometry).map(d => d.geometry);
   if (!skipCities) {
   const idGeom = new Map();
   for (const c of VISITED) {
+    const place = CITY_BY_NAME.get(c.name);
+    if (!place || tripGeoms.some(g => ptInGeom(c.lng, c.lat, g))) continue;
     for (const f of (c.regions || [])) {
       if (!f.geometry) continue;
       if (c.country === "印度尼西亚") {
         const key = JSON.stringify(f.geometry);
         const prev = idGeom.get(key);
         if (prev) {
+          prev.mates.push(place);
           prev.city.names.push(c.name);
           prev.city.name = prev.city.names.join(" · ");
         } else {
-          const rec = Object.assign({}, f, { geometry: rewind(f.geometry), city: { name: c.name, country: c.country, date: c.date, names: [c.name] } });
+          const rec = Object.assign({}, f, {
+            geometry: rewind(f.geometry),
+            place,
+            mates: [place],
+            city: { name: c.name, country: c.country, date: c.date, names: [c.name] }
+          });
           idGeom.set(key, rec);
           lit.push(rec);
         }
       } else {
-        lit.push(Object.assign({}, f, { geometry: rewind(f.geometry), city: c }));
+        lit.push(Object.assign({}, f, { geometry: rewind(f.geometry), place, city: c }));
       }
     }
   }
@@ -461,10 +683,10 @@ else try {
 
   const capColor = d => {
     if (d.city) {
-      const hot = d === hover;
+      const hot = d === hover || cityIsOn(d);
       if (litPhase === "off") return "rgba(201,164,108,0)";
-      if (litPhase === "rise" || hot) return "rgba(237,230,216,0.40)";
-      return "rgba(237,230,216,0.16)";
+      if (hot) return "rgba(237,230,216,0.62)";
+      return "rgba(237,230,216,0.13)";
     }
     if (!d.trip) return "rgba(237,230,216,0.02)";
     const st = d.trip.status;
@@ -482,9 +704,8 @@ else try {
   const altitude = d => {
     if (d.city) {
       if (litPhase === "off") return 0.004;
-      if (litPhase === "rise") return 0.05;
-      if (d === hover) return 0.035;
-      return 0.011;
+      if (d === hover || cityIsOn(d)) return 0.05;
+      return 0.010;
     }
     if (!d.trip) return 0.003;
     if (litPhase === "off") return 0.004;
@@ -495,11 +716,21 @@ else try {
     return 0.014;
   };
   const strokeColor = d => {
-    if (d.city) return "rgba(237,230,216,0.55)";
+    if (d.city) {
+      if (d === hover || cityIsOn(d)) return "rgba(237,230,216,0.92)";
+      return "rgba(237,230,216,0.28)";
+    }
     if (!d.trip) return "rgba(237,230,216,0.18)";
     if (d.trip.status === "done") return "rgba(237,230,216,0.55)";
     if (d.trip.status === "plan") return "rgba(201,164,108,0.42)";
     return "rgba(201,164,108,0.90)";
+  };
+  const sideColor = d => {
+    if (d.city) return (d === hover || cityIsOn(d)) ? "rgba(237,230,216,0.22)" : "rgba(237,230,216,0.05)";
+    return (d.trip && d.trip.status === "done") ? "rgba(237,230,216,0.06)" : d.trip ? "rgba(201,164,108,0.10)" : "rgba(0,0,0,0)";
+  };
+  const paintPolys = () => {
+    world.polygonAltitude(altitude).polygonCapColor(capColor).polygonStrokeColor(strokeColor).polygonSideColor(sideColor);
   };
   const pathColor = d => {
     if (d && d.kind === "day") return "rgba(201,164,108,0.95)";
@@ -519,7 +750,7 @@ else try {
     .hexPolygonColor(() => "rgba(237,230,216,0.10)")
     .polygonAltitude(altitude)
     .polygonCapColor(capColor)
-    .polygonSideColor(d => d.city || (d.trip && d.trip.status === "done") ? "rgba(237,230,216,0.06)" : d.trip ? "rgba(201,164,108,0.10)" : "rgba(0,0,0,0)")
+    .polygonSideColor(sideColor)
     .polygonStrokeColor(strokeColor)
     .polygonCapCurvatureResolution(d => (d.trip || d.city) ? 8 : 12)
     .polygonsTransitionDuration(reduceMotion ? 0 : 220)
@@ -528,17 +759,19 @@ else try {
       return d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker || tripMeta(d.trip)}` : "";
     })
     .onPolygonHover(d => {
-      hover = d && (d.trip || d.city) ? d : null;
-      const tripHover = d && d.trip ? d : null;
-      world.polygonAltitude(altitude).polygonCapColor(capColor);
-      $("#entry").classList.toggle("hot", !!tripHover);
+      hover = d && (d.trip || d.place) ? d : null;
+      const place = placeFromPoly(d);
+      paintPolys();
+      $("#entry").classList.toggle("hot", !!place);
       $("#cursor").classList.toggle("hot", !!hover);
-      showTrip(tripHover ? tripHover.trip : active);
+      showTrip(place || active);
       if (window._tickCount) window._tickCount();
     })
-    .onPolygonClick(d => {
-      if (!d || !d.trip) return;
-      selectTrip(d.trip, { fly: true, enter: !!d.trip.href });
+    .onPolygonClick((d, ev, coords) => {
+      const raw = placeFromPoly(d, coords);
+      const place = raw && raw.kind === "city" ? raw : asRailPlace(raw);
+      if (!place) return;
+      selectTrip(place, { fly: true, enter: !!place.href });
     })
     .ringsData([])
     .ringColor(() => t => `rgba(201,164,108,${(1 - t) * 0.7})`)
@@ -562,10 +795,10 @@ else try {
       b.className = "pin " + (d.trip.status === "done" ? "done" : d.trip.status === "plan" ? "plan" : "");
       b.type = "button";
       b.setAttribute("aria-label", d.trip.name);
-      b.innerHTML = `<b>${d.trip.short}</b><small>NO.${d.trip.no}</small><i></i>`;
+      b.innerHTML = `<b>${d.trip.short}</b><small>${d.trip.kind === "city" ? (d.trip.date || "").replace(/-/g, ".") : "NO." + d.trip.no}</small><i></i>`;
       b.onclick = e => {
         e.stopPropagation();
-        selectTrip(d.trip, { fly: true, enter: !!d.trip.href });
+        selectTrip(d.trip.kind === "city" ? d.trip : asRailPlace(d.trip), { fly: true, enter: !!d.trip.href });
       };
       return b;
     })
@@ -604,7 +837,21 @@ else try {
   }
 
   function htmlData(){
-    const pins = TRIPS.map(t => ({ lat: t.center[0], lng: t.center[1], trip: t }));
+    const pins = TRIPS
+      .filter(t => t.id === "qinggan")
+      .map(t => ({ lat: t.center[0], lng: t.center[1], trip: t }));
+    if (active && active.kind === "city") {
+      pins.push({ lat: active.center[0], lng: active.center[1], trip: active });
+    }
+    const pinFoot = fp => {
+      if (!fp || (fp.kind !== "month" && fp.kind !== "year")) return;
+      for (const c of fp.cities) {
+        if (c.regions && c.regions.length) continue;
+        pins.push({ lat: c.center[0], lng: c.center[1], trip: c });
+      }
+    };
+    pinFoot(active);
+    if (preview && preview !== active) pinFoot(preview);
     const stops = (active.stops || []).map(s => Object.assign({}, s));
     return pins.concat(stops);
   }
@@ -688,7 +935,7 @@ else try {
     world.htmlElementsData(htmlData());
     if (pathReady) setPaths("full");
     world.ringsData(ringsFor(trip));
-    world.polygonAltitude(altitude).polygonCapColor(capColor);
+      paintPolys();
     if (history.replaceState) history.replaceState(null, "", "#" + trip.id);
     if (fly) {
       ctrl.autoRotate = false;
@@ -698,6 +945,10 @@ else try {
     lastAct = Date.now();
     cruiseI = -1;
   }
+  choosePlace = function(trip){
+    railLock = true;
+    selectTrip(trip, { fly: true });
+  };
 
   function bump(){
     lastAct = Date.now();
@@ -753,33 +1004,36 @@ else try {
     else if (resumeGlobe) resumeGlobe();
   });
   addEventListener("hashchange", () => {
-    const t = TRIPS.find(x => x.id === hashId());
+    const hit = findPlace(hashId());
+    const t = hit && hit.kind === "city" ? hit : asRailPlace(hit);
     if (t && t !== active) selectTrip(t, { fly: true });
   });
 
-  $("#rail").addEventListener("click", e => {
-    const btn = e.target.closest("button[data-id]");
-    if (!btn) return;
-    const trip = TRIPS.find(t => t.id === btn.dataset.id);
-    selectTrip(trip, { fly: true });
-  });
+  let railLock = false;
   $("#rail").addEventListener("pointerover", e => {
+    if (railLock) return;
     const btn = e.target.closest("button[data-id]");
     if (!btn) return;
+    const trip = findPlace(btn.dataset.id);
+    if (!trip) return;
     overHud = true;
-    const trip = TRIPS.find(t => t.id === btn.dataset.id);
     showTrip(trip);
     if (window._tickCount) window._tickCount();
     ctrl.autoRotate = false;
     world.pointOfView(tripView(trip), 700);
     world.ringsData(ringsFor(trip));
+      paintPolys();
+    world.htmlElementsData(htmlData());
   });
   $("#rail").addEventListener("pointerleave", () => {
+    railLock = false;
     overHud = false;
     lastAct = Date.now();
     showTrip(active);
     if (window._tickCount) window._tickCount();
     homeView();
+      paintPolys();
+    world.htmlElementsData(htmlData());
   });
 
   function size(){
@@ -833,11 +1087,11 @@ else try {
   function lightProvinces(){
     world.polygonsTransitionDuration(700);
     litPhase = "rise";
-    world.polygonAltitude(altitude).polygonCapColor(capColor);
+    paintPolys();
     setTimeout(() => {
       litPhase = "idle";
       world.polygonsTransitionDuration(220);
-      world.polygonAltitude(altitude).polygonCapColor(capColor);
+      paintPolys();
     }, 900);
   }
 
