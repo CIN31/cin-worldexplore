@@ -354,9 +354,22 @@ function nearestPlace(places, lat, lng){
   }
   return best;
 }
+function isJapanCountry(d){
+  return !!d && String(d.id) === "392";
+}
+function japanFootprintOn(d){
+  if (!isJapanCountry(d)) return false;
+  const p = preview || active;
+  if (!p) return false;
+  if (p.id === "japan") return true;
+  if (p.kind === "city") return p.country === "日本";
+  if ((p.kind === "month" || p.kind === "year") && p.cities) return p.cities.some(c => c.country === "日本");
+  return false;
+}
 function placeFromPoly(d, coords){
   if (!d) return null;
   if (d.trip) return d.trip;
+  if (isJapanCountry(d)) return findPlace("m-2025-10");
   if (d.mates && d.mates.length > 1 && coords) return nearestPlace(d.mates, coords.lat, coords.lng);
   return d.place || null;
 }
@@ -649,12 +662,26 @@ else try {
     }
     return false;
   }
+  function geomHitsTrip(geom){
+    if (!geom) return false;
+    const polys = geom.type === "Polygon" ? [geom.coordinates] : geom.coordinates || [];
+    for (const poly of polys) {
+      if (!poly) continue;
+      for (const ring of poly) {
+        for (const p of ring) {
+          if (tripGeoms.some(g => ptInGeom(p[0], p[1], g))) return true;
+        }
+      }
+    }
+    return false;
+  }
   const tripGeoms = lit.filter(d => d.trip && d.geometry).map(d => d.geometry);
   if (!skipCities) {
   const idGeom = new Map();
   for (const c of VISITED) {
     const place = CITY_BY_NAME.get(c.name);
     if (!place || tripGeoms.some(g => ptInGeom(c.lng, c.lat, g))) continue;
+    if ((c.regions || []).some(f => geomHitsTrip(f.geometry))) continue;
     for (const f of (c.regions || [])) {
       if (!f.geometry) continue;
       if (c.country === "印度尼西亚") {
@@ -688,7 +715,10 @@ else try {
       if (hot) return "rgba(237,230,216,0.62)";
       return "rgba(237,230,216,0.13)";
     }
-    if (!d.trip) return "rgba(237,230,216,0.02)";
+    if (!d.trip) {
+      if (japanFootprintOn(d) || (isJapanCountry(d) && d === hover)) return "rgba(237,230,216,0.40)";
+      return "rgba(237,230,216,0.02)";
+    }
     const st = d.trip.status;
     const hot = d === hover || d.trip === preview;
     if (litPhase === "off") return "rgba(201,164,108,0)";
@@ -707,7 +737,10 @@ else try {
       if (d === hover || cityIsOn(d)) return 0.05;
       return 0.010;
     }
-    if (!d.trip) return 0.003;
+    if (!d.trip) {
+      if (japanFootprintOn(d) || (isJapanCountry(d) && d === hover)) return 0.035;
+      return 0.003;
+    }
     if (litPhase === "off") return 0.004;
     if (litPhase === "rise") return 0.05;
     if (d === hover || d.trip === preview) return 0.035;
@@ -720,13 +753,17 @@ else try {
       if (d === hover || cityIsOn(d)) return "rgba(237,230,216,0.92)";
       return "rgba(237,230,216,0.28)";
     }
-    if (!d.trip) return "rgba(237,230,216,0.18)";
+    if (!d.trip) {
+      if (japanFootprintOn(d) || (isJapanCountry(d) && d === hover)) return "rgba(237,230,216,0.70)";
+      return "rgba(237,230,216,0.18)";
+    }
     if (d.trip.status === "done") return "rgba(237,230,216,0.55)";
     if (d.trip.status === "plan") return "rgba(201,164,108,0.42)";
     return "rgba(201,164,108,0.90)";
   };
   const sideColor = d => {
     if (d.city) return (d === hover || cityIsOn(d)) ? "rgba(237,230,216,0.22)" : "rgba(237,230,216,0.05)";
+    if (japanFootprintOn(d) || (isJapanCountry(d) && d === hover)) return "rgba(237,230,216,0.10)";
     return (d.trip && d.trip.status === "done") ? "rgba(237,230,216,0.06)" : d.trip ? "rgba(201,164,108,0.10)" : "rgba(0,0,0,0)";
   };
   const paintPolys = () => {
@@ -756,12 +793,14 @@ else try {
     .polygonsTransitionDuration(reduceMotion ? 0 : 220)
     .polygonLabel(d => {
       if (d.city) return `<b>${d.city.name}</b><br>${d.city.country} · ${d.city.date.replace(/-/g, ".")}`;
+      if (isJapanCountry(d)) return "<b>日本</b><br>Japan";
       return d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker || tripMeta(d.trip)}` : "";
     })
     .onPolygonHover(d => {
-      hover = d && (d.trip || d.place) ? d : null;
+      hover = d && (d.trip || d.place || isJapanCountry(d)) ? d : null;
       const place = placeFromPoly(d);
       paintPolys();
+      world.htmlElementsData(htmlData());
       $("#entry").classList.toggle("hot", !!place);
       $("#cursor").classList.toggle("hot", !!hover);
       showTrip(place || active);
@@ -775,11 +814,11 @@ else try {
     })
     .ringsData([])
     .ringColor(() => t => `rgba(201,164,108,${(1 - t) * 0.7})`)
-    .ringMaxRadius(6).ringPropagationSpeed(1.6).ringRepeatPeriod(2200).ringAltitude(0.016)
+    .ringMaxRadius(6).ringPropagationSpeed(1.6).ringRepeatPeriod(2200).ringAltitude(0.07)
     .pathPoints(d => d.pts || d)
     .pathPointLat(p => p[0])
     .pathPointLng(p => p[1])
-    .pathPointAlt(0.02)
+    .pathPointAlt(0.042)
     .pathColor(pathColor)
     .pathStroke(1.2).pathDashLength(0.06).pathDashGap(0.012)
     .pathDashAnimateTime(0).pathTransitionDuration(0)
@@ -1045,9 +1084,15 @@ else try {
       }
     } catch (e) {}
   }
+  let countryShells = [];
+  function setPolys(){
+    const trips = lit.filter(d => d.trip);
+    const cities = lit.filter(d => d.city);
+    world.polygonsData(countryShells.concat(cities).concat(trips));
+  }
   size();
   addEventListener("resize", size);
-  world.polygonsData(lit);
+  setPolys();
   world.htmlElementsData(htmlData());
   document.body.classList.toggle("has-stops", !!(active.stops && active.stops.length));
   bindTicker();
@@ -1066,6 +1111,7 @@ else try {
     if (countries.length) {
       const byId = new Map(countries.map(d => [String(d.id), d]));
       for (const trip of TRIPS) {
+        if (trip.id === "japan") continue;
         for (const cid of (trip.countries || [])) {
           const feat = byId.get(String(cid)) || byId.get(String(+cid));
           if (feat && !feat.trip) {
@@ -1075,7 +1121,8 @@ else try {
         }
       }
       const shells = countries.filter(d => !d.trip);
-      world.polygonsData(shells.concat(lit));
+      countryShells = shells;
+      setPolys();
       const applyHex = () => {
         try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
         catch (e) { try { world.hexPolygonsData(countries); } catch (err) {} }
