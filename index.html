@@ -136,7 +136,7 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 .stop i{width:4px;height:4px;border-radius:50%;background:var(--ivory)}
 .stop.flash{opacity:1}
 body.near.has-stops .stop{opacity:1}
-body.near.has-stops .pin{opacity:0}
+body.near.has-stops .pin{opacity:0;pointer-events:none}
 
 #veil{position:fixed;inset:0;z-index:5;background:var(--ink-0);opacity:0;pointer-events:none;transition:opacity .5s ease .45s}
 .brand,.coord,.entry,.count,.ticker,.spine,.rail{transition:opacity .35s ease}
@@ -488,7 +488,8 @@ else try {
       if (window._tickCount) window._tickCount();
     })
     .onPolygonClick(d => {
-      if (d && d.trip) selectTrip(d.trip, { fly: true, enter: false });
+      if (!d || !d.trip) return;
+      selectTrip(d.trip, { fly: true, enter: !!d.trip.href });
     })
     .ringsData([])
     .ringColor(() => t => `rgba(201,164,108,${(1 - t) * 0.7})`)
@@ -515,8 +516,7 @@ else try {
       b.innerHTML = `<b>${d.trip.short}</b><small>NO.${d.trip.no}</small><i></i>`;
       b.onclick = e => {
         e.stopPropagation();
-        if (d.trip.href && d.trip === active) go(d.trip.href);
-        else selectTrip(d.trip, { fly: true, enter: false });
+        selectTrip(d.trip, { fly: true, enter: !!d.trip.href });
       };
       return b;
     })
