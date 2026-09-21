@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>青岛五日 · 栈桥到石老人</title>
+<meta name="description" content="2026 国庆，武汉高铁去青岛。五天四夜，从栈桥走到石老人，海边只散步。">
+<meta name="theme-color" content="#F7EFE4">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sand:#F7EFE4;
+  --sand-wet:#E8D9C4;
+  --ink:#2A2420;
+  --bay:#2B7D89;
+  --bay-ink:#1E5C66;
+  --tile:#C24F42;
+  --amber:#D4A04A;
+  --orange:#E06A2E;
+  --line:color-mix(in srgb, var(--ink) 12%, transparent);
+  --soft:color-mix(in srgb, var(--ink) 62%, var(--sand));
+  --display:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --latin:Fraunces,"Iowan Old Style","Palatino Linotype",serif;
+  --body:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --nav-h:52px;
+  --scroll:0;
+  --surge:0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 12px);color:var(--ink);overflow-x:clip;
+  background:
+    radial-gradient(720px 420px at 96% -8%, color-mix(in srgb, var(--orange) 28%, var(--sand)), transparent 62%),
+    radial-gradient(640px 380px at -8% 108%, color-mix(in srgb, var(--bay) 12%, var(--sand)), var(--sand) 70%)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .sky .sun,.sky .haze,.hero h1,.tide,.tide-surge,.foam,.horizon .disk{translate:none;opacity:1}
+}
+body{margin:0;overflow-x:clip;font:16px/1.65 var(--body);background:transparent;color:var(--ink);-webkit-text-size-adjust:100%;touch-action:manipulation}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.028;z-index:0;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.2 0 0 0 0 0.18 0 0 0 .4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.sky .sun{position:absolute;right:4%;top:2%;width:min(22vw,220px);height:min(22vw,220px);border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--orange) 55%,#fff) 0%,color-mix(in srgb,var(--orange) 18%,transparent) 42%,transparent 70%);
+  animation:sunbreathe 11s ease-in-out infinite;
+  translate:0 calc(var(--scroll) * 14vh);
+  opacity:calc(0.95 - var(--scroll) * 0.25)}
+.sky .haze{position:absolute;border-radius:50%;filter:blur(8px)}
+.sky .haze.bay{left:-18%;bottom:-22%;width:56vw;height:38vh;
+  background:radial-gradient(ellipse at center,color-mix(in srgb,var(--bay) 18%,transparent),transparent 72%);
+  animation:driftA 32s var(--ease) infinite}
+.sky .haze.gold{right:10%;top:8%;width:28vw;height:22vh;
+  background:radial-gradient(ellipse at center,color-mix(in srgb,var(--amber) 16%,transparent),transparent 74%);
+  animation:driftB 26s var(--ease) infinite}
+@keyframes sunbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes driftA{0%,100%{transform:translate(-3%,2%)}50%{transform:translate(7%,-5%)}}
+@keyframes driftB{0%,100%{transform:translate(2%,-2%)}50%{transform:translate(-6%,4%)}}
+@keyframes tideShift{to{transform:translateX(-10%)}}
+@keyframes foam{0%{transform:translateY(8px);opacity:0}18%{opacity:.45}100%{transform:translateY(-140px);opacity:0}}
+@keyframes sunpulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--orange) 0%,transparent)}50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--orange) 24%,transparent)}}
+@keyframes sundip{from{transform:translateY(0)}to{transform:translateY(4px)}}
+.hero-band{position:relative;overflow:hidden}
+.foam{position:absolute;inset:0;pointer-events:none;z-index:0;translate:0 calc(var(--scroll) * -70px)}
+.foam i{position:absolute;border-radius:50%;background:color-mix(in srgb, var(--sand) 30%, #fff);border:1px solid color-mix(in srgb, var(--bay) 22%, transparent);opacity:0;animation:foam 16s linear infinite}
+.foam i:nth-child(1){left:8%;bottom:12%;width:7px;height:7px;animation-duration:18s}
+.foam i:nth-child(2){left:22%;bottom:4%;width:4px;height:4px;animation-delay:3s;animation-duration:14s}
+.foam i:nth-child(3){left:48%;bottom:10%;width:6px;height:6px;animation-delay:6s;animation-duration:17s}
+.foam i:nth-child(4){left:71%;bottom:6%;width:5px;height:5px;animation-delay:1.5s;animation-duration:15s}
+.foam i:nth-child(5){left:88%;bottom:16%;width:8px;height:8px;animation-delay:8s;animation-duration:20s}
+a{color:var(--bay-ink);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--ink)}
+:focus-visible{outline:2px solid var(--bay-ink);outline-offset:3px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,h4{font-family:var(--display);font-weight:500;letter-spacing:.04em;text-wrap:balance;color:var(--ink)}
+.num{font-family:var(--latin);font-variant-numeric:tabular-nums;font-weight:400}
+.skip{position:absolute;left:12px;top:8px;padding:8px 12px;background:var(--sand);border:1px solid var(--ink);z-index:80;transform:translateY(-120%);transition:transform .2s var(--ease)}
+.skip:focus{transform:none}
+.wrap{width:min(1240px, calc(100% - 32px));max-width:100%;margin-inline:auto;position:relative;z-index:1}
+.wrap{padding-left:max(0px, env(safe-area-inset-left));padding-right:max(0px, env(safe-area-inset-right))}
+
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:18px 0 8px}
+.top a{color:var(--soft);text-decoration:none;font-size:13px}
+.top a:hover{color:var(--ink)}
+.top .no{font:italic 400 15px/1 var(--latin);color:var(--amber)}
+
+.cd{margin:4px 0 10px;padding:10px 0 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cd-label{margin:0;font-size:13px;color:var(--soft)}
+.cd-units{display:flex;align-items:baseline;flex-wrap:wrap;gap:0;margin:6px 0 0}
+.cd-units span{display:flex;align-items:baseline;gap:6px;padding-right:14px;margin-right:14px;border-right:1px solid var(--line)}
+.cd-units span:last-child{border-right:0;margin-right:0;padding-right:0}
+.cd-units b{font:400 clamp(28px,7vw,40px)/.9 var(--latin);font-variant-numeric:tabular-nums;letter-spacing:-.02em;min-width:2ch;text-align:right;color:var(--orange)}
+.cd-units i{font:500 14px/1 var(--display);font-style:normal;color:var(--bay-ink)}
+.cd.live .cd-label{color:var(--bay-ink)}
+
+.hero{padding:8px 0 20px}
+.hero h1{margin:0;font-size:clamp(52px,14vw,96px);line-height:.95;letter-spacing:.06em}
+.hero .sub{margin:14px 0 0;font:500 22px/1.35 var(--display);letter-spacing:.08em;max-width:22em}
+.tide{display:block;width:100%;height:22px;margin-top:18px;overflow:hidden}
+.tide-surge{translate:calc(var(--surge) * -36px) calc(clamp(-6px, var(--surge) * 10px, 6px))}
+.tide-run{animation:tideShift 7s linear infinite}
+.tide path{fill:none;stroke-linecap:round}
+.tide .t-bay{stroke:var(--bay);stroke-width:1.4;opacity:.7}
+.tide .t-sun{stroke:var(--orange);stroke-width:1.1;opacity:.28}
+
+.mapbox{margin:8px 0 22px;padding:0;border:1px solid var(--line);background:color-mix(in srgb, var(--sand-wet) 70%, var(--sand));min-width:0;max-width:100%;display:flex;flex-direction:column;overflow:hidden}
+.map-tools{display:flex;gap:4px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap;flex:none}
+.map-tools button{border:1px solid var(--line);background:var(--sand);color:var(--ink);padding:4px 10px;font:400 13px/1.2 var(--latin);min-width:36px;min-height:36px}
+.map-tools button:hover,.map-tools button[aria-pressed="true"]{border-color:var(--bay-ink);color:var(--bay-ink)}
+.map-caption{margin-left:auto;font:italic 400 12px/1 var(--latin);color:var(--soft)}
+.coast-canvas{position:relative;flex:1;height:min(62vh, 480px);min-height:260px;min-width:0;overflow:hidden;background:var(--sand)}
+#map{display:block;width:100%;height:100%;background:var(--sand)}
+.leaflet-container{font:inherit;background:var(--sand);z-index:0}
+.leaflet-marker-icon,.leaflet-div-icon{overflow:visible!important;background:none;border:0}
+.leaflet-tile-pane{
+  filter:saturate(.55) sepia(.2) hue-rotate(-12deg) brightness(1.05) contrast(.98);
+}
+.leaflet-control-attribution{font-size:10px;background:color-mix(in srgb, var(--sand) 90%, transparent);color:var(--soft);border:0}
+.leaflet-control-attribution a{color:var(--bay-ink)}
+.qd-pin{border:0;background:none;overflow:visible}
+.qd-pin i{display:block;width:18px;height:18px;border-radius:50%;box-sizing:border-box;background:var(--ink);border:2.5px solid var(--sand);box-shadow:0 0 0 1.5px var(--ink),0 2px 8px rgba(20,60,71,.4)}
+.qd-pin.on i{background:var(--bay);box-shadow:0 0 0 1.5px var(--bay),0 0 0 6px color-mix(in srgb, var(--bay) 28%, transparent),0 2px 8px rgba(20,60,71,.4)}
+.qd-pin.must.on i{background:var(--tile);box-shadow:0 0 0 1.5px var(--tile),0 0 0 6px color-mix(in srgb, var(--tile) 28%, transparent)}
+.qd-pin.sun.on i{background:var(--orange);box-shadow:0 0 0 1.5px var(--orange),0 0 0 6px color-mix(in srgb, var(--orange) 32%, transparent)}
+.qd-pin.hotel i{background:var(--amber);box-shadow:0 0 0 1.5px var(--amber),0 2px 8px rgba(20,60,71,.4);width:18px;height:18px}
+.qd-pin.dim{opacity:.72}
+.qd-pin.dim i{background:var(--sand);border-color:var(--ink);box-shadow:0 0 0 1.5px var(--ink)}
+.qd-pin b{position:absolute;left:22px;top:-2px;white-space:nowrap;font:500 13px/1.2 var(--display);letter-spacing:.04em;color:var(--ink);background:var(--sand);border:1px solid var(--ink);padding:3px 7px 2px;box-shadow:1px 2px 0 color-mix(in srgb, var(--ink) 12%, transparent)}
+.qd-pin.on b{border-color:var(--bay);color:var(--ink)}
+.qd-pin.must.on b{border-color:var(--tile)}
+.qd-pin.sun.on b{border-color:var(--orange)}
+.qd-pin.hotel b{border-color:var(--amber)}
+.qd-pin.dim b{color:var(--ink);border-color:color-mix(in srgb, var(--ink) 45%, var(--sand));background:color-mix(in srgb, var(--sand) 88%, var(--ink))}
+.qd-pin.dim.hide-name b{display:none}
+.pop{position:absolute;left:12px;right:12px;bottom:12px;background:var(--sand);border:1px solid var(--ink);padding:10px 12px;z-index:800}
+.pop[hidden]{display:none}
+.pop strong{display:block;font:500 16px/1.3 var(--display);letter-spacing:.04em}
+.pop p{margin:4px 0 8px;font-size:13px;color:var(--soft)}
+.pop-row{display:flex;gap:16px;font-size:13px}
+.pop-row a{color:var(--bay-ink)}
+.coast-today{list-style:none;margin:0;padding:10px 12px;border-top:1px solid var(--line);display:grid;gap:6px;flex:none}
+.coast-today li{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.coast-today b{font:500 13px/1.3 var(--display);letter-spacing:.02em}
+.coast-today i{font:italic 400 13px/1 var(--latin);color:var(--amber);font-style:italic;white-space:nowrap}
+.coast-note{margin:0;padding:0 12px 12px;font-size:12px;color:var(--soft);flex:none}
+
+.facts{display:grid;grid-template-columns:1fr;gap:14px 20px;margin:0 0 28px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);list-style:none}
+.facts li{margin:0;min-width:0}
+.facts b{display:block;font:400 22px/1.15 var(--latin);letter-spacing:.01em}
+.facts span{display:block;margin-top:4px;font-size:13px;color:var(--soft)}
+
+.daynav{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--sand) 82%, #fff);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.daynav .row{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.daynav .row::-webkit-scrollbar{display:none}
+.daynav a{flex:1 1 0;min-width:0;text-align:center;text-decoration:none;color:color-mix(in srgb, var(--ink) 78%, var(--sand));padding:12px 6px 10px;font:400 20px/1 var(--latin);border-bottom:2px solid transparent;touch-action:manipulation}
+.daynav a span{display:block;margin-top:4px;font:400 11px/1 var(--body);letter-spacing:.04em}
+.daynav a.on,.daynav a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+.day{padding:28px 0 8px;scroll-margin-top:calc(var(--nav-h) + 12px)}
+.day-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.day-n{font:400 40px/1 var(--latin);color:var(--tile);min-width:1.2ch}
+.day h2{margin:0;font-size:clamp(22px,5vw,30px)}
+.pace{font:italic 400 15px/1 var(--latin);color:var(--amber)}
+.theme{margin:0 0 16px;color:var(--soft);max-width:36em}
+
+.tl{list-style:none;margin:0;padding:0;border-left:1px solid var(--line);position:relative}
+.tl::after{content:"";position:absolute;left:-1px;top:0;width:2px;height:calc(var(--tl,0) * 100%);background:color-mix(in srgb,var(--orange) 70%, var(--bay));pointer-events:none}
+.tl li{display:grid;grid-template-columns:5.6rem minmax(0,1fr);gap:10px 14px;padding:0 0 16px 16px;position:relative}
+.tl li::before{content:"";position:absolute;left:-4px;top:8px;width:7px;height:7px;border:1px solid var(--bay);background:var(--sand);border-radius:50%}
+.tl .sun::before{border-color:var(--orange);background:var(--orange);animation:sunpulse 2.8s ease-in-out infinite}
+.tl time{font:400 15px/1.3 var(--latin);color:var(--amber);padding-top:2px}
+.tl h3{margin:0;font-size:16px;letter-spacing:.03em}
+.tl p{margin:4px 0 0;font-size:14px;color:var(--soft);max-width:42em}
+.how{margin-top:6px;font-size:13px;color:var(--bay-ink)}
+
+.panel{margin:8px 0 18px;padding:12px 0;border-top:1px solid var(--line)}
+.panel h3{margin:0 0 8px;font-size:18px}
+.kv{margin:0;display:grid;grid-template-columns:5.6rem minmax(0,1fr);gap:6px 14px;font-size:14px}
+.kv dt{color:var(--soft)}
+.kv dd{margin:0}
+.must{color:var(--tile)}
+
+.opt{margin:0 0 16px;padding:10px 0;font-size:14px;color:var(--soft);max-width:42em;border-top:1px dashed var(--line)}
+
+.empty{margin:12px 0 20px;padding:22px 18px;border:1px dashed color-mix(in srgb, var(--ink) 28%, transparent);min-height:7rem}
+.empty p{margin:6px 0 0;color:var(--soft);max-width:36em}
+
+.table-wrap{margin:8px 0 20px;max-width:100%;min-width:0;overflow:hidden}
+.table-wrap::-webkit-scrollbar{display:none;width:0;height:0}
+table{border-collapse:collapse;width:100%;min-width:0;table-layout:fixed;font-size:14px}
+th,td{text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere;word-break:break-word}
+th{font-weight:500;color:var(--soft);font-size:13px}
+td.num,th.num{font-family:var(--latin);font-variant-numeric:tabular-nums}
+
+.books{list-style:none;margin:8px 0 20px;padding:0}
+.books li{margin:0;padding:14px 0;border-bottom:1px solid var(--line)}
+.books h3{margin:0;font-size:18px}
+.books .meta{margin:4px 0 8px;font:italic 400 14px/1.35 var(--latin);color:var(--amber)}
+.books p{margin:0;font-size:14px;color:var(--soft);max-width:42em}
+.books .how{margin-top:6px}
+.rec{color:var(--bay-ink)}
+
+.sunbox{margin:36px 0 12px;padding-top:8px}
+.sunbox h2{margin:0 0 6px}
+.sunbox td.num,.sunbox th.num{white-space:nowrap}
+.horizon{display:block;width:100%;height:28px;margin:8px 0 16px}
+.horizon .sea{fill:color-mix(in srgb, var(--orange) 18%, var(--sand))}
+.horizon .disk{fill:var(--orange);transform-box:fill-box;transform-origin:center;animation:sundip 7s ease-in-out infinite alternate}
+.horizon .edge{stroke:var(--orange);fill:none;stroke-width:1.2}
+.sun-grid{display:grid;gap:14px;margin:0 0 20px}
+.sun-grid article{padding:0 0 12px;border-bottom:1px solid var(--line)}
+.sun-grid h3{margin:0;font-size:18px}
+.sun-grid p{margin:4px 0 0;font-size:14px;color:var(--soft)}
+.when{font:italic 400 16px/1 var(--latin);color:var(--orange)}
+
+.book .must-tag{color:var(--tile);font-size:13px}
+
+.foods{display:grid;gap:16px;margin:12px 0 24px}
+.foods h3{margin:0 0 4px;font-size:18px}
+.foods p,.foods li{font-size:14px;color:var(--soft)}
+.foods ul{margin:0;padding-left:1.1em}
+
+.tips{margin:8px 0 0;padding-left:1.15em;color:var(--soft);max-width:42em}
+.tips li{margin:0 0 8px}
+
+.note{font-size:13px;color:var(--soft);max-width:42em}
+
+footer{margin:40px 0 0;padding:18px 0 calc(28px + env(safe-area-inset-bottom));border-top:1px solid var(--line);font-size:13px;color:var(--soft)}
+footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay)}
+
+@media (min-width:640px){
+  .facts{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .sun-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:1023px){
+  .main{display:flex;flex-direction:column}
+  .mapbox{order:-1;position:sticky;top:var(--nav-h);z-index:4;margin:0 0 8px}
+  .coast-canvas{height:38vh;min-height:220px}
+  html{scroll-padding-top:calc(var(--nav-h) + 38vh + 12px)}
+}
+@media (max-width:639px){
+  .map-tools button{min-width:32px;min-height:32px;padding:3px 8px}
+}
+@media (min-width:1024px){
+  .wrap{width:min(1280px, calc(100% - 48px))}
+  .main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);column-gap:32px;align-items:start;margin-top:20px}
+  .days{min-width:0}
+  .mapbox{position:sticky;top:calc(var(--nav-h) + 10px);z-index:4;margin:0;align-self:start;height:calc(100vh - var(--nav-h) - 20px);max-height:calc(100vh - var(--nav-h) - 20px)}
+  .coast-canvas{height:auto;min-height:0}
+  .tl li{grid-template-columns:6.2rem minmax(0,1fr)}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#days">跳到日程</a>
+<div class="sky" aria-hidden="true"><i class="sun"></i><i class="haze bay"></i><i class="haze gold"></i></div>
+
+<div class="hero-band">
+  <div class="foam" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="wrap">
+  <header class="hero">
+    <div class="top">
+      <a href="../index.html">世界探索计划</a>
+      <span class="no" translate="no">No. 05</span>
+    </div>
+    <div class="cd" id="cd">
+      <p class="cd-label" id="cd-label">距 G3010 出发 · 10.1 武汉 07:02</p>
+      <p class="cd-units" id="cd-units">
+        <span><b id="cd-d">--</b><i>天</i></span>
+        <span><b id="cd-h">--</b><i>时</i></span>
+        <span><b id="cd-m">--</b><i>分</i></span>
+        <span><b id="cd-s">--</b><i>秒</i></span>
+      </p>
+    </div>
+    <h1>青岛</h1>
+    <p class="sub">去青岛，哈啤酒，吃嘎啦！</p>
+    <svg class="tide" viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true">
+      <g class="tide-surge">
+      <g class="tide-run">
+        <path class="t-bay" d="M0 11c20-8 20 8 40 0s20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0 20 8 40 0"/>
+        <path class="t-sun" d="M0 15c20-6 20 6 40 0s20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0 20 6 40 0"/>
+      </g>
+      </g>
+    </svg>
+  </header>
+
+  <ul class="facts">
+    <li><b class="num" translate="no">G3010</b><span>10.1 武汉 07:02 开，青岛站 14:57 到</span></li>
+    <li><b>埠西四晚</b><span>山海信居 LOFT，地铁 4 号线埠西站。不是海景房</span></li>
+    <li><b class="num">1 + 2</b><span>石老人日出一次，小麦岛与情人坝两场日落</span></li>
+    <li><b class="must">两场要约</b><span>海军博物馆提前 7 天；啤酒博物馆提前 1–3 天</span></li>
+  </ul>
+</div>
+</div>
+
+<nav class="daynav" aria-label="五日导航">
+  <div class="wrap">
+    <div class="row">
+      <a href="#day-1">1<span>抵达</span></a>
+      <a href="#day-2">2<span>日出</span></a>
+      <a href="#day-3">3<span>citywalk</span></a>
+      <a href="#day-4">4<span>啤酒</span></a>
+      <a href="#day-5">5<span>返程</span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap main">
+  <div class="days" id="days">
+    <article class="day" id="day-1" data-day="1">
+      <div class="day-head">
+        <span class="day-n" aria-hidden="true">1</span>
+        <h2>10.1 抵达，老城慢逛</h2>
+        <span class="pace">松</span>
+      </div>
+      <p class="theme">到站适应。放行李，再去栈桥看青岛湾日落。不安排高强度景点。</p>
+      <ol class="tl">
+        <li>
+          <time datetime="2026-10-01T07:02" class="num" translate="no">07:02</time>
+          <div>
+            <h3>武汉站出发</h3>
+            <p>G3010，全程 7 小时 55 分。到的是青岛站，不是青岛北，也不是青岛西。</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-01T14:57" class="num" translate="no">14:57</time>
+          <div>
+            <h3>抵达青岛站</h3>
+            <p>市南区泰安路 2 号。出站就是老城。</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-01T15:20" class="num" translate="no">15:20</time>
+          <div>
+            <h3>去酒店入住、休整</h3>
+            <p>打车约 15.0 km / 21 分钟。地铁 1 号线转 4 号线到埠西，约 46 分钟。</p>
+            <p class="how">推荐打车</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-01T16:00" class="num" translate="no">16:00</time>
+          <div>
+            <h3>栈桥</h3>
+            <p>免费，全天开放。走到回澜阁，沿海边约 1 小时。礁石湿滑，人多看脚下。</p>
+          </div>
+        </li>
+        <li class="sun">
+          <time datetime="2026-10-01T17:30" class="num" translate="no">17:30</time>
+          <div>
+            <h3>小青岛 / 琴屿路看日落</h3>
+            <p>今日日落约 17:45。免费，4–10 月 06:30–20:00。隔海看栈桥与老城，人比栈桥少。可只看日落，有精力再闲逛。</p>
+          </div>
+        </li>
+        <li>
+          <time>晚饭</time>
+          <div>
+            <h3>中山路 / 老城区</h3>
+            <p>海鲜水饺、辣炒蛤蜊、鲅鱼饺子、海菜凉粉。可选民国海鲜饺子楼、海萍馄饨、排骨米饭。避开栈桥拉客海鲜档，点餐先问单价、称重、加工费。</p>
+          </div>
+        </li>
+        <li>
+          <time>饭后</time>
+          <div>
+            <h3>中山路步行街</h3>
+            <p>圣弥厄尔教堂看外观即可。门票 10 元，08:30–17:00，来得及再进。</p>
+          </div>
+        </li>
+        <li>
+          <time>晚</time>
+          <div>
+            <h3>回酒店</h3>
+            <p>打车约 15.5 km / 23 分钟。</p>
+            <p class="how">推荐打车</p>
+          </div>
+        </li>
+      </ol>
+      <p class="opt">青岛站距栈桥只有 800 米。若行李能暂存，也可先看栈桥 / 日落再回酒店，少穿一次城。按原计划先入住再回老城也成立，预留打车时间即可。</p>
+    </article>
+
+    <article class="day" id="day-2" data-day="2">
+      <div class="day-head">
+        <span class="day-n" aria-hidden="true">2</span>
+        <h2>10.2 海上日出，海军博物馆</h2>
+        <span class="pace">中 · 早起</span>
+      </div>
+      <p class="theme">东线海边慢走，下午海军博物馆。午休必须留。今日不追日落。</p>
+      <ol class="tl">
+        <li class="sun">
+          <time datetime="2026-10-02T05:20" class="num" translate="no">05:20</time>
+          <div>
+            <h3>出发去石老人海水浴场</h3>
+            <p>打车 5.4 km / 约 14 分钟。05:00 公交有，约 34 分钟还要走路，早起不合适。</p>
+            <p class="how">必须打车</p>
+          </div>
+        </li>
+        <li class="sun">
+          <time datetime="2026-10-02T05:30" class="num" translate="no">05:30</time>
+          <div>
+            <h3>看海上日出</h3>
+            <p>免费全天。日出约 05:55。开阔无遮挡。10 月可能海雾，雾大可放弃，不要硬起。</p>
+          </div>
+        </li>
+        <li>
+          <time>日出后</time>
+          <div>
+            <h3>海边走到青岛雕塑园</h3>
+            <p>约 2.5 km。打车 13 分钟，更建议沿沙滩 / 木栈道走 1–1.5 小时。人少，拍照散步。</p>
+            <p class="how">推荐步行沿海</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-02T09:30" class="num" translate="no">09:30–11:00</time>
+          <div>
+            <h3>二选一，不要全上</h3>
+            <p>轻松：雕塑园附近继续放空，再回酒店。想多逛：顺路海之恋公园滨海步道。</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-02T11:30" class="num" translate="no">11:30</time>
+          <div>
+            <h3>回酒店午休</h3>
+            <p>雕塑园回酒店打车约 7 km / 22 分钟。午休 1.5–2 小时。</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-02T14:00" class="num" translate="no">14:00</time>
+          <div>
+            <h3>海军博物馆</h3>
+            <p>免费，须提前 7 天预约。游玩 3–4 小时。16:00 停止入馆。</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-02T17:30" class="num" translate="no">17:30</time>
+          <div>
+            <h3>3 号门出馆</h3>
+            <p>可选短逛琴屿路 / 鲁迅公园，不强制。不要再加收费大景点。</p>
+          </div>
+        </li>
+        <li>
+          <time>晚饭</time>
+          <div>
+            <h3>老城区海鲜，袋装原浆</h3>
+            <p>吃完打车回酒店，约 16.5 km / 29 分钟。</p>
+          </div>
+        </li>
+      </ol>
+      <div class="panel">
+        <h3>海军博物馆</h3>
+        <dl class="kv">
+          <dt>地址</dt><dd>市南区莱阳路 8 号（高德常作琴屿路 22 号，同一园区）</dd>
+          <dt>门票</dt><dd>免费</dd>
+          <dt>预约</dt><dd class="must">必须提前 7 天实名约。国庆极难，现场基本无票。公众号 / 小程序搜「海军博物馆」</dd>
+          <dt>证件</dt><dd class="must">实体身份证。不接受电子身份证</dd>
+          <dt>动线</dt><dd>4 号门进：核潜艇（抢到才参观），再海上舰艇，再陆上武器，再室内展厅。3 号门出，出门即琴屿路</dd>
+          <dt>注意</dt><dd>露天区域大，带外套。登舰台阶多，穿防滑鞋</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="day" id="day-3" data-day="3">
+      <div class="day-head">
+        <span class="day-n" aria-hidden="true">3</span>
+        <h2>10.3 洋房，滨海慢走</h2>
+        <span class="pace">松</span>
+      </div>
+      <p class="theme">八大关到小麦岛，几乎全是平路。核心日落：小麦岛橘子海。</p>
+      <ol class="tl">
+        <li>
+          <time>上午</time>
+          <div>
+            <h3>自然醒，去八大关</h3>
+            <p>酒店打车 18.0 km / 约 30 分钟。地铁 4 转 3 约 45 分钟。国庆去八大关更建议打车。</p>
+            <p class="how">推荐打车</p>
+          </div>
+        </li>
+        <li>
+          <time>2–3 小时</time>
+          <div>
+            <h3>八大关慢走</h3>
+            <p>免费全天。重点走嘉峪关路、居庸关路、第二海水浴场海边，走到花石楼。花石楼可选进入，8.5 元，08:30–17:30。</p>
+          </div>
+        </li>
+        <li>
+          <time>午餐</time>
+          <div>
+            <h3>八大关 / 太平角</h3>
+            <p>家常菜、海鲜锅贴。</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-03T13:30" class="num" translate="no">13:30</time>
+          <div>
+            <h3>回酒店午休</h3>
+            <p>原路打车约 30 分钟。</p>
+          </div>
+        </li>
+        <li>
+          <time>下午</time>
+          <div>
+            <h3>燕儿岛山公园滨海步道</h3>
+            <p>免费。人少，礁石海崖。酒店打车 8.8 km / 24 分钟。</p>
+            <p class="how">推荐打车</p>
+          </div>
+        </li>
+        <li class="sun">
+          <time datetime="2026-10-03T16:30" class="num" translate="no">16:30</time>
+          <div>
+            <h3>上小麦岛等日落</h3>
+            <p>燕儿岛过去 3.1 km / 打车 18 分钟，或沿海继续走。国庆会挤，16:30 到场合理。</p>
+          </div>
+        </li>
+        <li class="sun">
+          <time datetime="2026-10-03T17:40" class="num" translate="no">17:40</time>
+          <div>
+            <h3>日落与蓝调</h3>
+            <p>草坪缓坡，面朝西侧海湾。提前占靠海位置。日落后蓝调也值得留。</p>
+          </div>
+        </li>
+        <li>
+          <time>晚饭</time>
+          <div>
+            <h3>麦岛 / 万象城 / 台东</h3>
+            <p>想吃小吃夜市可去台东步行街。回酒店打车约 8.6 km / 23 分钟。</p>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="day-4" data-day="4">
+      <div class="day-head">
+        <span class="day-n" aria-hidden="true">4</span>
+        <h2>10.4 红瓦，啤酒，城市海景</h2>
+        <span class="pace">中</span>
+      </div>
+      <p class="theme">小鱼山俯瞰老城，下午啤酒博物馆，傍晚情人坝看帆船与灯光秀。和小麦岛的自然日落完全不同。</p>
+      <ol class="tl">
+        <li>
+          <time>上午</time>
+          <div>
+            <h3>小鱼山公园</h3>
+            <p>酒店打车 13.0 km / 28 分钟。免费，07:30–18:00。山顶小平台，无陡坡，俯瞰第一海水浴场和红瓦绿树，人比信号山少。</p>
+            <p class="how">推荐打车去，山上下步行</p>
+          </div>
+        </li>
+        <li>
+          <time>上午</time>
+          <div>
+            <h3>大学路 / 鱼山路 / 龙江路</h3>
+            <p>网红转角、漫画街。慢逛老街、小店、咖啡。</p>
+          </div>
+        </li>
+        <li>
+          <time>顺路</time>
+          <div>
+            <h3>鲁迅公园</h3>
+            <p>免费，礁石临海。若 Day2 已去，可跳过。</p>
+          </div>
+        </li>
+        <li>
+          <time>午餐</time>
+          <div>
+            <h3>老城区</h3>
+            <p>小青青馄饨、西镇臭豆腐加电烤肉、咖啡馆。店名只是可选，不是必打卡。</p>
+          </div>
+        </li>
+        <li>
+          <time>午后</time>
+          <div>
+            <h3>回酒店午休</h3>
+            <p>可选。若不想折返，可从老城直接去啤酒博物馆。</p>
+          </div>
+        </li>
+        <li>
+          <time>下午</time>
+          <div>
+            <h3>青岛啤酒博物馆</h3>
+            <p>60 元，约 1.5–2 小时，含原浆和啤酒豆。登州路啤酒街可顺逛。</p>
+          </div>
+        </li>
+        <li class="sun">
+          <time>傍晚</time>
+          <div>
+            <h3>奥帆中心到情人坝</h3>
+            <p>啤酒博物馆过去打车 7.6 km / 29 分钟。地铁要走很久，不要坐。日落约 17:41。</p>
+            <p class="how">必须打车</p>
+          </div>
+        </li>
+        <li>
+          <time datetime="2026-10-04T18:40" class="num" translate="no">18:40–20:00</time>
+          <div>
+            <h3>浮山湾国庆灯光秀</h3>
+            <p>日落后留到 19:00 前后。晚饭在奥帆周边：海鲜、啤酒配烧烤。</p>
+          </div>
+        </li>
+      </ol>
+      <div class="panel">
+        <h3>青岛啤酒博物馆</h3>
+        <dl class="kv">
+          <dt>地址</dt><dd>市北区登州路 56-1</dd>
+          <dt>门票</dt><dd>60 元，含原浆啤酒和啤酒豆</dd>
+          <dt>预约</dt><dd>国庆提前 1–3 天线上约。公众号「青岛啤酒博物馆」或美团 / 携程。约满现场无票</dd>
+          <dt>开放</dt><dd>攻略按 08:30–17:30，16:00 停止入场</dd>
+        </dl>
+        <p class="note">9–10 月官网有时写 08:00–18:30、17:30 停入。出发前以公众号为准。</p>
+      </div>
+    </article>
+
+    <article class="day" id="day-5" data-day="5">
+      <div class="day-head">
+        <span class="day-n" aria-hidden="true">5</span>
+        <h2>10.5 返程</h2>
+        <span class="pace">松</span>
+      </div>
+      <p class="theme">无早起。按出票后的车次离开。优先青岛站直达武汉，不要买青岛北或青岛西。</p>
+      <div class="empty">
+        <h3>返程车次待填</h3>
+        <p>票还没买。出票后把车次、发车时间写在这里。</p>
+        <p>去青岛站：打车约 14 km / 26 分钟；地铁 4 转 1 约 45 分钟。国庆提前 90 分钟出门更稳。</p>
+        <p>上午可到利群 / 海信超市买海鲜干货、啤酒、脂渣。不要在景区买。</p>
+      </div>
+    </article>
+  </div>
+
+  <aside class="mapbox" id="coast" aria-label="青岛行程地图">
+    <div class="map-tools">
+      <button type="button" id="zoom-reset">全程</button>
+      <button type="button" id="zoom-in" aria-label="放大">+</button>
+      <button type="button" id="zoom-out" aria-label="缩小">−</button>
+      <span class="map-caption" id="map-caption">前海一线</span>
+    </div>
+    <div class="coast-canvas" id="shore-wrap">
+      <div id="map" role="img" aria-label="青岛行程地图"></div>
+      <div class="pop" id="pop" hidden>
+        <strong id="pop-name"></strong>
+        <p id="pop-meta"></p>
+        <div class="pop-row">
+          <a id="pop-day" href="#day-1">看这天</a>
+          <a id="pop-gd" href="#" target="_blank" rel="noopener">在高德打开</a>
+        </div>
+      </div>
+    </div>
+    <ol class="coast-today" id="coast-today"></ol>
+    <p class="coast-note">底图是高德地图。连线是高德规划的步行或驾车路线。酒店在埠西，不在海边。</p>
+  </aside>
+</div>
+
+<div class="wrap after">
+    <section class="sunbox" id="sun" aria-labelledby="sun-h">
+      <h2 id="sun-h">日出日落</h2>
+      <svg class="horizon" viewBox="0 0 400 28" aria-hidden="true">
+        <path class="sea" d="M0 22c40-10 80 6 120-4s80 8 120-2 80 6 120-6 40 4 40 4V28H0z"/>
+        <circle class="disk" cx="292" cy="14" r="7"/>
+        <path class="edge" d="M0 22c40-10 80 6 120-4s80 8 120-2 80 6 120-6 40 4 40 4"/>
+      </svg>
+      <div class="sun-grid">
+        <article>
+          <p class="when">Day2 日出</p>
+          <h3>石老人海水浴场</h3>
+          <p>开阔海上日出。05:30 前到。雾大可取消。</p>
+        </article>
+        <article>
+          <p class="when">Day3 日落 1</p>
+          <h3>小麦岛公园</h3>
+          <p>草坪加橘子海，最松弛。16:30 占靠海位置。</p>
+        </article>
+        <article>
+          <p class="when">Day4 日落 2</p>
+          <h3>奥帆中心情人坝</h3>
+          <p>帆船、城市天际线、灯光秀。</p>
+        </article>
+        <article>
+          <p class="when">Day1 抵达夜</p>
+          <h3>小青岛 / 琴屿路</h3>
+          <p>青岛湾，隔海看栈桥。</p>
+        </article>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>日期</th><th class="num">日出</th><th class="num">日落</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>10.1</td><td class="num">05:54</td><td class="num">17:45</td></tr>
+            <tr><td>10.2</td><td class="num">05:55</td><td class="num">17:43</td></tr>
+            <tr><td>10.3</td><td class="num">05:56</td><td class="num">17:42</td></tr>
+            <tr><td>10.4</td><td class="num">05:57</td><td class="num">17:41</td></tr>
+            <tr><td>10.5</td><td class="num">05:57</td><td class="num">17:39</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">看日落提前 30 分钟。不要连续两天 5 点起床。不要把小麦岛并进 Day2。备选（不进主线）：信号山 / 小鱼山俯瞰红瓦。</p>
+    </section>
+
+    <section id="book" aria-labelledby="book-h">
+      <h2 id="book-h">预约清单</h2>
+      <ol class="books">
+        <li>
+          <h3>海军博物馆</h3>
+          <p class="meta">免费 · Day2 14:00</p>
+          <p class="must">提前 7 天，准点蹲。公众号 / 小程序「海军博物馆」</p>
+          <p class="how">入场：实体身份证；4 号门进 3 号门出；16:00 停入；核潜艇单独抢</p>
+        </li>
+        <li>
+          <h3>青岛啤酒博物馆</h3>
+          <p class="meta">60 元 · Day4 下午</p>
+          <p>提前 1–3 天。公众号或美团 / 携程</p>
+          <p class="how">入场：分时入场，约满现场无票</p>
+        </li>
+      </ol>
+      <p class="note">免预约：栈桥、八大关、信号山、小鱼山、小麦岛、情人坝、石老人、小青岛、圣弥厄尔教堂、雕塑园、燕儿岛、鲁迅公园。</p>
+    </section>
+
+    <section id="food" aria-labelledby="food-h">
+      <h2 id="food-h">吃</h2>
+      <div class="foods">
+        <div>
+          <h3>必吃类型</h3>
+          <p>海鲜：辣炒蛤蜊、鲅鱼水饺、墨鱼水饺、海肠捞饭、清蒸海鲜、大虾或墨鱼锅贴。小吃：排骨米饭（万和春）、海菜凉粉、海鲜馄饨、西镇电烤肉、脂渣、袋装原浆啤酒。</p>
+        </div>
+        <div>
+          <h3>按片区</h3>
+          <ul>
+            <li>老城 / 中山路 · Day1、Day2 晚、Day4 午：饺子、馄饨、锅贴、排骨米饭</li>
+            <li>八大关 / 太平角 · Day3 午：家常菜、海鲜锅贴</li>
+            <li>麦岛 / 万象城 / 台东 · Day3 晚：夜市、炸串、烤猪蹄、戳子肉</li>
+            <li>登州路 · Day4 下午：啤酒菜、原浆</li>
+            <li>奥帆 / 五四广场 · Day4 晚：海景海鲜、啤酒烧烤</li>
+          </ul>
+        </div>
+        <div>
+          <h3>避坑</h3>
+          <p>不吃景区拉客海鲜、栈桥天价海鲜。点餐确认单价、称重、加工费。海鲜加冰啤酒备肠胃药，不要空腹猛吃生冷海鲜。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ride" aria-labelledby="ride-h">
+      <h2 id="ride-h">怎么走</h2>
+      <p class="note">下载「青岛地铁」APP。早起、赶日落、跨区回酒店打车。老城内部步行。不自驾进市南老城。酒店在 4 号线埠西，往西去老城是 4 号线往人民会堂方向。</p>
+      <p class="note">下面是高德平时路况。国庆沿海路和八大关周边会堵，预留 1.3–1.8 倍。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>从酒店</th><th class="num">打车</th><th>地铁 / 公交</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>青岛站</td><td class="num">14–15 km / 21–26 分</td><td>约 45 分</td></tr>
+            <tr><td>栈桥</td><td class="num">15.5 km / 23 分</td><td>约 47 分</td></tr>
+            <tr><td>石老人</td><td class="num">5.4 km / 14 分</td><td>公交约 34 分</td></tr>
+            <tr><td>雕塑园</td><td class="num">7.1 km / 22 分</td><td>约 64 分</td></tr>
+            <tr><td>八大关</td><td class="num">18.0 km / 30 分</td><td>约 45 分</td></tr>
+            <tr><td>海军博物馆</td><td class="num">16.5 km / 29 分</td><td>约 47 分</td></tr>
+            <tr><td>啤酒博物馆</td><td class="num">8.7 km / 20 分</td><td>约 46 分</td></tr>
+            <tr><td>小麦岛</td><td class="num">9.2 km / 29 分</td><td>约 64 分</td></tr>
+            <tr><td>燕儿岛</td><td class="num">8.8 km / 24 分</td><td>约 61 分</td></tr>
+            <tr><td>情人坝</td><td class="num">9.3 km / 29 分</td><td>约 75 分</td></tr>
+            <tr><td>小鱼山</td><td class="num">13.0 km / 28 分</td><td>约 49 分</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">住宿：山海信居 LOFT 酒店（国信体育馆店），市北区浮山新区街道辽阳路 7 号 2 号 3 楼 332。地标是埠西站，近国信体育馆 / 丽达茂。去石老人近，去栈桥、八大关、海军博物馆要往西穿城。</p>
+    </section>
+
+    <section aria-labelledby="tips-h">
+      <h2 id="tips-h">临走前</h2>
+      <ol class="tips">
+        <li>海军博物馆、啤酒博物馆按规则提前约，现场基本无票。</li>
+        <li>海边风大，日出日落必须带外套。礁石防滑，看潮汐。</li>
+        <li>每天留午休是设计，不是浪费。不要把 Day3 小麦岛并进 Day2。</li>
+        <li>不连续早起看两个日出。</li>
+        <li>不加黄岛金沙滩。</li>
+        <li>穿衣：长袖、长裤、防风薄外套、防滑运动鞋。老城多坡道台阶。不适合下海，只散步踩水。</li>
+      </ol>
+      <p class="note">装备：实体身份证、充电宝与线、耳机、相机支架、替换袜、洗漱、防晒、帽子、墨镜、雨具、保温杯、纸巾、湿巾、肠胃药。</p>
+    </section>
+
+    <footer>
+      <a href="../index.html">回地球仪</a>
+      <span>　2026.10.01–10.05　市内打车加地铁</span>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const start = new Date("2026-10-01T07:02:00+08:00");
+  const end = new Date("2026-10-05T23:59:59+08:00");
+  const pad = n => String(n).padStart(2, "0");
+  const box = document.getElementById("cd");
+  const lab = document.getElementById("cd-label");
+  const units = document.getElementById("cd-units");
+  function tick(){
+    const now = new Date();
+    if (now < start) {
+      let t = Math.floor((start - now) / 1000);
+      document.getElementById("cd-d").textContent = Math.floor(t / 86400); t %= 86400;
+      document.getElementById("cd-h").textContent = pad(Math.floor(t / 3600)); t %= 3600;
+      document.getElementById("cd-m").textContent = pad(Math.floor(t / 60));
+      document.getElementById("cd-s").textContent = pad(t % 60);
+    } else if (now <= end) {
+      box.classList.add("live");
+      const day = Math.floor((now - start) / 864e5) + 1;
+      lab.textContent = "已经出发，旅途中";
+      units.innerHTML = "<span><i>第</i><b>" + day + "</b><i>天</i></span>";
+      return clearInterval(timer);
+    } else {
+      lab.textContent = "旅程已结束";
+      units.innerHTML = "";
+      return clearInterval(timer);
+    }
+  }
+  const timer = setInterval(tick, 1000);
+  tick();
+})();
+
+(function(){
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const root = document.documentElement;
+  const lines = Array.from(document.querySelectorAll(".tl"));
+  let surge = 0, scroll = 0, lastY = window.scrollY, raf = 0;
+
+  function clamp(n, a, b){ return n < a ? a : n > b ? b : n; }
+
+  function paint(){
+    raf = 0;
+    const max = Math.max(1, root.scrollHeight - innerHeight);
+    const target = window.scrollY / max;
+    scroll += (target - scroll) * 0.14;
+    const dy = window.scrollY - lastY;
+    lastY = window.scrollY;
+    surge += dy * 0.01;
+    surge *= 0.86;
+    surge = clamp(surge, -1.6, 1.6);
+    root.style.setProperty("--scroll", scroll.toFixed(4));
+    root.style.setProperty("--surge", surge.toFixed(4));
+    const mark = innerHeight * 0.62;
+    for (let i = 0; i < lines.length; i++){
+      const r = lines[i].getBoundingClientRect();
+      const p = (mark - r.top) / Math.max(1, r.height);
+      lines[i].style.setProperty("--tl", clamp(p, 0, 1).toFixed(3));
+    }
+    if (Math.abs(surge) > 0.002 || Math.abs(target - scroll) > 0.001) kick();
+  }
+  function kick(){
+    if (!raf) raf = requestAnimationFrame(paint);
+  }
+
+  addEventListener("scroll", kick, {passive: true});
+  addEventListener("wheel", function(e){
+    surge += clamp(e.deltaY, -90, 90) * 0.018;
+    kick();
+  }, {passive: true});
+  addEventListener("touchmove", kick, {passive: true});
+  kick();
+})();
+
+(function(){
+  const pins = [
+    {id:"station", name:"青岛站", lng:120.312786, lat:36.064812, days:[1,5], keep:true, blurb:"去程抵达、返程出发"},
+    {id:"zhanqiao", name:"栈桥", lng:120.319300, lat:36.061736, days:[1], keep:true, blurb:"Day1 下午，免费"},
+    {id:"xiaoqd", name:"小青岛", lng:120.323783, lat:36.053098, days:[1], sun:true, blurb:"Day1 日落 17:45"},
+    {id:"navy", name:"海军馆", lng:120.327714, lat:36.054786, days:[2], must:true, blurb:"Day2 14:00，提前 7 天约"},
+    {id:"xiaoyu", name:"小鱼山", lng:120.336558, lat:36.058765, days:[4], blurb:"Day4 上午，红瓦俯瞰"},
+    {id:"beer", name:"啤酒馆", lng:120.347318, lat:36.079106, days:[4], inland:true, blurb:"Day4 下午，60 元需预约"},
+    {id:"badaguan", name:"八大关", lng:120.350903, lat:36.053625, days:[3], keep:true, blurb:"Day3 上午，免费慢走"},
+    {id:"qingren", name:"情人坝", lng:120.390288, lat:36.052388, days:[4], sun:true, blurb:"Day4 日落 + 灯光秀"},
+    {id:"yaner", name:"燕儿岛", lng:120.405710, lat:36.055267, days:[3], blurb:"Day3 下午，滨海步道"},
+    {id:"hotel", name:"酒店", lng:120.424979, lat:36.106199, days:[1,2,3,4,5], inland:true, hotel:true, keep:true, blurb:"埠西，四晚同住，不是海景"},
+    {id:"xiaomai", name:"小麦岛", lng:120.431045, lat:36.054245, days:[3], sun:true, keep:true, blurb:"Day3 橘子海日落"},
+    {id:"diaosu", name:"雕塑园", lng:120.454678, lat:36.079683, days:[2], blurb:"Day2 日出后沿海走来"},
+    {id:"shilao", name:"石老人", lng:120.468010, lat:36.091680, days:[2], sun:true, keep:true, blurb:"Day2 05:30 日出"}
+  ];
+  const dayOrder = {
+    1:["station","zhanqiao","xiaoqd"],
+    2:["shilao","diaosu","navy"],
+    3:["badaguan","yaner","xiaomai"],
+    4:["xiaoyu","beer","qingren"],
+    5:["hotel","station"]
+  };
+  const dayPlaces = {
+    1: [["栈桥","16:00"],["小青岛","17:30 日落"]],
+    2: [["石老人","05:30 日出"],["雕塑园","步行"],["海军馆","14:00"]],
+    3: [["八大关","上午"],["燕儿岛","下午"],["小麦岛","17:40 日落"]],
+    4: [["小鱼山","上午"],["啤酒馆","下午"],["情人坝","傍晚"]],
+    5: [["酒店","埠西"],["青岛站","按车票"]]
+  };
+
+  const dayRoutes = {"1":[[36.064848,120.313668],[36.063403,120.313724],[36.063503,120.313989],[36.063073,120.314023],[36.063099,120.314753],[36.062214,120.315208],[36.062244,120.319132],[36.061749,120.319336],[36.061745,120.319336],[36.062244,120.319132],[36.0625,120.320087],[36.061068,120.327799],[36.059388,120.330117],[36.058277,120.330126],[36.055516,120.330729],[36.055017,120.331189],[36.055009,120.33194],[36.054549,120.332062],[36.054089,120.330586],[36.053637,120.33023],[36.053151,120.328971],[36.053277,120.32829],[36.052721,120.324193],[36.052938,120.324062],[36.052925,120.323837]],"2":[[36.091671,120.467999],[36.091866,120.467886],[36.092114,120.468281],[36.09227,120.468164],[36.090091,120.464505],[36.08885,120.460968],[36.088555,120.460812],[36.086953,120.461016],[36.086168,120.460816],[36.080977,120.454844],[36.080152,120.454184],[36.079674,120.454679],[36.079528,120.45511],[36.078082,120.454251],[36.077578,120.453618],[36.077095,120.452492],[36.077336,120.452492],[36.077454,120.452116],[36.079782,120.453827],[36.077154,120.451692],[36.074847,120.447808],[36.071355,120.445405],[36.071205,120.444858],[36.071323,120.444284],[36.074155,120.439038],[36.071226,120.433684],[36.066216,120.423277],[36.066242,120.422644],[36.066908,120.42178],[36.074611,120.413433],[36.075984,120.410499],[36.080072,120.405231],[36.08041,120.403756],[36.080431,120.394454],[36.082915,120.385238],[36.082808,120.379444],[36.082583,120.37783],[36.079358,120.37025],[36.077846,120.362799],[36.076746,120.349296],[36.074783,120.338374],[36.074214,120.33404],[36.072717,120.332591],[36.070716,120.331106],[36.070255,120.330349],[36.069134,120.329314],[36.063313,120.326642],[36.061361,120.326111],[36.060942,120.328091],[36.059515,120.330006],[36.055514,120.33073],[36.055015,120.331191],[36.055009,120.331942],[36.054628,120.332103],[36.054087,120.330585],[36.053636,120.330226],[36.053148,120.328879],[36.053277,120.328289],[36.05483,120.328061]],"3":[[36.053619,120.350902],[36.05355,120.357949],[36.054688,120.361103],[36.05479,120.36399],[36.055718,120.366232],[36.054564,120.367321],[36.059478,120.376456],[36.062723,120.383784],[36.063506,120.394062],[36.063442,120.395012],[36.061919,120.396149],[36.061286,120.396879],[36.060213,120.398981],[36.057552,120.403321],[36.057069,120.404754],[36.057032,120.406299],[36.05679,120.406524],[36.05627,120.405843],[36.055798,120.40573],[36.055573,120.406084],[36.055162,120.405832],[36.055161,120.405829],[36.055573,120.406081],[36.055794,120.405729],[36.056267,120.405842],[36.056788,120.406523],[36.057031,120.406298],[36.057652,120.40885],[36.059336,120.410977],[36.059679,120.411827],[36.059683,120.415117],[36.058633,120.418837],[36.058498,120.420217],[36.059197,120.425308],[36.059562,120.426094],[36.060564,120.427378],[36.058876,120.429197],[36.056897,120.430122],[36.055738,120.430326],[36.054423,120.431181],[36.05428,120.431007]],"4":[[36.059011,120.336089],[36.059167,120.336025],[36.059698,120.336604],[36.059596,120.335166],[36.05987,120.335081],[36.061028,120.336926],[36.060819,120.33823],[36.061023,120.339308],[36.062321,120.341008],[36.063362,120.341577],[36.064998,120.341239],[36.064724,120.342081],[36.065014,120.343068],[36.064778,120.343186],[36.064327,120.342859],[36.063984,120.344184],[36.063689,120.344624],[36.064478,120.34508],[36.065996,120.346507],[36.067053,120.346877],[36.069354,120.346131],[36.071778,120.347279],[36.07378,120.347961],[36.076397,120.348095],[36.076982,120.353121],[36.07717,120.353497],[36.080721,120.351421],[36.079487,120.34965],[36.078925,120.347368],[36.07879,120.346625],[36.078656,120.346636],[36.077717,120.347054],[36.076397,120.348095],[36.076767,120.350562],[36.077513,120.360776],[36.07725,120.361473],[36.071988,120.366961],[36.06208,120.373104],[36.058963,120.375335],[36.062723,120.383784],[36.06334,120.391509],[36.062621,120.391756],[36.062117,120.39234],[36.05722,120.399245],[36.055401,120.397281],[36.054999,120.396235],[36.054328,120.39543],[36.053523,120.394813],[36.053363,120.394996],[36.05252,120.394486],[36.052654,120.393719],[36.051968,120.393515],[36.052465,120.390306]],"5":[[36.106296,120.424928],[36.107205,120.42744],[36.107371,120.427306],[36.10668,120.425331],[36.104684,120.413036],[36.10396,120.41147],[36.097485,120.400087],[36.09675,120.398086],[36.096305,120.393472],[36.09565,120.380131],[36.094819,120.362423],[36.094894,120.361178],[36.096771,120.356764],[36.099609,120.346458],[36.100269,120.345112],[36.102291,120.342816],[36.102501,120.342049],[36.10235,120.341014],[36.101873,120.340311],[36.101256,120.339887],[36.097399,120.338498],[36.094068,120.337763],[36.09255,120.336953],[36.091659,120.33574],[36.088816,120.329464],[36.088076,120.328246],[36.086906,120.326905],[36.083526,120.323955],[36.082958,120.323102],[36.082427,120.323488],[36.082239,120.32455],[36.081917,120.324615],[36.082132,120.322818],[36.081649,120.32183],[36.080925,120.321101],[36.077406,120.319551],[36.075587,120.319336],[36.073989,120.318826],[36.07099,120.314497],[36.069697,120.313601],[36.06922,120.313483],[36.068705,120.313714],[36.065738,120.313725],[36.065111,120.314015],[36.065062,120.313655],[36.064849,120.313669]]};
+
+  const wrap = document.getElementById("shore-wrap");
+  const todayBox = document.getElementById("coast-today");
+  const caption = document.getElementById("map-caption");
+  const pop = document.getElementById("pop");
+  const popName = document.getElementById("pop-name");
+  const popMeta = document.getElementById("pop-meta");
+  const popDay = document.getElementById("pop-day");
+  const popGd = document.getElementById("pop-gd");
+  const navLinks = Array.from(document.querySelectorAll(".daynav a"));
+  const dayEls = Array.from(document.querySelectorAll(".day"));
+  let current = 1, lastFit = null, markers = {}, lines = {};
+
+  function closePop(){ pop.hidden = true; }
+  function openPop(p){
+    popName.textContent = p.name;
+    popMeta.textContent = "Day " + p.days.join(" / ") + "　" + (p.blurb || "");
+    popDay.href = "#day-" + p.days[0];
+    popGd.href = "https://uri.amap.com/marker?position=" + p.lng + "," + p.lat + "&name=" + encodeURIComponent("青岛" + p.name);
+    pop.hidden = false;
+  }
+  popDay.addEventListener("click", closePop);
+
+  function pinClass(p, on){
+    return "qd-pin"
+      + (p.hotel ? " hotel" : "")
+      + (p.must ? " must" : "")
+      + (p.sun ? " sun" : "")
+      + (on ? " on" : " dim")
+      + ((!on && !p.keep) ? " hide-name" : "");
+  }
+  function pinIcon(p, on){
+    const label = p.hotel ? "住 · 酒店" : p.name;
+    return L.divIcon({
+      className: pinClass(p, on),
+      html: "<i></i><b>" + label + "</b>",
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+  }
+
+  const map = L.map("map", {
+    zoomControl: false,
+    attributionControl: true,
+    minZoom: 11,
+    maxZoom: 18
+  }).setView([36.072, 120.38], 13);
+  L.tileLayer("https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=7", {
+    subdomains: "1234",
+    maxZoom: 18,
+    attribution: "高德地图"
+  }).addTo(map);
+
+  const lineStyle = function(on){
+    return {
+      color: "#E06A2E",
+      weight: on ? 4.5 : 2.5,
+      opacity: on ? 0.92 : 0.22,
+      lineCap: "round",
+      lineJoin: "round"
+    };
+  };
+  [1,2,3,4,5].forEach(function(n){
+    const latlngs = dayRoutes[String(n)] || [];
+    if (latlngs.length < 2) return;
+    lines[n] = L.polyline(latlngs, lineStyle(false)).addTo(map);
+  });
+  pins.forEach(function(p){
+    const m = L.marker([p.lat, p.lng], {icon: pinIcon(p, false), zIndexOffset: p.hotel ? 200 : 0});
+    m.on("click", function(ev){
+      L.DomEvent.stop(ev);
+      openPop(p);
+      setDay(p.days[0], {fromMap: true});
+    });
+    m.addTo(map);
+    markers[p.id] = m;
+  });
+  map.on("click", closePop);
+
+  function focusIds(ids, animate){
+    lastFit = ids && ids.length ? ids : null;
+    const chosen = (ids && ids.length ? ids : pins.map(function(p){ return p.id; }))
+      .map(function(id){ return pins.find(function(p){ return p.id === id; }); })
+      .filter(Boolean);
+    if (!chosen.length) return;
+    const b = L.latLngBounds(chosen.map(function(p){ return [p.lat, p.lng]; }));
+    map.fitBounds(b, {
+      padding: [28, 28],
+      maxZoom: ids && ids.length ? 15 : 14,
+      animate: animate !== false,
+      duration: 0.4
+    });
+  }
+
+  function highlight(n, move){
+    current = n;
+    Object.keys(lines).forEach(function(k){
+      lines[k].setStyle(lineStyle(Number(k) === n));
+    });
+    pins.forEach(function(p){
+      const on = p.days.indexOf(n) !== -1;
+      markers[p.id].setIcon(pinIcon(p, on));
+      markers[p.id].setZIndexOffset(on ? (p.hotel ? 400 : 300) : 0);
+    });
+    todayBox.innerHTML = (dayPlaces[n] || []).map(function(row){
+      return "<li><b>" + row[0] + "</b><i>" + row[1] + "</i></li>";
+    }).join("");
+    if (move || lastFit) caption.textContent = n === 5 ? "返程" : ("Day " + n);
+    if (move) focusIds(dayOrder[n] || [], true);
+  }
+
+  function setDay(n, opts){
+    opts = opts || {};
+    navLinks.forEach(function(a, i){
+      const on = i + 1 === n;
+      a.classList.toggle("on", on);
+      if (on) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
+    });
+    highlight(n, !!opts.fit);
+  }
+
+  document.getElementById("zoom-in").addEventListener("click", function(){ map.zoomIn(); });
+  document.getElementById("zoom-out").addEventListener("click", function(){ map.zoomOut(); });
+  document.getElementById("zoom-reset").addEventListener("click", function(){
+    closePop();
+    focusIds(null, true);
+    caption.textContent = "全程";
+  });
+
+  const io = new IntersectionObserver(function(entries){
+    const vis = entries.filter(function(e){ return e.isIntersecting; }).sort(function(a, b){ return b.intersectionRatio - a.intersectionRatio; })[0];
+    if (!vis) return;
+    setDay(Number(vis.target.getAttribute("data-day")));
+  }, {rootMargin:"-40% 0px -45% 0px", threshold:[0.1, 0.3, 0.6]});
+  dayEls.forEach(function(d){ io.observe(d); });
+  navLinks.forEach(function(a){
+    a.addEventListener("click", function(){
+      const n = Number((a.getAttribute("href") || "").replace("#day-", ""));
+      if (n) setDay(n, {fit: true});
+    });
+  });
+
+  function boot(){
+    map.invalidateSize();
+    const params = new URLSearchParams(location.search);
+    const qDay = Number(params.get("day"));
+    const hash = location.hash;
+    if (qDay >= 1 && qDay <= 5) setDay(qDay, {fit: true});
+    else if (/^#day-[1-5]$/.test(hash)) setDay(Number(hash.slice(-1)), {fit: true});
+    else { setDay(1); focusIds(null, false); caption.textContent = "全程"; }
+  }
+  map.whenReady(function(){ requestAnimationFrame(boot); });
+  setTimeout(function(){ map.invalidateSize(); }, 300);
+  new ResizeObserver(function(){
+    map.invalidateSize();
+  }).observe(wrap);
+})();
+</script>
+</body>
+</html>
+

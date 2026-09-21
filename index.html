@@ -339,7 +339,7 @@ function railOnId(p){
   if (!p) return null;
   if (p.kind === "year" || p.kind === "month") return p.id;
   if (p.kind === "city" && p.date) return "m-" + p.date.slice(0, 7);
-  if (p.id === "qinggan") return "qinggan";
+  if (p.href) return p.id;
   if (p.id === "japan") return "m-2025-10";
   if (p.id === "xinjiang") return "m-2026-03";
   if (p.id === "xizang") return "m-2024-03";
@@ -389,7 +389,7 @@ function cityIsOn(d){
 }
 function asRailPlace(place){
   if (!place) return place;
-  if (place.kind === "month" || place.kind === "year" || place.id === "qinggan") return place;
+  if (place.kind === "month" || place.kind === "year" || place.href) return place;
   const id = railOnId(place);
   return (id && findPlace(id)) || place;
 }
@@ -475,12 +475,11 @@ function paintStatus(){
 }
 
 function renderRail(){
-  const qinggan = TRIPS.find(t => t.id === "qinggan");
   const onId = railOnId(active);
   const expand = (active.kind === "year" || active.kind === "month" || active.kind === "city") ? placeYear(active) : null;
-  const qBtn = qinggan
-    ? `<button type="button" data-id="qinggan" data-st="${qinggan.status}" class="${onId === "qinggan" ? "on" : ""}" aria-current="${onId === "qinggan" ? "true" : "false"}"><i class="dot"></i><span>${qinggan.short}</span></button>`
-    : "";
+  const tripBtns = TRIPS.filter(t => t.href).map(t =>
+    `<button type="button" data-id="${t.id}" data-st="${t.status}" class="${onId === t.id ? "on" : ""}" aria-current="${onId === t.id ? "true" : "false"}"><i class="dot"></i><span>${t.short}</span></button>`
+  ).join("");
   const years = YEARS.map(g => {
     const open = expand === g.key;
     const yearOn = onId === g.id;
@@ -490,7 +489,7 @@ function renderRail(){
       `<button type="button" class="month${onId === m.id ? " on" : ""}" data-id="${m.id}" data-st="done" aria-current="${onId === m.id ? "true" : "false"}"><i class="dot"></i><span>${m.key.slice(5)}</span><span class="n">${m.cities.length}</span></button>`
     ).join("");
   }).join("");
-  $("#rail").innerHTML = qBtn + years;
+  $("#rail").innerHTML = tripBtns + years;
   const on = $("#rail button.on");
   if (on) on.scrollIntoView({ block: "nearest", inline: "nearest" });
 }
@@ -642,7 +641,7 @@ else try {
     return geom;
   }
   const lit = TRIPS.flatMap(t => {
-    if (t.id === "xinjiang" || t.id === "xizang" || t.id === "qingdao") return [];
+    if (t.id === "xinjiang" || t.id === "xizang") return [];
     return (t.regions || []).map(f => Object.assign({}, f, { geometry: rewind(f.geometry), trip: t }));
   });
   function ptInRing(lng, lat, ring){
@@ -877,7 +876,7 @@ else try {
 
   function htmlData(){
     const pins = TRIPS
-      .filter(t => t.id === "qinggan")
+      .filter(t => t.href)
       .map(t => ({ lat: t.center[0], lng: t.center[1], trip: t }));
     if (active && active.kind === "city") {
       pins.push({ lat: active.center[0], lng: active.center[1], trip: active });
