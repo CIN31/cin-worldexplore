@@ -874,6 +874,21 @@ else try {
     return [loc];
   }
 
+  function globeStops(trip){
+    const stops = (trip && trip.stops) || [];
+    if (stops.length < 2) return [];
+    let minLat = 90, maxLat = -90, minLng = 180, maxLng = -180;
+    for (const s of stops) {
+      if (s.lat < minLat) minLat = s.lat;
+      if (s.lat > maxLat) maxLat = s.lat;
+      if (s.lng < minLng) minLng = s.lng;
+      if (s.lng > maxLng) maxLng = s.lng;
+    }
+    const span = Math.max(maxLat - minLat, maxLng - minLng);
+    if (span < 1.2) return [];
+    return stops.map(s => Object.assign({}, s));
+  }
+
   function htmlData(){
     const pins = TRIPS
       .filter(t => t.href)
@@ -890,8 +905,7 @@ else try {
     };
     pinFoot(active);
     if (preview && preview !== active) pinFoot(preview);
-    const stops = (active.stops || []).map(s => Object.assign({}, s));
-    return pins.concat(stops);
+    return pins.concat(globeStops(active));
   }
 
   function setPaths(mode, seg){
@@ -969,7 +983,7 @@ else try {
     if (window._tickCount) window._tickCount();
     renderRail();
     bindTicker();
-    document.body.classList.toggle("has-stops", !!(trip.stops && trip.stops.length));
+    document.body.classList.toggle("has-stops", globeStops(trip).length > 0);
     world.htmlElementsData(htmlData());
     if (pathReady) setPaths("full");
     world.ringsData(ringsFor(trip));
@@ -1093,7 +1107,7 @@ else try {
   addEventListener("resize", size);
   setPolys();
   world.htmlElementsData(htmlData());
-  document.body.classList.toggle("has-stops", !!(active.stops && active.stops.length));
+  document.body.classList.toggle("has-stops", globeStops(active).length > 0);
   bindTicker();
   world.ringsData(ringsFor(active));
 
