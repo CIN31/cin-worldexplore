@@ -176,6 +176,10 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:500;letter-spacing:.04em;text
 .tl h3{margin:0;font-size:16px;letter-spacing:.03em}
 .tl p{margin:4px 0 0;font-size:14px;color:var(--soft);max-width:42em}
 .how{margin-top:6px;font-size:13px;color:var(--bay-ink)}
+.spot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.spot h3{flex:1;min-width:0}
+.gd-nav{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 10px;border:1px solid var(--bay);color:var(--bay-ink);text-decoration:none;font:500 12px/1 var(--body);letter-spacing:.08em;background:transparent;white-space:nowrap}
+.gd-nav:hover{background:var(--bay-ink);color:var(--sand);border-color:var(--bay-ink)}
 
 .panel{margin:8px 0 18px;padding:12px 0;border-top:1px solid var(--line)}
 .panel h3{margin:0 0 8px;font-size:18px}
@@ -188,6 +192,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:500;letter-spacing:.04em;text
 
 .empty{margin:12px 0 20px;padding:22px 18px;border:1px dashed color-mix(in srgb, var(--ink) 28%, transparent);min-height:7rem}
 .empty p{margin:6px 0 0;color:var(--soft);max-width:36em}
+.empty .spot{margin:0 0 4px}
 
 .table-wrap{margin:8px 0 20px;max-width:100%;min-width:0;overflow:hidden}
 .table-wrap::-webkit-scrollbar{display:none;width:0;height:0}
@@ -345,14 +350,14 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p>G3010，全程 7 小时 55 分。到的是青岛站，不是青岛北，也不是青岛西。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="station">
           <time datetime="2026-10-01T14:57" class="num" translate="no">14:57</time>
           <div>
             <h3>抵达青岛站</h3>
             <p>市南区泰安路 2 号。出站就是老城。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="hotel">
           <time datetime="2026-10-01T15:20" class="num" translate="no">15:20</time>
           <div>
             <h3>去酒店入住、休整</h3>
@@ -360,35 +365,35 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p class="how">推荐打车</p>
           </div>
         </li>
-        <li>
+        <li data-nav="zhanqiao">
           <time datetime="2026-10-01T16:00" class="num" translate="no">16:00</time>
           <div>
             <h3>栈桥</h3>
             <p>免费，全天开放。走到回澜阁，沿海边约 1 小时。礁石湿滑，人多看脚下。</p>
           </div>
         </li>
-        <li class="sun">
+        <li class="sun" data-nav="xiaoqd">
           <time datetime="2026-10-01T17:30" class="num" translate="no">17:30</time>
           <div>
             <h3>小青岛 / 琴屿路看日落</h3>
             <p>今日日落约 17:45。免费，4–10 月 06:30–20:00。隔海看栈桥与老城，人比栈桥少。可只看日落，有精力再闲逛。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="zhongshan">
           <time>晚饭</time>
           <div>
             <h3>中山路 / 老城区</h3>
             <p>海鲜水饺、辣炒蛤蜊、鲅鱼饺子、海菜凉粉。可选民国海鲜饺子楼、海萍馄饨、排骨米饭。避开栈桥拉客海鲜档，点餐先问单价、称重、加工费。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="zhongshan">
           <time>饭后</time>
           <div>
             <h3>中山路步行街</h3>
             <p>圣弥厄尔教堂看外观即可。门票 10 元，08:30–17:00，来得及再进。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="hotel">
           <time>晚</time>
           <div>
             <h3>回酒店</h3>
@@ -408,7 +413,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
       </div>
       <p class="theme">东线海边慢走，下午海军博物馆。午休必须留。今日不追日落。</p>
       <ol class="tl">
-        <li class="sun">
+        <li class="sun" data-nav="shilao">
           <time datetime="2026-10-02T05:20" class="num" translate="no">05:20</time>
           <div>
             <h3>出发去石老人海水浴场</h3>
@@ -416,14 +421,14 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p class="how">必须打车</p>
           </div>
         </li>
-        <li class="sun">
+        <li class="sun" data-nav="shilao">
           <time datetime="2026-10-02T05:30" class="num" translate="no">05:30</time>
           <div>
             <h3>看海上日出</h3>
             <p>免费全天。日出约 05:55。开阔无遮挡。10 月可能海雾，雾大可放弃，不要硬起。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="diaosu">
           <time>日出后</time>
           <div>
             <h3>海边走到青岛雕塑园</h3>
@@ -438,14 +443,14 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p>轻松：雕塑园附近继续放空，再回酒店。想多逛：顺路海之恋公园滨海步道。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="hotel">
           <time datetime="2026-10-02T11:30" class="num" translate="no">11:30</time>
           <div>
             <h3>回酒店午休</h3>
             <p>雕塑园回酒店打车约 7 km / 22 分钟。午休 1.5–2 小时。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="navy">
           <time datetime="2026-10-02T14:00" class="num" translate="no">14:00</time>
           <div>
             <h3>海军博物馆</h3>
@@ -459,7 +464,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p>可选短逛琴屿路 / 鲁迅公园，不强制。不要再加收费大景点。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="zhongshan">
           <time>晚饭</time>
           <div>
             <h3>老城区海鲜，袋装原浆</h3>
@@ -488,7 +493,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
       </div>
       <p class="theme">八大关到小麦岛，几乎全是平路。核心日落：小麦岛橘子海。</p>
       <ol class="tl">
-        <li>
+        <li data-nav="badaguan">
           <time>上午</time>
           <div>
             <h3>自然醒，去八大关</h3>
@@ -496,28 +501,28 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p class="how">推荐打车</p>
           </div>
         </li>
-        <li>
+        <li data-nav="badaguan">
           <time>2–3 小时</time>
           <div>
             <h3>八大关慢走</h3>
             <p>免费全天。重点走嘉峪关路、居庸关路、第二海水浴场海边，走到花石楼。花石楼可选进入，8.5 元，08:30–17:30。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="taiping">
           <time>午餐</time>
           <div>
             <h3>八大关 / 太平角</h3>
             <p>家常菜、海鲜锅贴。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="hotel">
           <time datetime="2026-10-03T13:30" class="num" translate="no">13:30</time>
           <div>
             <h3>回酒店午休</h3>
             <p>原路打车约 30 分钟。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="yaner">
           <time>下午</time>
           <div>
             <h3>燕儿岛山公园滨海步道</h3>
@@ -525,21 +530,21 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p class="how">推荐打车</p>
           </div>
         </li>
-        <li class="sun">
+        <li class="sun" data-nav="xiaomai">
           <time datetime="2026-10-03T16:30" class="num" translate="no">16:30</time>
           <div>
             <h3>上小麦岛等日落</h3>
             <p>燕儿岛过去 3.1 km / 打车 18 分钟，或沿海继续走。国庆会挤，16:30 到场合理。</p>
           </div>
         </li>
-        <li class="sun">
+        <li class="sun" data-nav="xiaomai">
           <time datetime="2026-10-03T17:40" class="num" translate="no">17:40</time>
           <div>
             <h3>日落与蓝调</h3>
             <p>草坪缓坡，面朝西侧海湾。提前占靠海位置。日落后蓝调也值得留。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="taidong">
           <time>晚饭</time>
           <div>
             <h3>麦岛 / 万象城 / 台东</h3>
@@ -557,7 +562,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
       </div>
       <p class="theme">小鱼山俯瞰老城，下午啤酒博物馆，傍晚情人坝看帆船与灯光秀。和小麦岛的自然日落完全不同。</p>
       <ol class="tl">
-        <li>
+        <li data-nav="xiaoyu">
           <time>上午</time>
           <div>
             <h3>小鱼山公园</h3>
@@ -565,42 +570,42 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p class="how">推荐打车去，山上下步行</p>
           </div>
         </li>
-        <li>
+        <li data-nav="daxue">
           <time>上午</time>
           <div>
             <h3>大学路 / 鱼山路 / 龙江路</h3>
             <p>网红转角、漫画街。慢逛老街、小店、咖啡。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="luxun">
           <time>顺路</time>
           <div>
             <h3>鲁迅公园</h3>
             <p>免费，礁石临海。若 Day2 已去，可跳过。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="zhongshan">
           <time>午餐</time>
           <div>
             <h3>老城区</h3>
             <p>小青青馄饨、西镇臭豆腐加电烤肉、咖啡馆。店名只是可选，不是必打卡。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="hotel">
           <time>午后</time>
           <div>
             <h3>回酒店午休</h3>
             <p>可选。若不想折返，可从老城直接去啤酒博物馆。</p>
           </div>
         </li>
-        <li>
+        <li data-nav="beer">
           <time>下午</time>
           <div>
             <h3>青岛啤酒博物馆</h3>
             <p>60 元，约 1.5–2 小时，含原浆和啤酒豆。登州路啤酒街可顺逛。</p>
           </div>
         </li>
-        <li class="sun">
+        <li class="sun" data-nav="qingren">
           <time>傍晚</time>
           <div>
             <h3>奥帆中心到情人坝</h3>
@@ -608,7 +613,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
             <p class="how">必须打车</p>
           </div>
         </li>
-        <li>
+        <li data-nav="qingren">
           <time datetime="2026-10-04T18:40" class="num" translate="no">18:40–20:00</time>
           <div>
             <h3>浮山湾国庆灯光秀</h3>
@@ -635,7 +640,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
         <span class="pace">松</span>
       </div>
       <p class="theme">无早起。按出票后的车次离开。优先青岛站直达武汉，不要买青岛北或青岛西。</p>
-      <div class="empty">
+      <div class="empty" data-nav="station">
         <h3>返程车次待填</h3>
         <p>票还没买。出票后把车次、发车时间写在这里。</p>
         <p>去青岛站：打车约 14 km / 26 分钟；地铁 4 转 1 约 45 分钟。国庆提前 90 分钟出门更稳。</p>
@@ -882,16 +887,16 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
     {id:"station", name:"青岛站", lng:120.312786, lat:36.064812, days:[1,5], keep:true, blurb:"去程抵达、返程出发"},
     {id:"zhanqiao", name:"栈桥", lng:120.319300, lat:36.061736, days:[1], keep:true, blurb:"Day1 下午，免费"},
     {id:"xiaoqd", name:"小青岛", lng:120.323783, lat:36.053098, days:[1], sun:true, blurb:"Day1 日落 17:45"},
-    {id:"navy", name:"海军馆", lng:120.327714, lat:36.054786, days:[2], must:true, blurb:"Day2 14:00，提前 7 天约"},
-    {id:"xiaoyu", name:"小鱼山", lng:120.336558, lat:36.058765, days:[4], blurb:"Day4 上午，红瓦俯瞰"},
-    {id:"beer", name:"啤酒馆", lng:120.347318, lat:36.079106, days:[4], inland:true, blurb:"Day4 下午，60 元需预约"},
+    {id:"navy", name:"海军馆", navName:"海军博物馆", lng:120.327714, lat:36.054786, days:[2], must:true, blurb:"Day2 14:00，提前 7 天约"},
+    {id:"xiaoyu", name:"小鱼山", navName:"小鱼山公园", lng:120.336558, lat:36.058765, days:[4], blurb:"Day4 上午，红瓦俯瞰"},
+    {id:"beer", name:"啤酒馆", navName:"青岛啤酒博物馆", lng:120.347318, lat:36.079106, days:[4], inland:true, blurb:"Day4 下午，60 元需预约"},
     {id:"badaguan", name:"八大关", lng:120.350903, lat:36.053625, days:[3], keep:true, blurb:"Day3 上午，免费慢走"},
     {id:"qingren", name:"情人坝", lng:120.390288, lat:36.052388, days:[4], sun:true, blurb:"Day4 日落 + 灯光秀"},
-    {id:"yaner", name:"燕儿岛", lng:120.405710, lat:36.055267, days:[3], blurb:"Day3 下午，滨海步道"},
-    {id:"hotel", name:"酒店", lng:120.424979, lat:36.106199, days:[1,2,3,4,5], inland:true, hotel:true, keep:true, blurb:"埠西，四晚同住，不是海景"},
-    {id:"xiaomai", name:"小麦岛", lng:120.431045, lat:36.054245, days:[3], sun:true, keep:true, blurb:"Day3 橘子海日落"},
-    {id:"diaosu", name:"雕塑园", lng:120.454678, lat:36.079683, days:[2], blurb:"Day2 日出后沿海走来"},
-    {id:"shilao", name:"石老人", lng:120.468010, lat:36.091680, days:[2], sun:true, keep:true, blurb:"Day2 05:30 日出"}
+    {id:"yaner", name:"燕儿岛", navName:"燕儿岛山公园", lng:120.405710, lat:36.055267, days:[3], blurb:"Day3 下午，滨海步道"},
+    {id:"hotel", name:"酒店", navName:"山海信居LOFT酒店", lng:120.424979, lat:36.106199, days:[1,2,3,4,5], inland:true, hotel:true, keep:true, blurb:"埠西，四晚同住，不是海景"},
+    {id:"xiaomai", name:"小麦岛", navName:"小麦岛公园", lng:120.431045, lat:36.054245, days:[3], sun:true, keep:true, blurb:"Day3 橘子海日落"},
+    {id:"diaosu", name:"雕塑园", navName:"青岛雕塑园", lng:120.454678, lat:36.079683, days:[2], blurb:"Day2 日出后沿海走来"},
+    {id:"shilao", name:"石老人", navName:"石老人海水浴场", lng:120.468010, lat:36.091680, days:[2], sun:true, keep:true, blurb:"Day2 05:30 日出"}
   ];
   const dayOrder = {
     1:["station","zhanqiao","xiaoqd"],
@@ -921,6 +926,40 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
   const navLinks = Array.from(document.querySelectorAll(".daynav a"));
   const dayEls = Array.from(document.querySelectorAll(".day"));
   let current = 1, lastFit = null, markers = {}, lines = {};
+
+  const navExtra = {
+    zhongshan: {kw: "青岛中山路"},
+    taiping: {lng: 120.365486, lat: 36.050451, name: "太平角"},
+    daxue: {kw: "青岛大学路"},
+    luxun: {kw: "青岛鲁迅公园"},
+    taidong: {kw: "青岛台东步行街"}
+  };
+  function gdHref(key){
+    const p = navExtra[key] || pins.find(function(x){ return x.id === key; });
+    if (!p) return "";
+    if (p.kw) return "https://uri.amap.com/search?keyword=" + encodeURIComponent(p.kw) + "&src=qd-trip&callnative=1";
+    const name = p.navName || p.name;
+    return "https://uri.amap.com/navigation?to=" + p.lng + "," + p.lat + "," + encodeURIComponent(name) + "&mode=car&coordinate=gaode&callnative=1&src=qd-trip";
+  }
+  document.querySelectorAll("[data-nav]").forEach(function(el){
+    const href = gdHref(el.getAttribute("data-nav"));
+    if (!href) return;
+    const h3 = el.querySelector("h3");
+    if (!h3 || (h3.parentNode && h3.parentNode.classList.contains("spot"))) return;
+    const a = document.createElement("a");
+    a.className = "gd-nav";
+    a.href = href;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "导航";
+    a.title = "高德导航";
+    a.setAttribute("aria-label", "高德导航：" + h3.textContent.trim());
+    const spot = document.createElement("div");
+    spot.className = "spot";
+    h3.parentNode.insertBefore(spot, h3);
+    spot.appendChild(h3);
+    spot.appendChild(a);
+  });
 
   function closePop(){ pop.hidden = true; }
   function openPop(p){
