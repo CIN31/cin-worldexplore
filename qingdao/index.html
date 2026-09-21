@@ -112,6 +112,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:500;letter-spacing:.04em;text
 .map-tools button{border:1px solid var(--line);background:var(--sand);color:var(--ink);padding:4px 10px;font:400 13px/1.2 var(--latin);min-width:36px;min-height:36px}
 .map-tools button:hover,.map-tools button[aria-pressed="true"]{border-color:var(--bay-ink);color:var(--bay-ink)}
 .map-caption{margin-left:auto;font:italic 400 12px/1 var(--latin);color:var(--soft)}
+.map-fold{display:none;flex:none}
 .coast-canvas{position:relative;flex:1;height:min(62vh, 480px);min-height:260px;min-width:0;overflow:hidden;background:var(--sand)}
 #map{display:block;width:100%;height:100%;background:var(--sand)}
 .leaflet-container{font:inherit;background:var(--sand);z-index:0;transform:translateZ(0)}
@@ -240,7 +241,25 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
   .mapbox{order:-1;position:sticky;top:var(--nav-h);z-index:4;margin:0 0 8px}
   .coast-canvas{flex:none;height:38vh;min-height:220px}
   #map,.leaflet-container{height:38vh;min-height:220px}
-  html{scroll-padding-top:calc(var(--nav-h) + 38vh + 12px)}
+  .map-fold{display:inline-flex;align-items:center;justify-content:center;min-width:52px}
+  html{scroll-padding-top:calc(var(--nav-h) + 48px)}
+  html:has(.mapbox.is-open){scroll-padding-top:calc(var(--nav-h) + 38vh + 12px)}
+  .mapbox:not(.is-open) .coast-canvas,
+  .mapbox:not(.is-open) #map,
+  .mapbox:not(.is-open) .leaflet-container{
+    height:0!important;
+    min-height:0!important;
+    overflow:hidden;
+    visibility:hidden;
+  }
+  .mapbox:not(.is-open) .coast-today{display:none}
+  .mapbox:not(.is-open) #zoom-in,
+  .mapbox:not(.is-open) #zoom-out,
+  .mapbox:not(.is-open) #zoom-reset{display:none}
+  .mapbox:not(.is-open) .map-tools{border-bottom:0}
+  .mapbox:not(.is-open) .map-caption{margin-left:0}
+  .mapbox:not(.is-open) .map-fold{border-color:var(--bay-ink);color:var(--bay-ink)}
+  .mapbox:not(.is-open) .pop{display:none!important}
 }
 @media (max-width:639px){
   .map-tools button{min-width:32px;min-height:32px;padding:3px 8px}
@@ -631,6 +650,7 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
       <button type="button" id="zoom-in" aria-label="放大">+</button>
       <button type="button" id="zoom-out" aria-label="缩小">−</button>
       <span class="map-caption" id="map-caption">前海一线</span>
+      <button type="button" class="map-fold" id="map-fold" aria-controls="shore-wrap" aria-expanded="false">展开</button>
     </div>
     <div class="coast-canvas" id="shore-wrap">
       <div id="map" role="img" aria-label="青岛行程地图"></div>
@@ -1032,7 +1052,55 @@ footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--bay
     });
   });
 
-  function sizeMap(){ map.invalidateSize({animate: false}); }
+  function sizeMap(){
+    if (mqPhone && mqPhone.matches && box && !box.classList.contains("is-open")) return;
+    map.invalidateSize({animate: false});
+  }
+
+  const box = document.getElementById("coast");
+  const foldBtn = document.getElementById("map-fold");
+  const mqPhone = matchMedia("(max-width:1023px)");
+  const FOLD_KEY = "qd-map-open";
+  function syncFold(){
+    const open = !mqPhone.matches || box.classList.contains("is-open");
+    foldBtn.textContent = open ? "收起" : "展开";
+    foldBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    foldBtn.setAttribute("aria-label", open ? "收起地图" : "展开地图");
+  }
+  function setMapOpen(open, persist){
+    box.classList.toggle("is-open", open);
+    if (persist && mqPhone.matches){
+      try { localStorage.setItem(FOLD_KEY, open ? "1" : "0"); } catch (err) {}
+    }
+    syncFold();
+    closePop();
+    if (open){
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          sizeMap();
+          focusIds(lastFit, false);
+          setTimeout(sizeMap, 80);
+        });
+      });
+    }
+  }
+  foldBtn.addEventListener("click", function(){
+    setMapOpen(!box.classList.contains("is-open"), true);
+  });
+  function restoreFold(){
+    if (!mqPhone.matches){
+      box.classList.add("is-open");
+      syncFold();
+      return;
+    }
+    let saved = null;
+    try { saved = localStorage.getItem(FOLD_KEY); } catch (err) {}
+    setMapOpen(saved === "1", false);
+  }
+  if (mqPhone.addEventListener) mqPhone.addEventListener("change", function(){ restoreFold(); sizeMap(); });
+  else mqPhone.addListener(function(){ restoreFold(); sizeMap(); });
+  restoreFold();
+
   function boot(){
     sizeMap();
     const params = new URLSearchParams(location.search);
