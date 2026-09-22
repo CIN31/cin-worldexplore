@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>世界探索计划</title>
 <meta name="description" content="世界探索计划：已走过新疆、西藏、日本，下一站青甘大环线。">
+<link rel="prefetch" href="./qinggan/index.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -152,7 +153,7 @@ body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
 body.near.has-stops .stop{opacity:1}
 body.near.has-stops .pin{opacity:0;pointer-events:none}
 
-#veil{position:fixed;inset:0;z-index:5;background:var(--ink-0);opacity:0;pointer-events:none;transition:opacity .5s ease .45s}
+#veil{position:fixed;inset:0;z-index:5;background:var(--ink-0);opacity:0;pointer-events:none;transition:opacity .32s ease .06s}
 .brand,.coord,.entry,.count,.ticker,.spine,.rail{transition:opacity .35s ease}
 body.leaving .brand,body.leaving .coord,body.leaving .entry,body.leaving .count,body.leaving .ticker,body.leaving .spine,body.leaving .rail{opacity:0}
 body.leaving #veil{opacity:1;pointer-events:auto}
@@ -245,8 +246,8 @@ body.leaving #veil{opacity:1;pointer-events:auto}
 <div id="veil" aria-hidden="true"></div>
 <script src="./trips.js"></script>
 <script src="./visited.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/globe.gl@2.41.4/dist/globe.gl.min.js"></script>
+<script src="./vendor/topojson-client.min.js"></script>
+<script src="./vendor/globe.gl.min.js"></script>
 <script>
 const TRIPS = window.TRIPS || [];
 const VISITED = (window.VISITED || []).filter(c => c.name !== "青岛市");
@@ -393,7 +394,7 @@ function asRailPlace(place){
   const id = railOnId(place);
   return (id && findPlace(id)) || place;
 }
-const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const WORLD_URL = "./vendor/countries-110m.json";
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isMobile = () => innerWidth < 900;
 const WORLD_HOME = () => isMobile() ? { lat: 18, lng: 105, altitude: 2.5 } : { lat: 32, lng: 105, altitude: 2.05 };
@@ -514,7 +515,7 @@ let go = function(href){
   if (!href || document.body.classList.contains("leaving")) return;
   if (reduceMotion) { location.href = href; return; }
   document.body.classList.add("leaving");
-  leaveTimer = setTimeout(() => { location.href = href; }, 1100);
+  leaveTimer = setTimeout(() => { location.href = href; }, 620);
 };
 
 $("#enter").addEventListener("click", e => {
@@ -598,19 +599,30 @@ function initDust(){
       y: Math.random() * innerHeight,
       a: .15 + Math.random() * .35,
       s: .6 + Math.random() * .8,
-      p: Math.random() * Math.PI * 2
-    }));
+      cp: 0, sp: 0
+    })).map(st => { const ph = Math.random() * Math.PI * 2; st.cp = Math.cos(ph); st.sp = Math.sin(ph); return st; });
   }
   resize();
   addEventListener("resize", resize);
+  let cleared = false;
   return function draw(t){
+    // 地球画布不透明且铺满视口，出现后星尘就被完全遮住了，再画只是白费一帧
+    if (document.body.classList.contains("ready") && document.querySelector("#globe canvas")) {
+      if (!cleared) { ctx.clearRect(0, 0, innerWidth, innerHeight); stars = []; cleared = true; }
+      return;
+    }
     ctx.clearRect(0, 0, innerWidth, innerHeight);
+    ctx.fillStyle = "#EDE6D8";
+    const S = Math.sin(t / 1800), C = Math.cos(t / 1800);
     for (const st of stars) {
       st.y -= 0.02;
       if (st.y < 0) st.y = innerHeight;
-      ctx.fillStyle = `rgba(237,230,216,${st.a * (.7 + .3 * Math.sin(t / 1800 + st.p))})`;
+      // sin(t+p) 展开成 sin t·cos p + cos t·sin p，闪烁效果不变；
+      // globalAlpha 是数字，比每颗星拼一次 rgba() 字符串再解析便宜得多
+      ctx.globalAlpha = st.a * (.7 + .3 * (S * st.cp + C * st.sp));
       ctx.fillRect(st.x, st.y, st.s, st.s);
     }
+    ctx.globalAlpha = 1;
   };
 }
 const drawDust = reduceMotion ? () => {} : initDust();
@@ -776,7 +788,7 @@ else try {
   };
 
   const el = document.getElementById("globe");
-  world = Globe({ rendererConfig: { antialias: true, powerPreference: "high-performance", alpha: false } })(el)
+  world = Globe({ rendererConfig: { antialias: !isMobile(), powerPreference: "high-performance", alpha: false } })(el)
     .backgroundColor("#07090C")
     .showAtmosphere(true)
     .atmosphereColor("#C9A46C")
@@ -1026,8 +1038,8 @@ else try {
     ctrl.autoRotate = false;
     ctrl.enabled = false;
     const t = preview && preview.href === href ? preview : active;
-    world.pointOfView({ lat: t.center[0], lng: t.center[1], altitude: 0.48 }, 900);
-    leaveTimer = setTimeout(() => { location.href = href; }, 1100);
+    world.pointOfView({ lat: t.center[0], lng: t.center[1], altitude: 0.48 }, 560);
+    leaveTimer = setTimeout(() => { location.href = href; }, 620);
   };
 
   function restorePage(){
@@ -1123,11 +1135,17 @@ else try {
       const shells = countries.filter(d => !d.trip);
       countryShells = shells;
       setPolys();
-      const applyHex = () => {
-        try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
-        catch (e) { try { world.hexPolygonsData(countries); } catch (err) {} }
-      };
-      applyHex();
+      if (!isMobile()) {
+        const applyHex = () => {
+          try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
+          catch (e) { try { world.hexPolygonsData(countries); } catch (err) {} }
+        };
+        // 让首屏先出来，点阵在空闲时再铺
+        const idle = window.requestIdleCallback
+          ? cb => window.requestIdleCallback(cb, { timeout: 1500 })
+          : cb => setTimeout(cb, 600);
+        idle(applyHex);
+      }
     }
   })();
 
