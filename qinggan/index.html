@@ -729,7 +729,7 @@ $("#strip").innerHTML = DAYS.map((d,i)=>{
     <div class="d">${d.date}</div><div class="w">${d.wd}</div>
   </button>`;
 }).join("");
-$("#strip").querySelectorAll(".col").forEach(b => b.onclick = () => jumpTo(+b.dataset.i));
+$("#strip").querySelectorAll(".col").forEach(b => b.onclick = () => jumpTo(+b.dataset.i, true));
 
 /* day nav */
 $("#daynav").innerHTML = DAYS.map((d,i)=>`<a href="#day-${i}" data-i="${i}">${d.date} ${d.title.split("到")[1]?.split("，")[0] || d.title}</a>`).join("") + `<a href="#stays">住宿</a><a href="#todo">待办</a><a href="#budget">费用</a><a href="#weather">天气</a><a href="#tips">提醒</a>`;
@@ -1060,13 +1060,32 @@ $("#btn-follow").onclick = function(){ follow = !follow; this.setAttribute("aria
 document.querySelectorAll(".nav-amap").forEach(b => b.onclick = () => openAmapRoute(+b.dataset.i));
 
 /* 点击跳转：直接更新地图，并在滚动动画期间暂停滚动监听，避免被中途经过的日期覆盖 */
-let lockUntil = 0, spyTimer;
+let lockUntil = 0, spyTimer, holdFn = null, holdTimer = 0;
+function releaseHold(){
+  if (holdFn) { removeEventListener("scroll", holdFn); holdFn = null; }
+  clearTimeout(holdTimer);
+}
 function jumpTo(i, scroll = false){
+  releaseHold();
   lockUntil = Date.now() + 1200;
   highlight(i, true);
-  if (scroll) document.getElementById("day-" + i).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+  if (!scroll) return;
+  const el = document.getElementById("day-" + i);
+  if (!el) return;
+  const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+  if (!smooth) return;
+  /* 从页尾跳回开头要滚很长一段，固定 1.2 秒压不住滚动监听，
+     中途经过的日期会把高亮抢走，所以一直压到真正停下来为止 */
+  holdFn = () => {
+    lockUntil = Date.now() + 500;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => { releaseHold(); lockUntil = 0; }, 180);
+  };
+  addEventListener("scroll", holdFn, { passive: true });
+  holdFn();
 }
-document.querySelectorAll("#daynav a[data-i]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); jumpTo(+a.dataset.i); }));
+document.querySelectorAll("#daynav a[data-i]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); jumpTo(+a.dataset.i, true); }));
 document.querySelectorAll('#daynav a:not([data-i])').forEach(a => a.addEventListener("click", e => {
   const t = document.querySelector(a.getAttribute("href")); if (!t) return; e.preventDefault(); t.scrollIntoView({behavior:"smooth"});
 }));
