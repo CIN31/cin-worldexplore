@@ -1065,18 +1065,10 @@ function releaseHold(){
   if (holdFn) { removeEventListener("scroll", holdFn); holdFn = null; }
   clearTimeout(holdTimer);
 }
-function jumpTo(i, scroll = false){
+/* 长距离滚动可能要好几秒，固定时长压不住滚动监听，中途经过的日期会把高亮抢走，
+   所以一直压到页面真正停下来为止 */
+function holdSpy(){
   releaseHold();
-  lockUntil = Date.now() + 1200;
-  highlight(i, true);
-  if (!scroll) return;
-  const el = document.getElementById("day-" + i);
-  if (!el) return;
-  const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
-  if (!smooth) return;
-  /* 从页尾跳回开头要滚很长一段，固定 1.2 秒压不住滚动监听，
-     中途经过的日期会把高亮抢走，所以一直压到真正停下来为止 */
   holdFn = () => {
     lockUntil = Date.now() + 500;
     clearTimeout(holdTimer);
@@ -1085,9 +1077,33 @@ function jumpTo(i, scroll = false){
   addEventListener("scroll", holdFn, { passive: true });
   holdFn();
 }
-document.querySelectorAll("#daynav a[data-i]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); jumpTo(+a.dataset.i, true); }));
-document.querySelectorAll('#daynav a:not([data-i])').forEach(a => a.addEventListener("click", e => {
-  const t = document.querySelector(a.getAttribute("href")); if (!t) return; e.preventDefault(); t.scrollIntoView({behavior:"smooth"});
+function jumpTo(i, scroll = false){
+  releaseHold();
+  lockUntil = Date.now() + 1200;
+  highlight(i, true);
+  if (!scroll) return;
+  const el = document.getElementById("day-" + i);
+  if (!el) return;
+  el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  holdSpy();
+}
+/* 顶部导航一律走原生锚点跳转：href="#day-N" / "#stays" 这类，
+   浏览器自己按 scroll-padding-top 让位给吸顶栏，比 JS 调 scrollIntoView 稳，
+   JS 只负责同步地图高亮。万一原生跳转没生效，下面再兜一次底。 */
+document.querySelectorAll("#daynav a[href^='#']").forEach(a => a.addEventListener("click", () => {
+  const i = a.dataset.i;
+  if (i !== undefined) jumpTo(+i);
+  holdSpy();
+  const target = document.getElementById(a.getAttribute("href").slice(1));
+  if (!target) return;
+  const before = scrollY;
+  setTimeout(() => {
+    const box = target.getBoundingClientRect();
+    if (scrollY === before && (box.top < -120 || box.top > innerHeight)) {
+      target.scrollIntoView({ block: "start" });
+      holdSpy();
+    }
+  }, 260);
 }));
 
 /* 滚动监听：取视口上方 35% 处所在的那一天 */
