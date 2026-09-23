@@ -636,7 +636,7 @@ showTrip(active);
 if (!TRIPS.length) fail();
 else if (typeof Globe !== "function") fail();
 else try {
-  let hover = null;
+  let hover = null, lastHoverPlace = null;
   let litPhase = reduceMotion ? "idle" : "off";
   let pathReady = reduceMotion;
   let overHud = false;
@@ -808,8 +808,11 @@ else try {
       return d.trip ? `<b>${d.trip.name}</b><br>${d.trip.kicker || tripMeta(d.trip)}` : "";
     })
     .onPolygonHover(d => {
-      hover = d && (d.trip || d.place || isJapanCountry(d)) ? d : null;
+      const nextHover = d && (d.trip || d.place || isJapanCountry(d)) ? d : null;
       const place = placeFromPoly(d);
+      // 有效悬停没变（比如从一处空白划到另一处空白）就不重算 400 多个多边形
+      if (nextHover === hover && place === lastHoverPlace) return;
+      hover = nextHover; lastHoverPlace = place;
       paintPolys();
       world.htmlElementsData(htmlData());
       $("#entry").classList.toggle("hot", !!place);
@@ -880,6 +883,58 @@ else try {
   pauseGlobe = () => { try { world.pauseAnimation(); } catch (e) {} };
   resumeGlobe = () => { try { world.resumeAnimation(); } catch (e) {} };
 
+  /* 悬停检测只看会响应鼠标的对象。
+     globe.gl 这个版本每一帧都对整个场景做一次射线检测，鼠标不动也照做：
+     约 1000 个对象、20 万个三角面，其中 431 条国界描边线逐段求距离，实测每帧约 17ms，
+     60 帧的整帧预算都被它吃掉，鼠标就发涩。
+     相机照常渲染 0、1 两个图层，射线检测只看 0 层；把普通国家、国界描边、点阵、
+     路线、光圈、大气挪到 1 层，只留地球本体和可点的行程、城市、日本在 0 层。
+     这些多边形原本悬停、点击都返回空，挪走后行为不变。 */
+  const RENDER_ONLY = 1;
+  const interactivePoly = d => !!(d && (d.trip || d.place || (d.mates && d.mates.length) || isJapanCountry(d)));
+  /* 地球本体有两个球：可见的 1.1 万面，另有一个不可见的 3.2 万面。
+     射线检测不管可不可见都会逐面去测，这是每帧开销的大头。
+     换成解析的射线与球面求交，结果一样，只是一次算术。 */
+  function fastSphereRaycast(mesh){
+    if (mesh.__fastRay || !mesh.geometry || !mesh.geometry.parameters || !mesh.geometry.parameters.radius) return;
+    mesh.__fastRay = true;
+    const R = mesh.geometry.parameters.radius;
+    const V = mesh.position.constructor;
+    const center = new V(), oc = new V(), hit = new V();
+    mesh.raycast = function(raycaster, intersects){
+      this.getWorldPosition(center);
+      const r = R * this.matrixWorld.getMaxScaleOnAxis();
+      const ray = raycaster.ray;
+      oc.subVectors(ray.origin, center);
+      const b = oc.dot(ray.direction), disc = b * b - (oc.dot(oc) - r * r);
+      if (disc < 0) return;
+      let t = -b - Math.sqrt(disc);
+      if (t < 0) t = -b + Math.sqrt(disc);
+      if (t < raycaster.near || t > raycaster.far) return;
+      ray.at(t, hit);
+      intersects.push({ distance: t, point: hit.clone(), object: this, face: null, faceIndex: null, uv: null });
+    };
+  }
+  function sortLayers(){
+    try {
+      world.scene().traverse(c => {
+        if (!(c.isMesh || c.isLine || c.isPoints)) return;
+        let o = c;
+        while (o && !o.__globeObjType) o = o.parent;
+        const type = o && o.__globeObjType;
+        if (type === "globe" && c.isMesh && c.geometry && c.geometry.type === "SphereGeometry") fastSphereRaycast(c);
+        // globe.gl 把多块领土拆成多条，内部包装的 data 字段才是我们传进去的数据
+        const datum = o && o.__data && (o.__data.data || o.__data);
+        const hit = !c.isLine && (type === "globe" || (type === "polygon" && interactivePoly(datum)));
+        const want = hit ? 0 : RENDER_ONLY;
+        if (c.layers.mask !== (1 << want)) c.layers.set(want);
+      });
+    } catch (e) {}
+  }
+  try { world.camera().layers.enable(RENDER_ONLY); } catch (e) {}
+  // globe.gl 的数据更新是异步建对象的，新对象默认在 0 层，定期归一次类；遍历一遍不到 1ms
+  setInterval(() => { if (!document.hidden) sortLayers(); }, 500);
+
   function ringsFor(trip, at){
     if (!trip || trip.status === "done" || trip.status === "plan") return [];
     const loc = at || { lat: trip.center[0], lng: trip.center[1] };
@@ -920,19 +975,28 @@ else try {
     return pins.concat(globeStops(active));
   }
 
+  /* 路线数据对象常驻复用，只改点和类型。
+     以前每次都传新对象，globe.gl 会把旧路线连同粗线材质一起销毁，
+     三维引擎随即删掉这个着色器程序，下一帧再整段重新编译：
+     开场逐段画线（21 个点）要连编 20 次，悬停日期、自动巡航时也每次都编，
+     在 Windows 的 Chrome 上每次几十到几百毫秒，鼠标就一直卡。
+     复用同一个对象后，线是原地更新，至少有一条线常驻，程序不会被删。 */
+  const pathMain = { pts: [], kind: "full" };
+  const pathDay = { pts: [], kind: "day" };
   function setPaths(mode, seg){
     const trip = active;
     if (!trip || !trip.route) { world.pathsData([]); return; }
     const route = trip.route;
     if (mode === "day" && seg) {
-      world.pathsData([
-        { pts: route, kind: "dim" },
-        { pts: route.slice(seg[0], seg[1] + 1), kind: "day" }
-      ]).pathDashAnimateTime(0);
+      pathMain.pts = route; pathMain.kind = "dim";
+      pathDay.pts = route.slice(seg[0], seg[1] + 1);
+      world.pathsData([pathMain, pathDay]).pathDashAnimateTime(0);
     } else if (mode === "draw") {
-      world.pathsData([{ pts: route.slice(0, seg), kind: "full" }]).pathDashAnimateTime(0);
+      pathMain.pts = route.slice(0, seg); pathMain.kind = "full";
+      world.pathsData([pathMain]).pathDashAnimateTime(0);
     } else {
-      world.pathsData([{ pts: route, kind: "full" }]).pathDashAnimateTime(reduceMotion ? 0 : 16000);
+      pathMain.pts = route; pathMain.kind = "full";
+      world.pathsData([pathMain]).pathDashAnimateTime(reduceMotion ? 0 : 16000);
     }
   }
 
