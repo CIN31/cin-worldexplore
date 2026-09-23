@@ -169,7 +169,8 @@ body.leaving #veil{opacity:1;pointer-events:auto}
 .cursor.on{opacity:.9}
 .cursor.hot{width:34px;height:34px;border-color:var(--brass)}
 .cursor i{position:absolute;left:50%;top:50%;width:2px;height:2px;border-radius:50%;background:var(--brass);translate:-50% -50%}
-#globe canvas{cursor:none}
+/* 系统鼠标由操作系统按屏幕刷新率绘制，不受地球帧率影响；原先隐藏它、换成跟着渲染帧走的圆圈，帧率一低鼠标就跳 */
+#globe.hot canvas{cursor:pointer}
 .scene-tooltip{
   color:var(--ivory)!important;background:rgba(12,16,22,.92)!important;
   border:1px solid var(--line);border-radius:0!important;
@@ -817,6 +818,7 @@ else try {
       world.htmlElementsData(htmlData());
       $("#entry").classList.toggle("hot", !!place);
       $("#cursor").classList.toggle("hot", !!hover);
+      el.classList.toggle("hot", !!(place || hover));
       showTrip(place || active);
       if (window._tickCount) window._tickCount();
     })
@@ -923,6 +925,8 @@ else try {
         while (o && !o.__globeObjType) o = o.parent;
         const type = o && o.__globeObjType;
         if (type === "globe" && c.isMesh && c.geometry && c.geometry.type === "SphereGeometry") fastSphereRaycast(c);
+        // 半透明双面材质默认被拆成正反两遍画；这些薄片从外面看只有一面，画一遍即可，绘制调用减半
+        if (type === "polygon" && c.isMesh) [].concat(c.material).forEach(m => { if (m && m.side === 2 && !m.forceSinglePass) m.forceSinglePass = true; });
         // globe.gl 把多块领土拆成多条，内部包装的 data 字段才是我们传进去的数据
         const datum = o && o.__data && (o.__data.data || o.__data);
         const hit = !c.isLine && (type === "globe" || (type === "polygon" && interactivePoly(datum)));
@@ -1174,6 +1178,48 @@ else try {
     } catch (e) {}
   }
   let countryShells = [];
+  /* 普通国家原来每块都作为多边形画：顶面、侧面各因半透明双面被拆成正反两遍，再加一条描边，
+     一块 5 次绘制调用，270 多块就是 1300 多次；而它们填充只有 2% 透明度、侧面全透明。
+     改成把国界一次性合并成两条线来画：国与国之间的边界、海岸线。
+     原来相邻两国的边界被两块多边形各描一次（0.18 叠两层约 0.33），这里用两档透明度还原。 */
+  function buildBorders(topo, attempt = 0){
+    let tpl = null, root = null;
+    world.scene().traverse(o => {
+      if (!tpl && o.isLineSegments && o.material && o.material.type === "LineBasicMaterial") tpl = o;
+      if (!root && o.__kapsuleInstance) root = o;
+    });
+    if (!tpl || !root) { if (attempt < 40) setTimeout(() => buildBorders(topo, attempt + 1), 250); return; }
+    // 本页没有全局 THREE，three.js 的类从场景里现成的描边对象上取
+    // 描边几何是带必填参数的子类，沿原型链找到 BufferGeometry 本身（它的父类没有 setAttribute）
+    let G = tpl.geometry.constructor;
+    while (Object.getPrototypeOf(G).prototype && typeof Object.getPrototypeOf(G).prototype.setAttribute === "function") G = Object.getPrototypeOf(G);
+    const Attr = tpl.geometry.attributes.position.constructor;
+    const skip = g => String(g.id) === "010" || isJapanCountry(g);   // 南极不画；日本仍是多边形，自带描边
+    const make = (filter, opacity) => {
+      const pos = [];
+      const put = (lng, lat) => { const q = world.getCoords(lat, lng, 0.003); pos.push(q.x, q.y, q.z); };
+      for (const line of topojson.mesh(topo, topo.objects.countries, filter).coordinates) {
+        for (let i = 1; i < line.length; i++) {
+          const [x0, y0] = line[i - 1];
+          let [x1, y1] = line[i];
+          if (x1 - x0 > 180) x1 -= 360; else if (x0 - x1 > 180) x1 += 360;
+          // 长直线段要细分，否则弦会切进球面里看不见
+          const n = Math.max(1, Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) / 1.5));
+          for (let k = 0; k < n; k++) {
+            put(x0 + (x1 - x0) * k / n, y0 + (y1 - y0) * k / n);
+            put(x0 + (x1 - x0) * (k + 1) / n, y0 + (y1 - y0) * (k + 1) / n);
+          }
+        }
+      }
+      const geom = new G();
+      geom.setAttribute("position", new Attr(new Float32Array(pos), 3));
+      const mat = tpl.material.clone();
+      mat.color.set("#EDE6D8"); mat.transparent = true; mat.opacity = opacity;
+      return new tpl.constructor(geom, mat);
+    };
+    root.add(make((a, b) => a !== b && !skip(a) && !skip(b), 0.33));
+    root.add(make((a, b) => a === b && !skip(a), 0.18));
+  }
   function setPolys(){
     const trips = lit.filter(d => d.trip);
     const cities = lit.filter(d => d.city);
@@ -1188,9 +1234,9 @@ else try {
   world.ringsData(ringsFor(active));
 
   (async () => {
-    let countries = [];
+    let countries = [], topo = null;
     try {
-      const topo = await fetch(WORLD_URL).then(r => {
+      topo = await fetch(WORLD_URL).then(r => {
         if (!r.ok) throw new Error(r.status);
         return r.json();
       });
@@ -1209,9 +1255,10 @@ else try {
           }
         }
       }
-      const shells = countries.filter(d => !d.trip);
-      countryShells = shells;
+      // 普通国家不再逐个当多边形画，只留有专门交互的日本；国界合并成线
+      countryShells = countries.filter(d => !d.trip && isJapanCountry(d));
       setPolys();
+      try { buildBorders(topo); } catch (e) {}
       if (!isMobile()) {
         const applyHex = () => {
           try { world.hexPolygonUseDots(true).hexPolygonsData(countries); }
