@@ -465,9 +465,11 @@ function showTrip(trip){
 function paintStatus(){
   const cityN = VISITED.length;
   const planN = TRIPS.filter(t => t.status === "plan").length;
-  const next = TRIPS.find(t => t.status === "next" || t.status === "now");
+  const current = TRIPS.find(t => t.status === "now");
+  const upcoming = TRIPS.find(t => t.status === "next");
   const bits = [`<span>已点亮 ${cityN} 城</span>`];
-  if (next) bits.push("<span>·</span>", `<span>下一站 ${next.short}</span>`);
+  if (current) bits.push("<span>·</span>", `<span>这一站 ${current.short}</span>`);
+  else if (upcoming) bits.push("<span>·</span>", `<span>下一站 ${upcoming.short}</span>`);
   if (planN) bits.push("<span>·</span>", `<span>计划中 ${planN} 站</span>`);
   $("#brand-status").innerHTML = bits.join("");
   $("#globe").setAttribute("aria-label", "可旋转的地球，已点亮 " + cityN + " 座城市");

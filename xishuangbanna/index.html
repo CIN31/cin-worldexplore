@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>世界探索计划--西双版纳</title>
+<meta name="description" content="10月31日中午12点到景洪。周六城里，周日出城，周一沿江。">
+<meta name="theme-color" content="#12362A">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canopy:#140E0A;
+  --ground:#F3EBDD;
+  --ink:#1C140E;
+  --soft:#4A3428;
+  --peacock:#8C3A24;
+  --gold:#E7C56A;
+  --cream:#F6F0E6;
+  --brocade:#9E2F36;
+  --line:color-mix(in srgb, var(--ink) 16%, transparent);
+  --display:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --time:Literata,"Palatino Linotype",Palatino,"Songti SC",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{
+  margin:0;
+  background:#140E0A url("img/stilts.jpg") center / cover fixed;
+  color:var(--ink);
+  font:17px/1.7 var(--display);
+  text-wrap:pretty;
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .road-han{stroke-dashoffset:0!important}
+}
+:focus-visible{outline:2px solid var(--peacock);outline-offset:3px}
+::selection{background:var(--gold);color:var(--canopy)}
+a{color:var(--peacock);text-underline-offset:3px}
+a:hover{color:var(--ink)}
+h1,h2,h3{font-weight:600;letter-spacing:.04em;text-wrap:balance}
+p{margin:0}
+.skip{
+  position:absolute;left:12px;top:8px;z-index:30;
+  padding:8px 12px;background:var(--cream);color:var(--canopy);
+  transform:translateY(-150%);
+}
+.skip:focus{transform:none}
+.wrap{width:min(40rem, calc(100% - 32px));margin-inline:auto}
+
+.hero{
+  position:relative;
+  z-index:1;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  background:#140E0A url("img/pagoda.jpg") center 42% / cover no-repeat;
+  color:var(--cream);
+  overflow:hidden;
+  padding:22px 0 40px;
+}
+.hero::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(16,10,6,.88) 0%, rgba(16,10,6,.18) 46%, rgba(16,10,6,.28) 100%);
+}
+.hero .wrap{position:relative;z-index:1}
+.hero a{color:var(--cream)}
+.hero a:hover{color:var(--gold)}
+.top{display:flex;justify-content:space-between;gap:16px;font-size:.95rem}
+.top span{color:var(--gold)}
+.hero h1{
+  margin:18px 0 0;
+  font-size:clamp(40px, 6.4vw, 68px);
+  line-height:1.15;
+  font-weight:700;
+  letter-spacing:.04em;
+  color:var(--gold);
+  text-shadow:0 2px 18px rgba(0,0,0,.35);
+}
+.lede{margin:18px 0 0;max-width:22em;font-size:1.05rem;line-height:1.65;text-shadow:0 1px 10px rgba(0,0,0,.45)}
+.live{margin:14px 0 0;color:var(--gold);font-family:var(--time);font-size:1rem}
+.live .cd{display:flex;gap:14px;margin-top:8px;font-variant-numeric:tabular-nums}
+.live .cd b{font-weight:600;font-size:1.7rem;letter-spacing:.02em}
+.live .cd i{font-style:normal;font-family:var(--display);font-size:.85rem;margin-left:3px}
+.dayshot{
+  position:relative;
+  z-index:1;
+  min-height:52vh;
+  display:flex;
+  align-items:flex-end;
+  background-position:center;
+  background-size:cover;
+  color:var(--cream);
+}
+.dayshot::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(16,10,6,.78), rgba(16,10,6,.08) 58%);
+}
+.dayshot .wrap{position:relative;z-index:1;padding:32px 0 28px}
+.dayshot h2,.dayshot .daylead{text-shadow:0 2px 16px rgba(0,0,0,.45)}
+.dayshot h2 span{color:var(--gold)}
+.shot-stilts{background-image:url("img/stilts.jpg")}
+.shot-river{background-image:url("img/river.jpg");background-position:center 60%}
+
+main,footer{background:var(--ground);position:relative;z-index:1}
+.day h2,.tail h2{
+  margin:0 0 10px;
+  font-size:clamp(1.7rem, 4vw, 2.1rem);
+  line-height:1.25;
+}
+
+.daynav{
+  position:sticky;top:0;z-index:5;
+  background:rgba(20,14,10,.92);
+  border-bottom:1px solid rgba(231,197,106,.35);
+}
+.daynav .row{display:flex;flex-wrap:wrap;gap:4px 22px;padding:12px 0}
+.daynav a{
+  color:var(--cream);
+  text-decoration:none;
+  padding:6px 0 8px;
+  font-size:1rem;
+}
+.daynav a[aria-current="true"]{color:var(--gold);box-shadow:inset 0 -2px 0 var(--gold)}
+
+.day{padding-top:36px;scroll-margin-top:64px}
+.day:has(.dayshot){padding-top:0}
+.daylead{margin:0 0 8px;max-width:36em}
+.day h2{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+}
+.day h2 span{
+  font-family:var(--time);
+  font-size:1.05rem;
+  font-weight:500;
+  letter-spacing:0;
+  color:var(--peacock);
+  font-variant-numeric:tabular-nums;
+}
+.dayshot h2 span{color:var(--gold)}
+
+.choice{border:0;margin:18px 0 0;padding:0}
+.choice legend{
+  padding:0;margin:0 0 4px;
+  font-size:1.15rem;font-weight:600;letter-spacing:.04em;
+}
+.choice .opt{
+  display:grid;
+  grid-template-columns:1.15rem minmax(0,1fr);
+  gap:10px;
+  align-items:start;
+  padding:12px 0 12px 10px;
+  border-top:1px solid var(--line);
+  border-left:3px solid transparent;
+}
+.choice .opt:last-child{border-bottom:1px solid var(--line)}
+.choice .opt:has(input:checked){border-left-color:var(--peacock)}
+.choice .opt:focus-within{outline:2px solid var(--peacock);outline-offset:3px}
+.choice input{margin-top:.45em;accent-color:var(--peacock)}
+.choice label{cursor:pointer}
+.choice strong{font-weight:600}
+.choice em{font-style:normal;color:var(--soft)}
+
+.map{margin:18px 0 0}
+.map svg{width:100%;height:auto;display:block}
+.map text{font-family:var(--display);fill:var(--ink)}
+.map .sub{font-family:var(--time);font-size:13px;fill:var(--soft)}
+.g-lun{opacity:.38}
+.plan:has(input[value="lun"]:checked) .g-han{opacity:.38}
+.plan:has(input[value="lun"]:checked) .g-lun{opacity:1}
+.road-han{
+  stroke-dasharray:420;
+  stroke-dashoffset:420;
+  animation:draw 1.15s cubic-bezier(.2,.7,.2,1) .15s forwards;
+}
+@keyframes draw{to{stroke-dashoffset:0}}
+.plan:has(input[value="lun"]:checked) .road-lun{stroke-dasharray:none}
+.cap{margin-top:6px}
+.cap.lun{display:none}
+.plan:has(input[value="lun"]:checked) .cap.han{display:none}
+.plan:has(input[value="lun"]:checked) .cap.lun{display:block}
+.road.lun{display:none}
+.plan:has(input[value="lun"]:checked) .road.han{display:none}
+.plan:has(input[value="lun"]:checked) .road.lun{display:block}
+
+.tl{list-style:none;margin:20px 0 0;padding:0 0 0 16px;border-left:2px solid var(--peacock)}
+.tl > li{
+  display:grid;
+  grid-template-columns:4.4rem minmax(0,1fr);
+  gap:2px 14px;
+  position:relative;
+  padding:0 0 22px 14px;
+}
+.tl > li::before{
+  content:"";
+  position:absolute;
+  left:-16px;top:.62em;
+  width:12px;height:2px;
+  background:var(--peacock);
+}
+.tl > li.now{background:color-mix(in srgb, var(--gold) 28%, transparent)}
+.tl > li.now::before{background:var(--brocade);height:3px}
+.tl time{
+  font-family:var(--time);
+  font-variant-numeric:tabular-nums;
+  font-weight:600;
+  line-height:1.45;
+  color:var(--peacock);
+}
+.live-tag{
+  display:block;
+  font-family:var(--display);
+  font-weight:600;
+  font-size:.78rem;
+  letter-spacing:.06em;
+  color:var(--brocade);
+}
+.tl h3{margin:0;font-size:1.16rem;line-height:1.45}
+.opt{margin-left:.45em;font-size:.86rem;font-weight:600;color:var(--brocade)}
+.tl p{margin-top:4px;line-height:1.45}
+.meals,.shop{list-style:none;margin:8px 0 0;padding:0}
+.meals li{margin:0;padding:7px 0 0}
+.meals strong,.shop b{font-weight:600}
+.shop li{
+  display:grid;
+  gap:1px;
+  padding:10px 0 0;
+}
+.shop span{color:var(--soft);font-size:.95rem;line-height:1.4}
+
+.tail{padding-top:42px}
+.notes{margin:8px 0 0;padding:0;list-style:none}
+.notes li{
+  padding:10px 0;
+  border-top:1px solid var(--line);
+  max-width:36em;
+}
+footer{
+  width:auto;
+  margin:0;
+  padding:16px max(16px, calc(50vw - 20rem)) 40px;
+  border-top:1px solid var(--line);
+  color:var(--soft);
+}
+footer p + p{margin-top:8px}
+
+@media (max-width:720px){
+  body{background-attachment:scroll}
+  .hero{min-height:92svh;background-position:62% center}
+  .tl > li{grid-template-columns:3.8rem minmax(0,1fr);gap:2px 10px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#d31">跳到周六</a>
+
+<header class="hero">
+  <div class="wrap top">
+    <a href="../index.html">回地球仪</a>
+    <span>三天</span>
+  </div>
+  <div class="wrap">
+    <h1>世界探索计划--西双版纳</h1>
+    <p class="lede">今天中午十二点到西双版纳站。<br>酒店在告庄，到站来接。<br>下午做傣装，明天坐直通车出城，后天在城里逛。</p>
+    <p class="live" id="live">距到达还有<span class="cd"><span><b id="cd-h">00</b><i>时</i></span><span><b id="cd-m">00</b><i>分</i></span><span><b id="cd-s">00</b><i>秒</i></span></span></p>
+  </div>
+</header>
+
+<main>
+  <nav class="daynav" aria-label="三天">
+    <div class="wrap row">
+      <a href="#d31">周六 31</a>
+      <a href="#d01">周日 1</a>
+      <a href="#d02">周一 2</a>
+    </div>
+  </nav>
+
+  <article class="day wrap" id="d31">
+    <h2>城里两片 <span>10.31</span></h2>
+    <p class="daylead">下午在告庄做傣装，租电动车去曼听和总佛寺。晚饭只留一顿。</p>
+    <ol class="tl">
+      <li data-at="2026-10-31T12:00:00+08:00">
+        <time datetime="2026-10-31T12:00:00+08:00">12:00</time>
+        <div>
+          <h3 data-name="西双版纳站">西双版纳站</h3>
+          <p>酒店在告庄西双景，到站来接。</p>
+        </div>
+      </li>
+      <li data-at="2026-10-31T13:10:00+08:00">
+        <time datetime="2026-10-31T13:10:00+08:00">13:10</time>
+        <div>
+          <h3 data-name="午饭">午饭</h3>
+          <p>顺路就吃杨杨小吃，不顺路在告庄吃。</p>
+        </div>
+      </li>
+      <li data-at="2026-10-31T14:00:00+08:00">
+        <time datetime="2026-10-31T14:00:00+08:00">14:00</time>
+        <div>
+          <h3 data-name="傣装妆造">傣装妆造</h3>
+          <p>现在问两点的档。衣服要能带出店。</p>
+          <ul class="shop">
+            <li>
+              <b>再见告庄</b>
+              <span>赶摆街 1-1801B</span>
+              <span>13098798466</span>
+              <span>约 699–999 · 妆造 1 小时</span>
+            </li>
+            <li>
+              <b>画匠写真</b>
+              <span>景堡寨 5 栋 102 · 星光夜市旁</span>
+            </li>
+          </ul>
+          <p>进寺要遮住肩和膝。</p>
+        </div>
+      </li>
+      <li data-at="2026-10-31T15:30:00+08:00">
+        <time datetime="2026-10-31T15:30:00+08:00">15:30</time>
+        <div>
+          <h3 data-name="曼听和总佛寺">租电动车，曼听、总佛寺</h3>
+          <p>两轮小电驴，一天大约 30–50 元。</p>
+          <p>史努比和偏三轮出不了告庄。</p>
+          <p>五点半往回骑，还车再吃饭。</p>
+        </div>
+      </li>
+      <li data-at="2026-10-31T18:30:00+08:00">
+        <time datetime="2026-10-31T18:30:00+08:00">18:30</time>
+        <div>
+          <h3 data-name="晚饭">晚饭</h3>
+          <p>告庄吃一顿。夜市或曼斗村烧烤都行。</p>
+          <p>灯亮了可以再拍一圈，按店里的时间还衣服。</p>
+        </div>
+      </li>
+    </ol>
+  </article>
+
+  <article class="day" id="d01">
+    <header class="dayshot shot-stilts">
+      <div class="wrap">
+        <h2>坐直通车出城 <span>11.01</span></h2>
+        <p class="daylead">从告庄西双景坐景区直通车。只走一个方向。</p>
+      </div>
+    </header>
+    <div class="wrap plan">
+      <fieldset class="choice">
+        <legend>走哪一边</legend>
+        <div class="opt">
+          <input type="radio" id="road-han" name="road" value="han" checked>
+          <label for="road-han"><strong>勐罕</strong> <em>傣族园和曼远村，顺路看周日赶摆</em></label>
+        </div>
+        <div class="opt">
+          <input type="radio" id="road-lun" name="road" value="lun">
+          <label for="road-lun"><strong>勐仑</strong> <em>植物园用满一整天，赶摆下次再说</em></label>
+        </div>
+      </fieldset>
+
+      <figure class="map">
+        <svg viewBox="0 0 640 300" aria-hidden="true">
+          <path d="M150 8 C186 74 206 96 236 142 S268 236 312 292" fill="none" stroke="#8C3A24" stroke-width="7" stroke-linecap="round" opacity=".28"/>
+          <text x="128" y="78" font-size="14">澜沧江</text>
+          <g class="g-han">
+            <path class="road-han" d="M248 146 C310 156 348 182 408 214" fill="none" stroke="#8C3A24" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="408" cy="214" r="6" fill="#8C3A24"/>
+            <text x="422" y="210" font-size="18">勐罕</text>
+            <text class="sub" x="328" y="168" font-size="13">约 45 分钟</text>
+          </g>
+          <g class="g-lun">
+            <path class="road-lun" d="M248 146 C340 128 440 108 548 118" fill="none" stroke="#8C3A24" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 6"/>
+            <circle cx="548" cy="118" r="6" fill="#8C3A24"/>
+            <text x="548" y="88" font-size="18" text-anchor="middle">勐仑</text>
+            <text class="sub" x="392" y="100" font-size="13">约 1 小时</text>
+          </g>
+          <circle cx="248" cy="146" r="7" fill="#1C140E"/>
+          <text x="118" y="176" font-size="18" text-anchor="middle">景洪</text>
+        </svg>
+        <figcaption>
+          <p class="cap han">直通车从告庄去勐罕。傣族园在这条线上，曼远村要在园门口再坐一小段。</p>
+          <p class="cap lun">直通车从告庄去勐仑。买往返，下午坐原车回告庄。</p>
+        </figcaption>
+      </figure>
+
+      <div class="road han">
+        <ol class="tl">
+          <li data-at="2026-11-01T07:20:00+08:00">
+            <time datetime="2026-11-01T07:20:00+08:00">07:20</time>
+            <div>
+              <h3 data-name="告庄早饭">告庄早饭</h3>
+              <p>吃完再去上车。</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T08:30:00+08:00">
+            <time datetime="2026-11-01T08:30:00+08:00">08:30</time>
+            <div>
+              <h3 data-name="告庄直通车">景区直通车</h3>
+              <p>去傣族园。告庄或泼水广场上车。</p>
+              <p>票在「版纳安心游」或「版纳好行」。</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T09:30:00+08:00">
+            <time datetime="2026-11-01T09:30:00+08:00">09:30</time>
+            <div>
+              <h3 data-name="傣族园">傣族园</h3>
+              <p>先问赶摆在不在，再进园。</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T13:30:00+08:00">
+            <time datetime="2026-11-01T13:30:00+08:00">13:30</time>
+            <div>
+              <h3 data-name="曼远村">曼远村</h3>
+              <p>园门口打车，大约二十分钟。</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T16:00:00+08:00">
+            <time datetime="2026-11-01T16:00:00+08:00">16:00</time>
+            <div>
+              <h3 data-name="回告庄">回告庄</h3>
+              <p>回傣族园门口坐车，末班约 18:00。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="road lun">
+        <ol class="tl">
+          <li data-at="2026-11-01T07:10:00+08:00">
+            <time datetime="2026-11-01T07:10:00+08:00">07:10</time>
+            <div>
+              <h3 data-name="告庄早饭">告庄早饭</h3>
+              <p>吃完去上车点。</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T08:30:00+08:00">
+            <time datetime="2026-11-01T08:30:00+08:00">08:30</time>
+            <div>
+              <h3 data-name="告庄直通车">景区直通车</h3>
+              <p>植物园往返。常见 8:30–10:30 去，15:30–17:00 回。</p>
+              <p>400-8866275</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T09:40:00+08:00">
+            <time datetime="2026-11-01T09:40:00+08:00">09:40</time>
+            <div>
+              <h3 data-name="热带植物园">热带植物园</h3>
+              <p>园内坐车，自带水。中午在园里吃。</p>
+            </div>
+          </li>
+          <li data-at="2026-11-01T16:30:00+08:00">
+            <time datetime="2026-11-01T16:30:00+08:00">16:30</time>
+            <div>
+              <h3 data-name="回告庄">回告庄</h3>
+              <p>按车票上的班次回。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </article>
+
+  <article class="day" id="d02">
+    <header class="dayshot shot-river">
+      <div class="wrap">
+        <h2>在景洪城里逛 <span>11.02</span></h2>
+        <p class="daylead">全在景洪。早市放在第一件。下午若有飞机，晚上整段去掉。</p>
+      </div>
+    </header>
+    <div class="wrap">
+    <ol class="tl">
+      <li data-at="2026-11-02T07:30:00+08:00">
+        <time datetime="2026-11-02T07:30:00+08:00">07:30</time>
+        <div>
+          <h3 data-name="景洪农贸市场">景洪农贸市场</h3>
+          <p>九点半前，去已经出摊的那家。</p>
+        </div>
+      </li>
+      <li data-at="2026-11-02T09:30:00+08:00">
+        <time datetime="2026-11-02T09:30:00+08:00">09:30</time>
+        <div>
+          <h3 data-name="观礼巷">观礼巷</h3>
+          <p>喝一杯。午饭留在江边。</p>
+        </div>
+      </li>
+      <li data-at="2026-11-02T10:30:00+08:00">
+        <time datetime="2026-11-02T10:30:00+08:00">10:30</time>
+        <div>
+          <h3 data-name="般若寺">般若寺</h3>
+          <p>遮住肩和膝。</p>
+        </div>
+      </li>
+      <li data-at="2026-11-02T12:00:00+08:00">
+        <time datetime="2026-11-02T12:00:00+08:00">12:00</time>
+        <div>
+          <h3 data-name="滨江大道">滨江大道</h3>
+          <p>沿江吃午饭。傣乡水城路过即可。</p>
+        </div>
+      </li>
+      <li data-at="2026-11-02T17:30:00+08:00">
+        <time datetime="2026-11-02T17:30:00+08:00">17:30</time>
+        <div>
+          <h3 data-name="阿兰烤鱼">阿兰烤鱼</h3>
+          <p>五点半前到。饭后江边夜市买水果。</p>
+        </div>
+      </li>
+    </ol>
+    </div>
+  </article>
+
+  <section class="tail wrap" id="notes">
+    <h2>出门</h2>
+    <ul class="notes">
+      <li>穿过的鞋。植物园那天多带水。</li>
+      <li>短袖，加一件薄外套。</li>
+      <li>防晒。黄昏擦驱蚊。</li>
+      <li>出城坐告庄直通车。</li>
+      <li>周一白天的飞机，晚上就不排了。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>班次和关门时间，以当天为准。</p>
+  <p><a href="../index.html">回地球仪</a></p>
+</footer>
+
+<script>
+(function(){
+  const land = Date.parse("2026-10-31T12:00:00+08:00");
+  const live = document.getElementById("live");
+  const cd = live.querySelector(".cd");
+  const cdH = document.getElementById("cd-h");
+  const cdM = document.getElementById("cd-m");
+  const cdS = document.getElementById("cd-s");
+  const radios = document.querySelectorAll('input[name="road"]');
+  const pad = n => String(n).padStart(2, "0");
+  let marked = "";
+
+  function visibleItems(){
+    return [...document.querySelectorAll(".tl > li[data-at]")].filter(el => el.offsetParent !== null);
+  }
+  function tick(){
+    const now = Date.now();
+    if (now < land){
+      const sec = Math.max(0, Math.floor((land - now) / 1000));
+      cdH.textContent = pad(Math.floor(sec / 3600));
+      cdM.textContent = pad(Math.floor((sec % 3600) / 60));
+      cdS.textContent = pad(sec % 60);
+      return;
+    }
+    if (cd) cd.remove();
+    const vis = visibleItems();
+    let cur = null;
+    vis.forEach(el => { if (Date.parse(el.dataset.at) <= now) cur = el; });
+    if (!cur){
+      live.textContent = "已经到站。从第一站开始。";
+      return;
+    }
+    const name = cur.querySelector("h3").dataset.name;
+    if (marked !== name){
+      document.querySelectorAll(".tl > li.now").forEach(el => el.classList.remove("now"));
+      document.querySelectorAll(".live-tag").forEach(el => el.remove());
+      cur.classList.add("now");
+      const tag = document.createElement("span");
+      tag.className = "live-tag";
+      tag.textContent = "现在";
+      cur.querySelector("time").appendChild(tag);
+      marked = name;
+    }
+    const last = vis[vis.length - 1];
+    live.textContent = (now > Date.parse("2026-11-02T21:00:00+08:00") && cur === last)
+      ? "这三天的安排到周一晚上为止。"
+      : "按时间，现在是" + name + "。";
+  }
+
+  const links = [...document.querySelectorAll(".daynav a")];
+  const watch = ["d31","d01","d02"].map(id => document.getElementById(id));
+  if ("IntersectionObserver" in window){
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        links.forEach(a => a.removeAttribute("aria-current"));
+        const a = links.find(x => x.getAttribute("href") === "#" + en.target.id);
+        if (a) a.setAttribute("aria-current", "true");
+      });
+    }, {rootMargin:"-30% 0px -55% 0px", threshold:0.01});
+    watch.forEach(el => obs.observe(el));
+  }
+
+  radios.forEach(r => r.addEventListener("change", tick));
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>
